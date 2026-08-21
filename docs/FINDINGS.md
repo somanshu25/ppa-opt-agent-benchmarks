@@ -619,3 +619,57 @@ This is the same lesson C2 taught on the repair side, in a different register:
 gcd, I/O timing is irrelevant so I/O-delay defects are inert; on aes, die area is
 fixed so area optimisation is inert. A benchmark suite that assumes one objective
 fits every design will silently ship vacuous instances.
+
+---
+
+## F14 — aes validation: 3/4, and two defect classes swapped roles
+
+The generalisation test. Same injectors, same grader, same harness, zero code
+changes -- only the design and the measured period range differ. Seed 1 drew
+period 1.000, io_pct 0.210. Cost: 1 shared baseline + 4 broken runs.
+
+| class | defect | `finish__ws` | `signoff__ws` | area | on aes | on gcd |
+|---|---|---|---|---|---|---|
+| **C2** | `set_input_delay` deleted | **+0.07244** | **-0.27979** | 17183 | **validated** | inert |
+| **C1** | period x1/1000 | -0.79901 | 0.16847 | 22932 (+33%) | validated | validated |
+| **C5** | `clk_io_pct` inflated | -0.00097 | 0.05506 | 18013 | validated | 1 of 2 seeds |
+| **C3** | `set_output_delay` deleted | 0.06825 | 0.06825 | 17257 | inert | validated |
+
+Baseline: `signoff_ws` 0.06825, area 17257, power 330.2 mW.
+
+### C2 on aes is the cleanest demonstration in the suite
+
+```
+                       flow's own view        held-out sign-off
+baseline                   0.06825                0.06825
+C2 broken                 +0.07244  better       -0.27979  missing timing
+                                                  TNS -5.85 ns
+```
+
+The implementation run reports **better** slack while the design misses timing by
+280 ps with 5.85 ns of total negative slack. That is the reward-hack inversion at
+full strength -- far starker than C3_s1 on gcd, where the same mechanism produced
+only a 7.5 ps gap.
+
+### The prediction held, and the classes traded places
+
+C2 was **completely inert on gcd** -- deleting all 35 input delays produced a
+byte-identical netlist and layout (F7). The stated explanation was that gcd has no
+I/O-critical paths: its worst path is register-to-register, so constraining the
+I/O changes nothing. aes, at 19k instances with real interface timing, was the
+predicted counter-case.
+
+It validated, and C3 went the other way -- inert on aes, validated on gcd. So the
+same defect class is **catastrophic on one design and vacuous on another**, and
+which is which is not guessable from the injector.
+
+**Consequence for benchmark construction:** an instance is a property of the
+(defect, design) *pair*, never of the defect alone. A suite that generates classes
+uniformly across designs will ship vacuous instances at roughly the rate seen here
+-- 4 of 8 on gcd, 1 of 4 on aes. Per-instance validation is not a nicety; it is
+the only thing standing between a generated instance and a meaningless one.
+
+**Consequence for the harness:** nothing had to change. The injectors, the
+allowlist, sign-off, frozen baselines, and the grader all transferred unmodified
+to a design 17x larger on the same platform. The only per-design input required
+was the measured clock-period range (F13).

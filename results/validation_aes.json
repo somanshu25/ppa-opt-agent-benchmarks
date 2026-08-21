@@ -1,0 +1,119 @@
+[
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": true,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [
+      "area_not_ballooned"
+    ],
+    "class_id": "C1",
+    "evidence": {
+      "baseline_area": 17256.8,
+      "baseline_finish_ws": 0.0682467,
+      "baseline_power": 0.330215,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.0682467,
+      "broken_area": 22931.9,
+      "broken_finish_ws": -0.79901,
+      "broken_power": 10.6974,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.168468
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 1.0
+    },
+    "instance_id": "nangate45_aes_C1_s1",
+    "seed": 1,
+    "silent_defect": false,
+    "validated": true
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": true,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [
+      "signoff_hold_ws",
+      "signoff_setup_ws",
+      "signoff_setup_tns"
+    ],
+    "class_id": "C2",
+    "evidence": {
+      "baseline_area": 17256.8,
+      "baseline_finish_ws": 0.0682467,
+      "baseline_power": 0.330215,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.0682467,
+      "broken_area": 17183.1,
+      "broken_finish_ws": 0.0724398,
+      "broken_power": 0.328447,
+      "broken_signoff_tns": -5.85361,
+      "broken_signoff_ws": -0.279785
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 1.0
+    },
+    "instance_id": "nangate45_aes_C2_s1",
+    "seed": 1,
+    "silent_defect": true,
+    "validated": true
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": false,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [],
+    "class_id": "C3",
+    "evidence": {
+      "baseline_area": 17256.8,
+      "baseline_finish_ws": 0.0682467,
+      "baseline_power": 0.330215,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.0682467,
+      "broken_area": 17256.8,
+      "broken_finish_ws": 0.0682467,
+      "broken_power": 0.330215,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.0682467
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 1.0
+    },
+    "instance_id": "nangate45_aes_C3_s1",
+    "seed": 1,
+    "silent_defect": true,
+    "validated": false
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": true,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [
+      "signoff_hold_ws",
+      "signoff_setup_ws"
+    ],
+    "class_id": "C5",
+    "evidence": {
+      "baseline_area": 17256.8,
+      "baseline_finish_ws": 0.0682467,
+      "baseline_power": 0.330215,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.0682467,
+      "broken_area": 18012.5,
+      "broken_finish_ws": -0.000971001,
+      "broken_power": 0.338718,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.0550611
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 1.0
+    },
+    "instance_id": "nangate45_aes_C5_s1",
+    "seed": 1,
+    "silent_defect": false,
+    "validated": true
+  }
+]

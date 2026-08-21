@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-palette="#2a78d6,#eb6834,#1baf7a">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPA Optimization Agent Benchmarks</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-0:#f4f4f2; --surface-1:#fcfcfb; --surface-2:#ececea;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#78776f;
+  --rule:#dcdcd8;
+  --series-1:#2a78d6; --series-2:#eb6834; --series-3:#1baf7a;
+  --good:#0a7d46; --bad:#c8322f; --warn:#a06a00;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --surface-0:#111110; --surface-1:#1a1a19; --surface-2:#242422;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
+    --rule:#33332f;
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
+    --good:#3fae74; --bad:#e66767; --warn:#c98500;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-0:#111110; --surface-1:#1a1a19; --surface-2:#242422;
+  --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
+  --rule:#33332f;
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
+  --good:#3fae74; --bad:#e66767; --warn:#c98500;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--text-primary);
+     font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+.slide{max-width:1040px;margin:0 auto 22px;background:var(--surface-1);
+       border:1px solid var(--rule);border-radius:10px;padding:44px 52px;
+       min-height:520px;position:relative}
+.slide:first-of-type{margin-top:22px}
+.tag{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+     color:var(--text-muted);margin-bottom:14px}
+h1{font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.02em}
+h2{font-size:29px;line-height:1.2;margin:0 0 18px;letter-spacing:-.015em}
+h3{font-size:17px;margin:26px 0 9px;letter-spacing:-.005em}
+p{margin:0 0 13px;color:var(--text-secondary);max-width:74ch}
+p.lead{font-size:18px;color:var(--text-primary)}
+strong{color:var(--text-primary);font-weight:650}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);
+     padding:1px 5px;border-radius:4px}
+pre{font-family:var(--mono);font-size:12.5px;line-height:1.6;background:var(--surface-2);
+    padding:14px 16px;border-radius:7px;overflow-x:auto;color:var(--text-primary);
+    border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+th{text-align:left;font-weight:600;color:var(--text-muted);font-size:11px;
+   letter-spacing:.07em;text-transform:uppercase;padding:7px 10px;
+   border-bottom:1.5px solid var(--rule)}
+td{padding:8px 10px;border-bottom:1px solid var(--rule);color:var(--text-secondary)}
+td.n{font-family:var(--mono);font-size:12.5px;text-align:right;white-space:nowrap}
+td strong{color:var(--text-primary)}
+.ok{color:var(--good);font-weight:650}
+.no{color:var(--bad);font-weight:650}
+.wn{color:var(--warn);font-weight:650}
+blockquote{margin:16px 0;padding:13px 20px;border-left:3px solid var(--series-1);
+           background:var(--surface-2);border-radius:0 7px 7px 0}
+blockquote p{margin:0;color:var(--text-primary);font-size:15.5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--surface-2);border:1px solid var(--rule);border-radius:8px;padding:16px 18px}
+.card h4{margin:0 0 7px;font-size:14px;color:var(--text-primary)}
+.card p{margin:0;font-size:13px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+.tile{background:var(--surface-2);border:1px solid var(--rule);border-radius:8px;padding:15px 17px}
+.tile .k{font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+         color:var(--text-muted);margin-bottom:8px}
+.tile .v{font:650 27px/1 var(--sans);letter-spacing:-.02em;color:var(--text-primary)}
+.tile .s{font-size:11.5px;color:var(--text-muted);margin-top:5px}
+.note{font-size:12.5px;color:var(--text-muted);margin-top:10px}
+.legend{display:flex;gap:20px;font-size:12.5px;color:var(--text-secondary);
+        margin:6px 0 10px;align-items:center;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+figure{margin:14px 0}
+figcaption{font-size:12.5px;color:var(--text-muted);margin-top:8px}
+.toggle{position:fixed;top:14px;right:14px;z-index:99;background:var(--surface-1);
+        color:var(--text-secondary);border:1px solid var(--rule);border-radius:7px;
+        padding:7px 12px;font:600 11.5px var(--sans);cursor:pointer}
+.mock{font-family:var(--mono);font-size:11.5px;line-height:1.55;background:var(--surface-2);
+      border:1px solid var(--rule);border-radius:8px;padding:16px;overflow-x:auto;
+      color:var(--text-primary);white-space:pre}
+ul{margin:0 0 13px;padding-left:20px;color:var(--text-secondary);max-width:74ch}
+li{margin-bottom:6px}
+.kicker{font-size:15px;color:var(--text-primary);font-weight:600;margin:0 0 6px}
+@media print{
+  body{background:#fff}
+  .slide{page-break-after:always;border:none;margin:0;min-height:0}
+  .toggle{display:none}
+}
+</style>
+</head>
+<body>
+<section class="slide" id="inversion">
+  <div class="tag">Task 2 · Create benchmark tasks</div>
+  <h2>Why the held-out SDC is not optional</h2>
+
+  <p>Instance <code>nangate45_aes_C2</code>: <code>set_input_delay</code> deleted.
+  Two views of the <em>same</em> layout, and they disagree in opposite
+  directions.</p>
+
+  <div class="legend">
+    <span><i class="sw" style="background:var(--series-1)"></i> Baseline</span>
+    <span><i class="sw" style="background:var(--series-2)"></i> Defect injected</span>
+  </div>
+
+  <figure>
+  <svg viewBox="0 0 900 250" width="100%" height="250" role="img"
+       aria-label="Setup worst slack under two views on aes. Flow's own view: baseline 0.068, defect 0.072, slightly higher. Sign-off view: baseline 0.068, defect minus 0.280, deeply negative.">
+    <line x1="76" y1="83" x2="860" y2="83" stroke="var(--rule)" stroke-width="1.5"/>
+    <text x="68" y="87" text-anchor="end" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">0</text>
+    <text x="68" y="45" text-anchor="end" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">+0.10</text>
+    <text x="68" y="209" text-anchor="end" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">−0.30</text>
+    <text x="22" y="120" font-size="11" fill="var(--text-muted)" transform="rotate(-90 22 120)" text-anchor="middle">setup WS (ns)</text>
+
+    <!-- Flow's own view: both bars small and positive -->
+    <rect x="150" y="54" width="86" height="29" rx="4" fill="var(--series-1)"/>
+    <rect x="244" y="52" width="86" height="31" rx="4" fill="var(--series-2)"/>
+    <text x="193" y="46" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">0.068</text>
+    <text x="287" y="44" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">0.072</text>
+    <text x="240" y="228" text-anchor="middle" font-size="13" fill="var(--text-primary)" font-weight="600">The flow's own view</text>
+    <text x="240" y="245" text-anchor="middle" font-size="12" fill="var(--series-2)" font-weight="650">▲ slightly "better"</text>
+
+    <!-- Sign-off view: the defect bar plunges below zero -->
+    <rect x="570" y="54" width="86" height="29" rx="4" fill="var(--series-1)"/>
+    <rect x="664" y="83" width="86" height="118" rx="4" fill="var(--series-2)"/>
+    <text x="613" y="46" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">0.068</text>
+    <text x="707" y="216" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">−0.280</text>
+    <text x="660" y="235" text-anchor="middle" font-size="13" fill="var(--text-primary)" font-weight="600">Held-out sign-off view</text>
+    <text x="660" y="245" text-anchor="middle" font-size="12" fill="var(--text-secondary)" font-weight="650"> </text>
+
+    <line x1="450" y1="30" x2="450" y2="210" stroke="var(--rule)" stroke-width="1"/>
+  </svg>
+  <figcaption>Same layout, same design, two measuring sticks. The flow reports the
+  design got slightly better; sign-off shows it missing timing by 280 ps, with
+  TNS −5.85 ns. The grader reads only the right-hand pair — every FAIL_TO_PASS
+  assertion comes from <code>signoff__*</code>, never <code>finish__*</code>.</figcaption>
+  </figure>
+
+  <p>An agent optimising the metric it can see calls the left chart a win and
+  stops. Structurally it cannot score: the numbers it improved are not the numbers
+  being read.</p>
+</section>
+</body></html>

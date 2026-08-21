@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en" data-palette="#2a78d6,#eb6834,#1baf7a">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPA Optimization Agent Benchmarks</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-0:#f4f4f2; --surface-1:#fcfcfb; --surface-2:#ececea;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#78776f;
+  --rule:#dcdcd8;
+  --series-1:#2a78d6; --series-2:#eb6834; --series-3:#1baf7a;
+  --good:#0a7d46; --bad:#c8322f; --warn:#a06a00;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --surface-0:#111110; --surface-1:#1a1a19; --surface-2:#242422;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
+    --rule:#33332f;
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
+    --good:#3fae74; --bad:#e66767; --warn:#c98500;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-0:#111110; --surface-1:#1a1a19; --surface-2:#242422;
+  --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#94938a;
+  --rule:#33332f;
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
+  --good:#3fae74; --bad:#e66767; --warn:#c98500;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--text-primary);
+     font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+.slide{max-width:1040px;margin:0 auto 22px;background:var(--surface-1);
+       border:1px solid var(--rule);border-radius:10px;padding:44px 52px;
+       min-height:520px;position:relative}
+.slide:first-of-type{margin-top:22px}
+.tag{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+     color:var(--text-muted);margin-bottom:14px}
+h1{font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.02em}
+h2{font-size:29px;line-height:1.2;margin:0 0 18px;letter-spacing:-.015em}
+h3{font-size:17px;margin:26px 0 9px;letter-spacing:-.005em}
+p{margin:0 0 13px;color:var(--text-secondary);max-width:74ch}
+p.lead{font-size:18px;color:var(--text-primary)}
+strong{color:var(--text-primary);font-weight:650}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);
+     padding:1px 5px;border-radius:4px}
+pre{font-family:var(--mono);font-size:12.5px;line-height:1.6;background:var(--surface-2);
+    padding:14px 16px;border-radius:7px;overflow-x:auto;color:var(--text-primary);
+    border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+th{text-align:left;font-weight:600;color:var(--text-muted);font-size:11px;
+   letter-spacing:.07em;text-transform:uppercase;padding:7px 10px;
+   border-bottom:1.5px solid var(--rule)}
+td{padding:8px 10px;border-bottom:1px solid var(--rule);color:var(--text-secondary)}
+td.n{font-family:var(--mono);font-size:12.5px;text-align:right;white-space:nowrap}
+td strong{color:var(--text-primary)}
+.ok{color:var(--good);font-weight:650}
+.no{color:var(--bad);font-weight:650}
+.wn{color:var(--warn);font-weight:650}
+blockquote{margin:16px 0;padding:13px 20px;border-left:3px solid var(--series-1);
+           background:var(--surface-2);border-radius:0 7px 7px 0}
+blockquote p{margin:0;color:var(--text-primary);font-size:15.5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--surface-2);border:1px solid var(--rule);border-radius:8px;padding:16px 18px}
+.card h4{margin:0 0 7px;font-size:14px;color:var(--text-primary)}
+.card p{margin:0;font-size:13px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+.tile{background:var(--surface-2);border:1px solid var(--rule);border-radius:8px;padding:15px 17px}
+.tile .k{font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+         color:var(--text-muted);margin-bottom:8px}
+.tile .v{font:650 27px/1 var(--sans);letter-spacing:-.02em;color:var(--text-primary)}
+.tile .s{font-size:11.5px;color:var(--text-muted);margin-top:5px}
+.note{font-size:12.5px;color:var(--text-muted);margin-top:10px}
+.legend{display:flex;gap:20px;font-size:12.5px;color:var(--text-secondary);
+        margin:6px 0 10px;align-items:center;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+figure{margin:14px 0}
+figcaption{font-size:12.5px;color:var(--text-muted);margin-top:8px}
+.toggle{position:fixed;top:14px;right:14px;z-index:99;background:var(--surface-1);
+        color:var(--text-secondary);border:1px solid var(--rule);border-radius:7px;
+        padding:7px 12px;font:600 11.5px var(--sans);cursor:pointer}
+.mock{font-family:var(--mono);font-size:11.5px;line-height:1.55;background:var(--surface-2);
+      border:1px solid var(--rule);border-radius:8px;padding:16px;overflow-x:auto;
+      color:var(--text-primary);white-space:pre}
+ul{margin:0 0 13px;padding-left:20px;color:var(--text-secondary);max-width:74ch}
+li{margin-bottom:6px}
+.kicker{font-size:15px;color:var(--text-primary);font-weight:600;margin:0 0 6px}
+@media print{
+  body{background:#fff}
+  .slide{page-break-after:always;border:none;margin:0;min-height:0}
+  .toggle{display:none}
+}
+</style>
+</head>
+<body>
+<button class="toggle" onclick="document.documentElement.dataset.theme=
+  document.documentElement.dataset.theme==='dark'?'light':'dark'">theme</button>
+
+<!-- ───────────────────────── TITLE ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Take-home · PPA Optimization Agent Benchmarks</div>
+  <h1>The hard problem isn't making the chip better.<br>It's proving the agent didn't cheat.</h1>
+  <p class="lead">Two working benchmarks, a grader validated against four adversarial
+  agents, and a baseline agent run end-to-end on the OpenROAD flow.</p>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Benchmarks</div><div class="v">2</div>
+      <div class="s">repair + optimisation, both validated</div></div>
+    <div class="tile"><div class="k">Baseline agent</div><div class="v">4 / 4</div>
+      <div class="s">resolved, headless <code>claude -p</code></div></div>
+    <div class="tile"><div class="k">Adversarial decoys</div><div class="v">4 / 4</div>
+      <div class="s">graded correctly, incl. 19× reward hack</div></div>
+    <div class="tile"><div class="k">Measured findings</div><div class="v">14</div>
+      <div class="s">four of them negative</div></div>
+  </div>
+
+  <p>Everything below is measured in a pinned environment — OpenROAD-flow-scripts
+  <code>02ba50d53</code>, Nangate45 and SkyWater130, no proprietary tools. Every
+  number is reproducible from the repo.</p>
+  <p class="note">Repo: <code>github.com/somanshu25/ppa-opt-agent-benchmarks</code>
+  · full evidence in <code>docs/FINDINGS.md</code></p>
+</section>
+
+<!-- ───────────────────────── OVERVIEW ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Overview</div>
+  <h2>What was built, and the one idea holding it together</h2>
+
+  <p class="lead">Point an agent at a chip flow and ask it to improve the numbers,
+  and <strong>the cheapest way to improve the numbers is to stop measuring.</strong></p>
+
+  <p>Delete <code>set_output_delay</code> and the tool stops checking those paths,
+  so reported slack <em>improves</em> while the design gets worse. An agent doing
+  gradient descent on visible QoR is driven <strong>toward</strong> destroying the
+  design. That is not an edge case — it is the gradient.</p>
+
+  <blockquote><p>So the scarce artifact is not the optimising agent.
+  <strong>It is the grader.</strong> The agent is replaceable; the grader is the moat.</p></blockquote>
+
+  <div class="grid">
+    <div class="card">
+      <h4>Task 1 — Hard problems</h4>
+      <p>Four defined (HP-A…HP-D), each with goal, why coding agents fail, inputs,
+      how to measure correctness, and the product. Five structural reasons the
+      domain breaks coding agents — four of them measured here, not asserted.</p>
+    </div>
+    <div class="card">
+      <h4>Task 2 — Benchmarks</h4>
+      <p><code>sdc-repair-v1</code> and <code>knob-opt-v1</code>, both in the
+      SWE-bench shape: environment, task, grader. Instances are self-proving —
+      <strong>4 of 8 generated were rejected by measurement.</strong></p>
+    </div>
+    <div class="card">
+      <h4>Task 3 — Baseline</h4>
+      <p>Claude Code headless, one sanitised container per instance. 4/4 resolved.
+      Plus four scripted decoys that prove the grader can't be gamed, and a
+      controlled A/B that cost 33% of the objective.</p>
+    </div>
+    <div class="card">
+      <h4>Task 4 — Product</h4>
+      <p>One product, four capabilities, built in the order the evidence supports.
+      Mock UI grounded entirely in measured numbers, plus the evidence pack an
+      engineer needs before trusting any of it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── TASK 1a ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 1 · Define hard problems</div>
+  <h2>Why this domain breaks coding agents</h2>
+
+  <table>
+    <thead><tr><th style="width:34%">Reason</th><th>Measured evidence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>R1 · The oracle is slow and non-binary</strong></td>
+        <td>SWE-bench runs tests in seconds, pass/fail. Here one evaluation is
+        <strong>40 s on gcd, 524 s on aes</strong> — and the answer is a vector with
+        real tradeoffs, not a boolean.</td></tr>
+      <tr><td><strong>R2 · The visible objective is corrupted</strong>
+        <div class="note">the load-bearing one</div></td>
+        <td>Deleting <code>set_output_delay</code>: the flow reports
+        <strong>+31% more slack</strong> (0.184 → 0.241) while sign-off says
+        0.184 → <strong>0.176, worse</strong>.</td></tr>
+      <tr><td><strong>R3 · Causality is physical, not textual</strong></td>
+        <td>Identical text, different consequences per design. The ABC clock target
+        moved nothing on gcd or aes even under a <strong>6× period change</strong>.</td></tr>
+      <tr><td><strong>R4 · Correctness has two independent axes</strong></td>
+        <td>Functional equivalence <em>and</em> constraint legality. "20% smaller" is
+        worthless without proving you changed neither.</td></tr>
+      <tr><td><strong>R5 · The knowledge isn't in the repo, and fails silently</strong></td>
+        <td>Our own sign-off was wrong by <strong>4.8 ps</strong> until we found CTS
+        injects <code>set_propagated_clock</code>. Nothing errored. Nothing warned.</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">R5 is the shape of every mistake in this domain: silent,
+  plausible-looking, and invisible without domain-specific verification. It was
+  caught only because a self-test demanded exact agreement.</p>
+</section>
+
+<!-- ───────────────────────── TASK 1b ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 1 · Define hard problems</div>
+  <h2>Four problems, and where each stands</h2>
+
+  <table>
+    <thead><tr><th>Problem</th><th style="width:30%">Goal</th><th>Product</th><th style="width:15%">Status</th></tr></thead>
+    <tbody>
+      <tr><td><strong>HP-A</strong> Constraint integrity</td>
+        <td>Is this design actually being <em>checked</em>?</td>
+        <td>Constraint Guard — CI gate</td>
+        <td class="ok">built · 4/4</td></tr>
+      <tr><td><strong>HP-B</strong> Budgeted die-area minimisation</td>
+        <td>Improve a design nobody broke, under a run budget</td>
+        <td>Closure Copilot</td>
+        <td class="ok">built · optimum hit</td></tr>
+      <tr><td><strong>HP-C</strong> QoR regression root-cause</td>
+        <td>"Area went up 8% — which stage, and why?"</td>
+        <td>QoR Bisect</td>
+        <td class="wn">defined</td></tr>
+      <tr><td><strong>HP-D</strong> Top-level → block budgeting</td>
+        <td>Allocate interface budget across blocks</td>
+        <td>Budget Broker</td>
+        <td class="wn">defined</td></tr>
+    </tbody>
+  </table>
+
+  <h3>HP-D is the sharpest argument, even unbuilt</h3>
+  <p><strong>Local success, global failure.</strong> Every block closes timing
+  standalone; the chip does not. There is no per-block test that can reveal it,
+  because the defect isn't <em>in</em> any block — it's in the relation between
+  them. No file contains the bug, which breaks the SWE-bench shape entirely.</p>
+
+  <p>And upstream says the capability is missing. Verbatim from
+  <code>platforms/asap7/constraints.sdc</code>:</p>
+  <blockquote><p>"ORFS regression checks do not have the ability to distinguish
+  between timing closure failures (register to register paths) and optimization
+  constraints violations."</p></blockquote>
+
+  <p class="note">Scoping is deliberate: two problems built deep beats four
+  shallow. An earlier draft of this analysis put HP-D first — measurement changed
+  the ordering, which is the same discipline that killed two defect classes.</p>
+</section>
+
+<!-- ───────────────────────── TASK 2a ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 2 · Create benchmark tasks</div>
+  <h2>The grader, in one idea borrowed from SWE-bench</h2>
+
+  <p>SWE-bench faces the identical attack — an agent could edit the tests. Its
+  defence is one line:</p>
+  <pre>git checkout &lt;base_commit&gt; -- tests/</pre>
+  <p>It <strong>throws away the agent's copy of the thing that judges it.</strong>
+  We do exactly that to constraints.</p>
+
+  <pre>        agent's layout                        measuring stick
+        ─────────────────                     ───────────────
+  BUILT WITH:  impl.sdc      ──────────►      JUDGED WITH: golden.sdc
+  6_final.odb   netlist + placement + routing   ← unchanged
+  6_final.spef  its own extracted parasitics    ← unchanged</pre>
+
+  <p><strong>Re-time, don't re-run.</strong> The layout is frozen; only the ruler
+  changes. Loosening a constraint cannot buy score, because the loosened
+  constraint is not the one used to judge. This mirrors real practice —
+  implementation SDC versus sign-off SDC.</p>
+
+  <h3>Validated exact — and the self-test earned its keep</h3>
+  <p>With <code>golden == impl</code>, sign-off must reproduce the flow's own
+  numbers. It does, to the digit, on all six timing metrics. <strong>The first
+  attempt failed by 4.8 ps</strong> and caught a real bug: CTS adds
+  <code>set_propagated_clock</code>, so ideal clocks were being timed against a
+  design with a real clock tree. Without the self-test that ships as a silently
+  biased gate.</p>
+</section>
+
+<!-- TASK 2b - inversion chart -->
+<section class="slide" id="inversion">
+  <div class="tag">Task 2 · Create benchmark tasks</div>
+  <h2>Why the held-out SDC is not optional</h2>
+
+  <p>Instance <code>nangate45_aes_C2</code>: <code>set_input_delay</code> deleted.
+  Two views of the <em>same</em> layout, and they disagree in opposite
+  directions.</p>
+
+  <div class="legend">
+    <span><i class="sw" style="background:var(--series-1)"></i> Baseline</span>
+    <span><i class="sw" style="background:var(--series-2)"></i> Defect injected</span>
+  </div>
+
+  <figure>
+  <svg viewBox="0 0 900 250" width="100%" height="250" role="img"
+       aria-label="Setup worst slack under two views on aes. Flow's own view: baseline 0.068, defect 0.072, slightly higher. Sign-off view: baseline 0.068, defect minus 0.280, deeply negative.">
+    <line x1="76" y1="83" x2="860" y2="83" stroke="var(--rule)" stroke-width="1.5"/>
+    <text x="68" y="87" text-anchor="end" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">0</text>
+    <text x="68" y="45" text-anchor="end" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">+0.10</text>
+    <text x="68" y="209" text-anchor="end" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">−0.30</text>
+    <text x="22" y="120" font-size="11" fill="var(--text-muted)" transform="rotate(-90 22 120)" text-anchor="middle">setup WS (ns)</text>
+
+    <!-- Flow's own view: both bars small and positive -->
+    <rect x="150" y="54" width="86" height="29" rx="4" fill="var(--series-1)"/>
+    <rect x="244" y="52" width="86" height="31" rx="4" fill="var(--series-2)"/>
+    <text x="193" y="46" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">0.068</text>
+    <text x="287" y="44" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">0.072</text>
+    <text x="240" y="228" text-anchor="middle" font-size="13" fill="var(--text-primary)" font-weight="600">The flow's own view</text>
+    <text x="240" y="245" text-anchor="middle" font-size="12" fill="var(--series-2)" font-weight="650">▲ slightly "better"</text>
+
+    <!-- Sign-off view: the defect bar plunges below zero -->
+    <rect x="570" y="54" width="86" height="29" rx="4" fill="var(--series-1)"/>
+    <rect x="664" y="83" width="86" height="118" rx="4" fill="var(--series-2)"/>
+    <text x="613" y="46" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">0.068</text>
+    <text x="707" y="216" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)" font-family="var(--mono)">−0.280</text>
+    <text x="660" y="235" text-anchor="middle" font-size="13" fill="var(--text-primary)" font-weight="600">Held-out sign-off view</text>
+    <text x="660" y="245" text-anchor="middle" font-size="12" fill="var(--text-secondary)" font-weight="650"> </text>
+
+    <line x1="450" y1="30" x2="450" y2="210" stroke="var(--rule)" stroke-width="1"/>
+  </svg>
+  <figcaption>Same layout, same design, two measuring sticks. The flow reports the
+  design got slightly better; sign-off shows it missing timing by 280 ps, with
+  TNS −5.85 ns. The grader reads only the right-hand pair — every FAIL_TO_PASS
+  assertion comes from <code>signoff__*</code>, never <code>finish__*</code>.</figcaption>
+  </figure>
+
+  <p>An agent optimising the metric it can see calls the left chart a win and
+  stops. Structurally it cannot score: the numbers it improved are not the numbers
+  being read.</p>
+</section>
+
+<!-- ───────────────────────── TASK 2c ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 2 · Create benchmark tasks</div>
+  <h2>Two benchmarks, and how they differ</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h4><code>sdc-repair-v1</code> — HP-A</h4>
+      <p><strong>Task.</strong> One defect injected into the constraints. Diagnose
+      and repair it; judged on the physical design that results.</p>
+      <p style="margin-top:9px"><strong>Deliverable.</strong> An edited
+      <code>impl.sdc</code> — the only file read.</p>
+      <p style="margin-top:9px"><strong>F2P.</strong> <code>signoff_setup_ws</code>,
+      <code>signoff_setup_tns</code> ≥ baseline. <strong>9 P2P</strong> gates
+      alongside.</p>
+    </div>
+    <div class="card">
+      <h4><code>knob-opt-v1</code> — HP-B</h4>
+      <p><strong>Task.</strong> Nothing is broken. Shrink the die by tuning flow
+      knobs, inside a 12-run budget.</p>
+      <p style="margin-top:9px"><strong>Deliverable.</strong>
+      <code>knobs.json</code> — a knob-value map.</p>
+      <p style="margin-top:9px"><strong>F2P.</strong> <code>die_area ≤ baseline
+      × 0.98</code>. <strong>11 P2P</strong> gates alongside.</p>
+    </div>
+  </div>
+
+  <h3>The structural difference that changes the grading shape</h3>
+  <p>In repair, something <em>is</em> broken, so assertions flip fail-to-pass —
+  that is what FAIL_TO_PASS means. In optimisation <strong>nothing is broken</strong>:
+  every assertion passes at baseline, so there is no flip to define, and left alone
+  <strong>the null agent wins by changing nothing.</strong> Hence an improvement
+  threshold.</p>
+
+  <p>Two more departures, both forced by measurement: <code>area_not_ballooned</code>
+  is dropped (it caps the very thing being optimised), and the timing gate becomes
+  <strong>"still closes"</strong> rather than "no worse than baseline" — under the
+  repair gate, the true optimum <em>fails over 5 ps</em> while closing comfortably.</p>
+
+  <p class="note">Both are graded the same way: re-run from clean with the
+  submission, then re-time against a reference the agent never controlled. The
+  agent's own run directory is never trusted — the same reason SWE-bench re-runs
+  tests from a fresh checkout.</p>
+</section>
+
+<!-- ───────────────────────── TASK 2d ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 2 · Create benchmark tasks</div>
+  <h2>Instances are self-proving — half were rejected</h2>
+
+  <p>Generating an instance is free and proves nothing. Each must demonstrate
+  <code>BASELINE_PASS</code> ∧ <code>BROKEN_FAIL</code> ∧ <code>REFFIX_PASS</code>,
+  or it is discarded.</p>
+
+  <table>
+    <thead><tr><th>Instance</th><th>Defect</th><th class="n">finish WS</th>
+      <th class="n">signoff WS</th><th class="n">area</th><th>verdict</th></tr></thead>
+    <tbody>
+      <tr><td><strong>C1_s1</strong></td><td>period ×1/1000</td><td class="n">−0.4231</td>
+        <td class="n">0.15946</td><td class="n"><strong>959.5 (+42%)</strong></td><td class="ok">shipped</td></tr>
+      <tr><td><strong>C1_s2</strong></td><td>period ×1/1000</td><td class="n">−0.4480</td>
+        <td class="n">0.09470</td><td class="n"><strong>1035.5 (+54%)</strong></td><td class="ok">shipped</td></tr>
+      <tr><td><strong>C3_s1</strong></td><td>output delay deleted</td><td class="n"><strong>0.24142</strong></td>
+        <td class="n"><strong>0.17635</strong></td><td class="n">673.8</td><td class="ok">shipped</td></tr>
+      <tr><td><strong>C5_s2</strong></td><td>io_pct 0.15→0.45</td><td class="n">−0.0320</td>
+        <td class="n">0.04390</td><td class="n"><strong>862.6 (+28%)</strong></td><td class="ok">shipped</td></tr>
+      <tr><td>C2_s1 / C2_s2</td><td>input delay deleted</td><td class="n">identical</td>
+        <td class="n">identical</td><td class="n">+0.0%</td><td class="no">rejected — inert</td></tr>
+      <tr><td>C3_s2</td><td>output delay deleted</td><td class="n">0.13196</td>
+        <td class="n">0.12210</td><td class="n">674.8</td><td class="no">rejected — flipped sign</td></tr>
+      <tr><td>C5_s1</td><td>io_pct 0.21→0.45</td><td class="n">0.01837</td>
+        <td class="n">0.18397</td><td class="n">674.3</td><td class="no">rejected — too small</td></tr>
+    </tbody>
+  </table>
+
+  <h3>C2 was inert, and I checked hard</h3>
+  <p>The broken run genuinely elaborated <strong>0 input delays versus 35 in the
+  baseline</strong> — then produced a <strong>byte-identical netlist and layout</strong>
+  (the SPEF differs by two lines, both the <code>*DATE</code> header). Removing 35
+  constraints changed nothing physical.</p>
+  <p>The honest reading isn't "the class failed" — it's that <strong>gcd has no
+  I/O-critical paths.</strong> C1 attacks the core clock and is robust on both
+  seeds; C2/C3/C5 all attack I/O and come out inert, marginal, conditional.
+  <strong>Class selection has to be matched to the design.</strong></p>
+</section>
+
+<!-- ───────────────────────── TASK 2e — LEAKS ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 2 · Create benchmark tasks</div>
+  <h2>The answer was in the room</h2>
+
+  <p>Two different attacks need two different defences. The sign-off gate stops an
+  agent that <em>cheats</em>. It does nothing against one that simply
+  <em>knows the answer</em>.</p>
+
+  <pre>$ grep set_input_delay flow/results/nangate45/gcd/base/6_final.sdc
+set_input_delay 0.0920 -clock [get_clocks {vclk_core_clock}] -add_delay [get_ports {req_msg[0]}]</pre>
+  <p class="note">That is the C2 answer, fully elaborated, sitting in a stale
+  results directory the agent could read.</p>
+
+  <table>
+    <thead><tr><th style="width:44%">Attack</th><th>golden = upstream</th><th>golden = randomised</th></tr></thead>
+    <tbody>
+      <tr><td>Copy <code>designs/…/constraint.sdc</code></td><td class="no">works</td><td class="ok">wrong value</td></tr>
+      <tr><td>Recover from <code>.git</code> history</td><td class="no">works</td><td class="ok">wrong value</td></tr>
+      <tr><td>Read stale <code>6_final.sdc</code></td><td class="no">works</td><td class="ok">wrong value</td></tr>
+      <tr><td><code>rules-base.json</code> / <code>autotuner.json</code> hints</td><td class="no">works</td><td class="ok">wrong value</td></tr>
+      <tr><td><strong>Recall from training data</strong></td><td class="no">plausible</td><td class="ok"><strong>impossible</strong></td></tr>
+    </tbody>
+  </table>
+
+  <blockquote><p>Sanitisation is <em>necessary but unfalsifiable</em> — you can never
+  prove you found every path. Randomisation is <em>sufficient by construction</em>:
+  <strong>an instance that didn't exist before we generated it cannot have been
+  memorised.</strong></p></blockquote>
+
+  <p>Sampling is keyed on a secret held outside the agent-visible tree. Without it,
+  the public seed plus this repo's own sampler would recompute the golden in one
+  line — a leak I introduced and then found by auditing my own instances.</p>
+
+  <p class="note">It works: the agent recovered randomised periods
+  <strong>0.69 and 0.58</strong> exactly. Neither is upstream's 0.46, the leak audit
+  was clean — so it had to recognise the ×1000 unit slip and invert it, not recall
+  a value.</p>
+</section>
+
+<!-- ───────────────────────── TASK 3a — DECOYS ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 3 · Run a baseline</div>
+  <h2>Four adversarial agents. The grader held.</h2>
+
+  <table>
+    <thead><tr><th>Decoy</th><th class="n">its own finish WS</th><th class="n">held-out signoff WS</th>
+      <th>resolved</th><th>caught by</th></tr></thead>
+    <tbody>
+      <tr><td><strong>oracle</strong> restores golden</td><td class="n">0.1839</td><td class="n">0.18390</td>
+        <td class="ok">yes ✓</td><td>— (positive control)</td></tr>
+      <tr><td><strong>null</strong> does nothing</td><td class="n">−0.4231</td><td class="n">0.15946</td>
+        <td class="no">no</td><td>F2P + area</td></tr>
+      <tr><td><strong>cheat_loose</strong> period → 5.0</td><td class="n"><strong>+3.5836</strong></td><td class="n">0.14334</td>
+        <td class="no">no</td><td><strong>F2P</strong></td></tr>
+      <tr><td><strong>cheat_knob</strong> <code>SKIP_DETAILED_ROUTE=1</code></td><td class="n">0.1661</td><td class="n">0.21163</td>
+        <td class="no">no</td><td><strong>P2P only</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>The reward hack, measured</h3>
+  <p><code>cheat_loose</code> relaxed the clock to 5 ns. Its own run reports
+  <strong>+3.58 ns of slack — 19× the baseline.</strong> By every metric the agent
+  can see it produced a spectacular design. Sign-off says 0.143, worse than
+  baseline. It resolves to <strong>zero</strong>.</p>
+
+  <h3>And the row that justifies the whole bracket</h3>
+  <p><code>cheat_knob</code> suppressed detailed routing, which makes timing
+  <em>optimistic</em> — 0.21163 beats the baseline's 0.18390. It
+  <strong>passed both FAIL_TO_PASS assertions.</strong> The centrepiece gate did
+  not catch it. DRC, antenna and the knob denylist did.</p>
+
+  <blockquote><p>F2P alone lets <code>cheat_knob</code> through by not measuring.
+  P2P alone lets <code>null</code> through by doing nothing. Neither is sufficient
+  — <strong>absence of evidence must fail.</strong> That is SWE-bench's bracket,
+  validated empirically rather than argued.</p></blockquote>
+</section>
+
+<!-- ───────────────────────── TASK 3b — AGENT ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 3 · Run a baseline</div>
+  <h2>Baseline agent: Claude Code, headless</h2>
+
+  <p><code>claude -p</code> inside a purpose-built image (ORFS + Claude Code), one
+  <strong>throwaway container per instance</strong>, only <code>public/</code>
+  staged, leak audit clean on every run. The agent had the real toolchain and could
+  build the design and read its own QoR.</p>
+
+  <table>
+    <thead><tr><th>Instance</th><th>Submitted</th><th class="n">Wall</th><th class="n">Cost</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>C1_s1</td><td>0.00069 → <strong>0.69</strong>, byte-identical to golden</td>
+        <td class="n">204 s</td><td class="n">$0.21</td><td class="ok">resolved</td></tr>
+      <tr><td>C1_s2</td><td>recovered exactly</td><td class="n">109 s</td><td class="n">$0.28</td><td class="ok">resolved</td></tr>
+      <tr><td>C3_s1</td><td>restored <code>set_output_delay</code></td><td class="n">115 s</td><td class="n">$0.17</td><td class="ok">resolved</td></tr>
+      <tr><td>C5_s2</td><td><code>clk_io_pct = 0.35</code></td><td class="n">976 s</td><td class="n">$1.23</td><td class="ok">resolved</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The first C5 run failed — and it was our bug, not the agent's</h3>
+  <p>It ran a genuine parameter sweep (<code>io020…io035</code>), hit
+  <code>max_turns</code> mid-search, and never wrote its conclusion back. Graded as
+  the null agent. <strong>A task-design defect.</strong> Two fixes — require writing
+  best-so-far after <em>every</em> trial, and report <code>terminal_reason</code> so
+  truncation is never conflated with a wrong answer — then a re-run at the
+  <em>same</em> budget resolved it.</p>
+
+  <h3>C5 also vindicated behavioural grading</h3>
+  <p>Golden was <code>0.15</code>; the agent submitted <code>0.35</code> and
+  <strong>passed</strong>, because its layout re-times as well as the golden's. The
+  question is never "did you recover the reference value" but "is the design you
+  produced as good". I had flagged C5 as possibly unfair — that concern was
+  <strong>wrong</strong>, for exactly this reason.</p>
+</section>
+
+<!-- TASK 3c - cliff chart -->
+<section class="slide" id="cliff">
+  <div class="tag">Task 3 · Run a baseline</div>
+  <h2>A one-paragraph spec bug cost 33% of the objective</h2>
+
+  <p>The optimisation grader was fixed to accept any non-negative slack —
+  but <strong>the prompt was not updated</strong>. Same agent, same 12-run budget,
+  same tools. The only change between runs was that paragraph.</p>
+
+  <div class="legend">
+    <span><i class="sw" style="background:var(--series-1)"></i> succeeds</span>
+    <span><i class="sw" style="background:var(--series-2)"></i> flow dies (FLW-0024)</span>
+  </div>
+
+  <figure>
+  <svg viewBox="0 0 900 270" width="100%" height="270" role="img"
+       aria-label="Die area against core utilization. Area falls from 1278 at util 55 to 932 at util 77, then the flow fails from 78 upward. Agent v1 chose 68; agent v2 chose 77, the optimum.">
+    <line x1="80" y1="215" x2="820" y2="215" stroke="var(--rule)"/>
+    <text x="450" y="252" text-anchor="middle" font-size="12" fill="var(--text-muted)">CORE_UTILIZATION</text>
+    <text x="26" y="120" font-size="11" fill="var(--text-muted)" transform="rotate(-90 26 120)" text-anchor="middle">die area (µm²)</text>
+
+    <!-- fail region -->
+    <rect x="676" y="30" width="144" height="185" fill="var(--series-2)" opacity="0.09"/>
+    <line x1="676" y1="30" x2="676" y2="215" stroke="var(--series-2)" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="748" y="120" text-anchor="middle" font-size="12" font-weight="650" fill="var(--series-2)">flow dies</text>
+    <text x="748" y="138" text-anchor="middle" font-size="11" fill="var(--series-2)">78 and above</text>
+
+    <!-- curve: util 55..77 -->
+    <polyline points="120,45 216,78 312,105 408,128 504,150 600,166 664,172"
+              fill="none" stroke="var(--series-1)" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="120" cy="45" r="5" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2"/>
+    <circle cx="408" cy="128" r="7" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2.5"/>
+    <circle cx="664" cy="172" r="7" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2.5"/>
+
+    <text x="120" y="34" text-anchor="middle" font-size="11.5" fill="var(--text-primary)" font-family="var(--mono)">1278</text>
+    <text x="120" y="233" text-anchor="middle" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">55</text>
+    <text x="408" y="233" text-anchor="middle" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">68</text>
+    <text x="664" y="233" text-anchor="middle" font-size="11" fill="var(--text-muted)" font-family="var(--mono)">77</text>
+    <text x="748" y="233" text-anchor="middle" font-size="11" fill="var(--series-2)" font-family="var(--mono)">78+</text>
+
+    <text x="408" y="112" text-anchor="middle" font-size="12" font-weight="650" fill="var(--text-primary)">v1 · −18.09%</text>
+    <text x="656" y="152" text-anchor="end" font-size="12" font-weight="650" fill="var(--text-primary)">v2 · −27.09%</text>
+    <text x="656" y="136" text-anchor="end" font-size="11" fill="var(--text-muted)">reference optimum</text>
+    <text x="120" y="60" text-anchor="middle" font-size="11" fill="var(--text-muted)">baseline</text>
+  </svg>
+  <figcaption>Die area versus utilization. The permitted range deliberately extends
+  to 85 — past the cliff — so the optimum is interior and overshooting costs the
+  whole run.</figcaption>
+  </figure>
+
+  <p>In v1 the agent had <em>measured</em> <code>u74</code> at 24.3% reduction with
+  positive slack and <strong>deliberately rejected it</strong>, in its own words to
+  satisfy "both the strict reading and the loose reading" of an ambiguous rubric.
+  That is correct behaviour against the spec it was given.</p>
+
+  <blockquote><p>A <strong>third failure mode</strong>, beyond "agent games the
+  grader" and "agent finds the answer": <strong>the task description and the grader
+  disagree.</strong> It is the most invisible of the three — every gate passes, the
+  agent looks sensible — and it is only detectable against a
+  <em>measured reference optimum</em>.</p></blockquote>
+</section>
+
+<!-- ───────────────────────── TASK 3d — ANALYSIS ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 3 · Run a baseline</div>
+  <h2>What the baseline taught us about the benchmark</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h4>Why it succeeded</h4>
+      <p>C1 is unambiguous once diagnosed, and randomisation forced reasoning over
+      recall — the agent had to recognise a ×1000 slip, not remember 0.46. C3
+      passed with a <em>textually different</em> fix (extra newline), because
+      grading is behavioural, not diff-matching.</p>
+    </div>
+    <div class="card">
+      <h4>Why it failed</h4>
+      <p>Never on reasoning. Once on <strong>budget</strong> (truncated mid-sweep,
+      submitted nothing) and once on <strong>our ambiguous spec</strong>. Both were
+      benchmark defects; both are fixed.</p>
+    </div>
+  </div>
+
+  <h3>Improvements this drove</h3>
+  <ul>
+    <li><strong>Task:</strong> require best-so-far checkpointing every trial, so
+    truncation degrades gracefully instead of submitting nothing.</li>
+    <li><strong>Harness:</strong> report <code>terminal_reason</code> — a 3/4 that
+    hides a truncation is a dishonest number.</li>
+    <li><strong>Grader:</strong> the timing gate must match the problem class —
+    "restore baseline" for repair, "still closes" for optimisation.</li>
+    <li><strong>Spec:</strong> state the gate in the prompt in the same words the
+    grader uses. Drift between them is invisible and expensive.</li>
+  </ul>
+
+  <h3>The cost asymmetry is a finding, not a footnote</h3>
+  <table>
+    <thead><tr><th>Task shape</th><th class="n">Wall</th><th class="n">Cost</th><th>Budget</th></tr></thead>
+    <tbody>
+      <tr><td>Repair (C1, C3)</td><td class="n">~140 s</td><td class="n">~$0.22</td><td>comfortable</td></tr>
+      <tr><td>Search (C5, HP-B)</td><td class="n">~1000 s</td><td class="n">$0.85–2.39</td><td class="wn">consumed in full, every time</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Search is ~7× the wall time and ~6× the cost. That is the
+  argument for making run budget an explicit, graded dimension — and, at hours per
+  run on a real block, it is the business model rather than a detail.</p>
+</section>
+
+<!-- ───────────────────────── TASK 4a — UI ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 4 · Motivate the future product</div>
+  <h2>A PPA review surface, not a chat box</h2>
+
+  <div class="mock">┌──────────────────────────────────────────────────────────────────────────────┐
+│  gcd · nangate45 · run #2847                    ● 4 gates passed   ⚠ 1 review │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   DIE AREA          POWER            SETUP WS         DRC                    │
+│   932 µm²           1.62 mW          +0.011 ns        0                      │
+│   ▼ 27.1%           ▼ 0.2%           ▼ 0.005 ns       —                      │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────────┐  │
+│  │  ⚠  Timing slack was SPENT, not preserved.                             │  │
+│  │     Baseline +0.016 → now +0.011. Still closes. This is the trade you  │  │
+│  │     asked for, but it is a trade.   [see path] [reject] [accept]       │  │
+│  └────────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│  PROPOSED CHANGE                                    ┌─────────────────────┐  │
+│  CORE_UTILIZATION        55 ──────────────▶ 77      │  SIGN-OFF           │  │
+│  PLACE_DENSITY_LB_ADDON  0.20 ────────────▶ 0.00    │  ✓ DRC 0            │  │
+│                                                     │  ✓ antenna 0        │  │
+│  ⓘ  util 78 fails: FLW-0024 in global placement.    │  ✓ setup WS ≥ 0     │  │
+│     This setting is 1 step from the cliff.          │  ✓ knobs in policy  │  │
+│                                                     │  ✓ budget 11/12     │  │
+│  SEARCH TRACE           11 of 12 runs · $0.85       │  ─────────────────  │  │
+│  55 ▁ 65 ▃ 75 ▆ 78 ✗ 79 ✗ 80 ✗ 82 ✗ 83 ✗ 85 ✗ 77 █ │  vs reference: 100% │  │
+│                                       ▲ chosen      └─────────────────────┘  │
+│  [ view layout ]  [ diff constraints ]  [ replay run ]  [ export evidence ]  │
+└──────────────────────────────────────────────────────────────────────────────┘</div>
+
+  <div class="grid3" style="margin-top:20px">
+    <div class="card"><h4>The trade is surfaced</h4>
+      <p>Slack went +0.016 → +0.011. Both pass. A dashboard that shows only green
+      has taught the engineer nothing.</p></div>
+    <div class="card"><h4>Failures are shown</h4>
+      <p><code>78 ✗ 79 ✗ 80 ✗</code> is the most useful part of the screen — it
+      tells you where the cliff is. That knowledge outlives the agent.</p></div>
+    <div class="card"><h4>vs reference: 100%</h4>
+      <p>Failure mode 3, rendered as a widget. Without it, v1's −18.09% reads as a
+      clean success.</p></div>
+  </div>
+</section>
+
+<!-- ───────────────────────── TASK 4b — CAPABILITIES ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 4 · Motivate the future product</div>
+  <h2>Four capabilities, one substrate</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h4>① Constraint Guard <span class="ok" style="font-size:11px">· grader built</span></h4>
+      <p>CI gate. Every SDC pull request is re-timed against sign-off constraints
+      the author does not control.</p>
+      <pre style="margin-top:10px;font-size:11px">PR #412  "tighten IO budget"        ✗ BLOCKED
+Author reports:  WS 0.184 → 0.241  ▲31% better
+Sign-off says:   WS 0.184 → 0.176  ▼ worse
+ⓘ deletes set_output_delay — 35 endpoints
+  became unconstrained.</pre>
+    </div>
+    <div class="card">
+      <h4>② Closure Copilot <span class="ok" style="font-size:11px">· grader built</span></h4>
+      <p>Proposes configurations, runs them under budget, presents a Pareto board
+      for approval. The screen on the previous slide.</p>
+      <p style="margin-top:9px"><strong>The comparator that makes it credible:</strong>
+      ORFS ships <strong>AutoTuner</strong>, a real non-LLM optimiser over the same
+      knob space. The claim to earn is not "we found −27%" but "we matched
+      AutoTuner in 11 runs <em>and explained why</em>."</p>
+    </div>
+    <div class="card">
+      <h4>③ QoR Bisect <span class="wn" style="font-size:11px">· defined</span></h4>
+      <p>Attributes a regression to a stage, then a cause — distinguishing
+      <em>causal</em> from <em>inherited</em> deltas.</p>
+      <pre style="margin-top:10px;font-size:11px">synth      +0.0%  ·
+floorplan  +8.1%  ████  ← first appears
+place      +8.1%  ████  (inherited)
+route      +8.2%  ████  (inherited)
+ROOT: CORE_UTILIZATION 60→55, commit a3f21c</pre>
+      <p style="margin-top:9px">Only sound because QoR is bit-exact deterministic —
+      every delta is attributable.</p>
+    </div>
+    <div class="card">
+      <h4>④ Budget Broker <span class="wn" style="font-size:11px">· defined</span></h4>
+      <p>Allocates interface budgets across blocks and re-negotiates as blocks
+      report back.</p>
+      <pre style="margin-top:10px;font-size:11px">reg2out(A) + interconnect + in2reg(B)
+                    ≤ period − uncertainty
+
+allocated 480 ps > 450 ps budget   ✗ −30 ps
+⚠ Every block closes. The chip does not.</pre>
+      <p style="margin-top:9px">The top-tier check is <strong>arithmetic</strong> —
+      verifiable by hand in ten seconds, which is what you want in a gate a lead
+      engineer signs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── TASK 4c — EVIDENCE ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Task 4 · Motivate the future product</div>
+  <h2>The evidence pack — what ships with every result</h2>
+
+  <p>What an engineer wants before trusting an agent. One export per run.</p>
+
+  <table>
+    <thead><tr><th style="width:33%">Artifact</th><th>Why it is in the pack</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Verdict</strong> — every assertion, pass/fail, with numbers</td>
+        <td>Not a score. The actual checks, individually legible.</td></tr>
+      <tr><td><strong>Sign-off delta</strong> — implementation view vs held-out view</td>
+        <td>Where the lie would be, if there were one.</td></tr>
+      <tr><td><strong>Search trace</strong> — every trial, including the failures</td>
+        <td>The cliff is knowledge the engineer keeps after the agent is gone.</td></tr>
+      <tr><td><strong>Diff</strong> — confined to permitted files</td><td>Reviewable in seconds.</td></tr>
+      <tr><td><strong>vs reference</strong> — % of known-achievable</td>
+        <td>Catches spec/grader disagreement. Nothing else does.</td></tr>
+      <tr><td><strong>Budget + cost</strong> — runs used, dollars</td>
+        <td>"Found in 11 runs" ≠ "found in 400".</td></tr>
+      <tr><td><strong>Replay command</strong> — pinned commit, exact invocation</td>
+        <td>Reproducible <em>without</em> the product. An evidence pack that only
+        works inside the tool is lock-in, not trust.</td></tr>
+      <tr><td><strong>Leak audit</strong> — what the agent could reach</td>
+        <td>Evidence it solved rather than looked up.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Build order — and it is a safety argument, not a difficulty ranking</h3>
+  <p>Constraint Guard first, even though Closure Copilot is the flagship.
+  <strong>Without a cheat-proof grader underneath, a closure copilot is an
+  automated way to ship a design that reports good numbers and is not.</strong></p>
+</section>
+
+<!-- ───────────────────────── LIMITS ───────────────────────── -->
+<section class="slide">
+  <div class="tag">Closing</div>
+  <h2>What I'd fix, and what would make this fail</h2>
+
+  <h3>Known limits, stated rather than hidden</h3>
+  <table>
+    <thead><tr><th style="width:38%">Limit</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Two levers of three</strong></td>
+        <td>SDC has 4 agent runs, flow knobs 2. <strong>RTL/netlist: 0</strong> — and
+        it is where cheating is easiest, needing an equivalence gate that does not
+        exist here yet.</td></tr>
+      <tr><td><strong>Two designs, one platform</strong></td>
+        <td>gcd (~1100 cells) and aes (~19k). ibex and sky130hd explored but not
+        benchmarked. All Nangate45 except the sky130hd baseline.</td></tr>
+      <tr><td><strong>HP-B is single-knob</strong></td>
+        <td>Five of eight permitted knobs are inert on gcd. It measures budgeted
+        search against a cliff, not multi-objective breadth.</td></tr>
+      <tr><td><strong>No AutoTuner comparison</strong></td>
+        <td>The highest-value thing remaining, and it needs no grader changes.</td></tr>
+      <tr><td><strong>Repair, not open-ended optimisation</strong></td>
+        <td>HP-A has ground truth because we injected the defect. That is its
+        strength and its ceiling.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The aes generalisation test: 3/4 validated, and the classes swapped roles</h3>
+  <table>
+    <thead><tr><th>Class</th><th class="n">finish WS</th><th class="n">signoff WS</th>
+      <th>on aes</th><th>on gcd</th></tr></thead>
+    <tbody>
+      <tr><td><strong>C2</strong> input delay deleted</td><td class="n">+0.07244</td>
+        <td class="n"><strong>−0.27979</strong></td><td class="ok">validated</td><td class="no">inert</td></tr>
+      <tr><td><strong>C1</strong> period ×1/1000</td><td class="n">−0.79901</td>
+        <td class="n">0.16847</td><td class="ok">validated</td><td class="ok">validated</td></tr>
+      <tr><td><strong>C5</strong> io_pct inflated</td><td class="n">−0.00097</td>
+        <td class="n">0.05506</td><td class="ok">validated</td><td class="wn">1 of 2 seeds</td></tr>
+      <tr><td><strong>C3</strong> output delay deleted</td><td class="n">0.06825</td>
+        <td class="n">0.06825</td><td class="no">inert</td><td class="ok">validated</td></tr>
+    </tbody>
+  </table>
+  <p><strong>C2 and C3 traded places.</strong> C2 was completely inert on gcd —
+  byte-identical layout after deleting all 35 input delays — and on aes it is the
+  most severe defect in the suite. C3 did the reverse. The prediction that
+  I/O-defect classes need an I/O-critical design held, and the machinery
+  transferred with zero changes.</p>
+
+  <p>Two other aes results: it does not close at its own upstream period (first
+  clean baseline is <strong>0.95</strong>, not the 0.85 I had guessed — the second
+  time a sweep caught a wrong guess), and its <strong>die area is fixed by a
+  floorplan DEF</strong>, so HP-B's objective does not transfer at all, though
+  power moves 25%.</p>
+
+  <blockquote><p>The mechanism generalises. <strong>The objective and the defect
+  class do not.</strong> A suite that assumes one class or one objective fits every
+  design will silently ship vacuous instances — which is exactly what per-instance
+  validation is for.</p></blockquote>
+
+  <p class="note">Four of the thirteen findings are negative — a corruption channel
+  with no consequence, an inert defect class, a wrong guessed range, an untunable
+  objective. They are in the repo on purpose: they are the reason the remaining
+  claims are worth believing.</p>
+</section>
+
+</body>
+</html>
