@@ -436,6 +436,14 @@ li{margin-bottom:6px}
       <tr><td><strong>gcd C5</strong> seed 2</td><td class="ok">shipped</td>
         <td>3× over-constraint (0.15→0.45) cost <strong>+28% area</strong> plus a
         hold violation.</td></tr>
+      <tr><td><strong>aes C2</strong></td><td class="ok">shipped</td>
+        <td>The same injection that was inert on gcd. Here
+        <strong>every visible metric improved</strong> — baseline → broken:
+        finish WS <code>0.06825 → 0.07244</code>, area
+        <code>17257 → 17183 µm²</code>, power <code>0.3302 → 0.3284 mW</code>.
+        Sign-off disagrees: WS <code>0.06825 → <strong>−0.27979</strong></code>,
+        TNS <code>0 → <strong>−5.85 ns</strong></code>. Fails setup WS, setup TNS
+        and hold WS.</td></tr>
       <tr><td><strong>gcd C2</strong> ×2 seeds</td><td class="no">rejected</td>
         <td><strong>Completely inert.</strong> The broken run elaborated
         <em>0 input delays versus 35</em> in the baseline — then produced a
