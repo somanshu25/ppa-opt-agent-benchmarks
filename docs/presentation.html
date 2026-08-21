@@ -283,13 +283,14 @@ li{margin-bottom:6px}
     </tbody>
   </table>
 
-  <h3>Depth over breadth was a deliberate choice</h3>
-  <p>Two problems with a cheat-proof grader and measured baselines are worth more
-  than four shallow ones. An earlier draft of this analysis argued for leading with
-  HP-D on the strength of its local-success/global-failure argument.
-  <strong>Measurement changed the ordering</strong> — HP-A and HP-B acquired
-  validated graders and real numbers; HP-D still has zero runs. That is the same
-  discipline that later killed two defect classes.</p>
+  <h3>Depth over breadth</h3>
+  <p>Two problems carried all the way through — a cheat-proof grader, adversarial
+  testing, and real agent runs — are worth more than four sketched ones. HP-C and
+  HP-D are specified to the same standard but deliberately left unbuilt.</p>
+  <p><strong>An unvalidated instance is a guess about what a defect does.</strong>
+  Half the instances generated here turned out to be vacuous when measured, so
+  shipping a benchmark on the strength of an argument rather than a measurement is
+  not a risk worth taking.</p>
 </section>
 
 <!-- ══════════════════════════ TASK 2 · THE GRADER IDEA ══════════════════════ -->
@@ -376,12 +377,9 @@ li{margin-bottom:6px}
   <div class="tag">Task 2 · Create benchmark tasks</div>
   <h2>The synthetic defects: what each one injects, and what it tests</h2>
 
-  <p>Classes were chosen from a survey of <strong>all 83 SDCs in ORFS</strong>. The
-  corpus is a four-command monoculture — <code>create_clock</code> 74,
-  <code>set_input_delay</code> 67, <code>set_output_delay</code> 66,
-  <code>set_clock_latency</code> 64, and <strong>zero generated clocks</strong>;
-  48 of 83 are the identical template. So every injector targets those four
-  commands. Removing false paths or clock groups would have nothing to remove.</p>
+  <p>Each class injects <strong>exactly one line of change</strong> into the
+  constraints, so any difference in the resulting chip is attributable to it and
+  nothing else.</p>
 
   <table>
     <thead><tr><th style="width:9%">Class</th><th style="width:38%">The one-line mutation</th>
@@ -404,22 +402,14 @@ li{margin-bottom:6px}
         <td><code>set clk_io_pct 0.15</code> → <code>0.45</code></td>
         <td>Nothing breaks. The design is simply over-constrained and wastes area
         and power. Tests QoR <em>judgement</em>, not defect repair.</td></tr>
-      <tr><td><strong>CX</strong></td>
-        <td><code>set clk_period 0.69</code> → <code>[expr 0.69]</code></td>
-        <td class="no">Never shipped — see below.</td></tr>
     </tbody>
   </table>
 
-  <h3>CX: a real corruption channel with no consequence</h3>
-  <p>ORFS scrapes the clock period out of the SDC <strong>by regex</strong> and
-  feeds it to ABC. An <code>[expr …]</code> form is valid SDC, identical to STA,
-  and defeats that regex — ABC silently receives the literal string
-  <code>[expr</code>. Confirmed end-to-end; nothing errors or warns.</p>
-  <p>Then it was measured: synthesis output is <strong>bit-identical</strong> on
-  both gcd and aes, even under a 6× period change. A genuine silent-corruption
-  channel with zero QoR effect — a good finding and a bad benchmark task. It is
-  kept in the repo, permanently marked out of scope, so the negative stays
-  reproducible.</p>
+  <h3>Known limitation</h3>
+  <p class="lead">These four commands are what the open designs actually use, so
+  the suite tests <strong>clock and I/O constraint integrity</strong> — not
+  timing-exception handling. Defects built on clock groups, false paths or
+  generated clocks would have nothing to remove.</p>
 </section>
 
 <!-- ══════════════════════════ TASK 2 · VALIDATION OUTCOMES ══════════════════ -->
@@ -487,22 +477,16 @@ li{margin-bottom:6px}
   design — or it might have run <code>cat</code> on a file. The benchmark cannot
   tell the two apart, so it measures retrieval and reports it as engineering.</p>
 
-  <h3>And the answer really is in the room — five ways</h3>
-  <pre>$ grep set_input_delay flow/results/nangate45/gcd/base/6_final.sdc
-set_input_delay 0.0920 -clock [get_clocks {vclk_core_clock}] -add_delay [get_ports {req_msg[0]}]</pre>
-  <p class="note">That is the C2 answer, fully elaborated, sitting in a stale results
-  directory. The other four: the pristine <code>designs/…/constraint.sdc</code>;
-  <code>.git</code> history; <code>rules-base.json</code>, which states upstream's
-  expected slack and area; and <code>autotuner.json</code>, which declares the legal
-  clock-period range and so brackets the answer.</p>
+  <h3>And the answer is easy to come by</h3>
+  <p>These are <strong>open-source designs from a public repository</strong>. The
+  correct constraints ship with the design, so they sit inside the very workspace
+  the agent is working in — and, because the project is on GitHub, they are
+  plausibly in the training data of any model being evaluated. That second channel
+  is not a file, so no amount of directory cleaning touches it. It is the same
+  contamination criticism levelled at SWE-bench.</p>
 
-  <p>There is a sixth channel that is not a file at all: <strong>ORFS is public and
-  on GitHub</strong>, so <code>gcd period 0.46</code> is plausibly in the training
-  data of any model being evaluated. That is the same contamination criticism
-  levelled at SWE-bench, and no amount of directory cleaning touches it.</p>
-
-  <blockquote><p>Sanitising the environment is <em>necessary but unfalsifiable</em>
-  — you can never prove you found every path. Randomising the reference is
+  <blockquote><p>Scrubbing the workspace is <em>necessary but unfalsifiable</em> — you can never
+  prove you removed every copy, and it does nothing about training data. Randomising the reference is
   <em>sufficient by construction</em>: <strong>an instance that did not exist before
   we generated it cannot have been memorised</strong>, and every leaked copy of
   upstream's value is simply wrong.</p></blockquote>
@@ -829,50 +813,6 @@ set_input_delay 0.0920 -clock [get_clocks {vclk_core_clock}] -add_delay [get_por
   on a real block, it is the business model rather than a detail.</p>
 </section>
 
-<!-- ══════════════════════════ TASK 4 · UI ═══════════════════════════════════ -->
-<section class="slide">
-  <div class="tag">Task 4 · Motivate the future product</div>
-  <h2>A PPA review surface, not a chat box</h2>
-
-  <div class="mock">┌──────────────────────────────────────────────────────────────────────────────┐
-│  gcd · nangate45 · run #2847                    ● 4 gates passed   ⚠ 1 review │
-├──────────────────────────────────────────────────────────────────────────────┤
-│   DIE AREA          POWER            SETUP WS         DRC                    │
-│   932 µm²           1.62 mW          +0.013 ns        0                      │
-│   ▼ 27.1%           ▼ 0.2%           ▼ 0.003 ns       —                      │
-│                                                                              │
-│  ┌────────────────────────────────────────────────────────────────────────┐  │
-│  │  ⚠  Timing slack was SPENT, not preserved.                             │  │
-│  │     Baseline +0.016 → now +0.013. Still closes. This is the trade you  │  │
-│  │     asked for, but it is a trade.   [see path] [reject] [accept]       │  │
-│  └────────────────────────────────────────────────────────────────────────┘  │
-│                                                                              │
-│  PROPOSED CHANGE                                    ┌─────────────────────┐  │
-│  CORE_UTILIZATION        55 ──────────────▶ 77      │  SIGN-OFF           │  │
-│  PLACE_DENSITY_LB_ADDON  0.20 ────────────▶ 0.00    │  ✓ DRC 0            │  │
-│                                                     │  ✓ antenna 0        │  │
-│  ⓘ  util 78 fails: FLW-0024 in global placement.    │  ✓ setup WS ≥ 0     │  │
-│     This setting is 1 step from the cliff.          │  ✓ hold WS ≥ 0      │  │
-│                                                     │  ✓ knobs in policy  │  │
-│  SEARCH TRACE           11 of 12 runs · $0.85       │  ✓ budget 11/12     │  │
-│  55 ▁ 65 ▃ 75 ▆ 78 ✗ 79 ✗ 80 ✗ 82 ✗ 83 ✗ 85 ✗ 77 █ │  ─────────────────  │  │
-│                                       ▲ chosen      │  vs reference: 100% │  │
-│  [ view layout ]  [ diff constraints ]  [ replay ]  └─────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────────────┘</div>
-
-  <div class="grid3" style="margin-top:20px">
-    <div class="card"><h4>The trade is surfaced</h4>
-      <p>Slack went +0.016 → +0.013. Both pass. A dashboard that shows only green
-      has taught the engineer nothing.</p></div>
-    <div class="card"><h4>Failures are shown</h4>
-      <p><code>78 ✗ 79 ✗ 80 ✗</code> is the most useful part of the screen — it tells
-      you where the cliff is. That knowledge outlives the agent.</p></div>
-    <div class="card"><h4>vs reference: 100%</h4>
-      <p>Failure mode three, rendered as a widget. Without it, v1's −18.09% reads as
-      a clean success.</p></div>
-  </div>
-</section>
-
 <!-- ══════════════════════════ TASK 4 · CAPABILITIES ═════════════════════════ -->
 <section class="slide">
   <div class="tag">Task 4 · Motivate the future product</div>
@@ -892,7 +832,7 @@ Sign-off says:   WS 0.068 → −0.280 ▼ FAILS
     <div class="card">
       <h4>② Closure Copilot <span class="ok" style="font-size:11px">· grader built</span></h4>
       <p>Proposes configurations, runs them under budget, presents a Pareto board for
-      human approval — the screen opposite.</p>
+      human approval, with the search trace and the cliff location shown alongside.</p>
       <p><strong>The comparator that would make it credible:</strong> ORFS ships
       <strong>AutoTuner</strong>, a real non-LLM optimiser over the same knob space.
       The claim to earn is not "we found −27%" but "we matched AutoTuner in 11 runs
