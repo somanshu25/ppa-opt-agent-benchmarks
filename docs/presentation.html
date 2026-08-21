@@ -122,7 +122,7 @@ li{margin-bottom:6px}
     <div class="tile"><div class="k">Adversarial decoys</div><div class="v">4 / 4</div>
       <div class="s">graded correctly, incl. a 19× reward hack</div></div>
     <div class="tile"><div class="k">Measured findings</div><div class="v">14</div>
-      <div class="s">four of them negative</div></div>
+      <div class="s">five killed an idea; one a pure negative</div></div>
   </div>
 
   <p>Everything here is measured in a pinned environment — OpenROAD-flow-scripts
@@ -954,18 +954,42 @@ allocated 480 ps > 450 ps budget  ✗ −30 ps
       <tr><td><strong>Repair, not open-ended optimisation</strong></td>
         <td>HP-A has ground truth because we injected the defect. That is both its
         strength and its ceiling.</td></tr>
+      <tr><td><strong>A large improvement is currently just a pass</strong></td>
+        <td>HP-A resolves any run whose sign-off timing is at least as good as the
+        baseline — so an unexplained <em>gain</em> is waved through. See below.</td></tr>
     </tbody>
   </table>
+
+  <h3>Next: treat suspicious improvement as a review trigger, not a win</h3>
+  <p>The repair gate asks <em>"is sign-off timing no worse than baseline?"</em>. That
+  is the right question for a regression, but it is one-sided: a run that comes back
+  <strong>dramatically better</strong> passes silently. And on a repair task, where
+  the reference is a known-good design, a large unexplained gain is
+  <strong>as suspicious as a loss</strong>. It usually means one of:</p>
+  <ul>
+    <li>the reference constraints do not fully pin the design, so the agent found
+    genuine slack the benchmark never intended to offer;</li>
+    <li>the agent found a loophole the gates do not yet model;</li>
+    <li>the instance is mis-specified — the same class of error that made a spec
+    ambiguity cost 33% of the objective.</li>
+  </ul>
+  <p>The fix is a <strong>per-metric improvement band</strong>: a delta beyond which
+  the run is not auto-passed but <strong>flagged for human review</strong>, shipped
+  with its diff, its sign-off delta and its search trace attached. Cheap to add — the
+  numbers are already computed — and it is what an engineer would do anyway.
+  <strong>Nobody accepts a surprise 30% win without asking where it came from.</strong></p>
 
   <blockquote><p>The mechanism generalises. <strong>The objective and the defect class
   do not.</strong> A suite that assumes one class or one objective fits every design
   will silently ship vacuous instances — which is exactly what per-instance validation
   is for.</p></blockquote>
 
-  <p class="note">Four of the fourteen findings are negative — a corruption channel
-  with no consequence, an inert defect class, two wrong guessed ranges, an untunable
-  objective. They are in the repo on purpose: they are the reason the remaining claims
-  are worth believing.</p>
+  <p class="note">One of the fourteen findings is a <strong>pure negative</strong> —
+  a silent corruption channel with no measurable consequence, cut as a defect class.
+  <strong>Five more overturned a design choice</strong>: an inert defect class on gcd,
+  an untunable objective, two wrong guessed ranges, and a spec that disagreed with its
+  own grader. They are in the repo on purpose — they are the reason the remaining
+  claims are worth believing.</p>
 </section>
 
 </body>
