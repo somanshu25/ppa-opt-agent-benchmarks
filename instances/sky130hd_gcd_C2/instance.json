@@ -1,0 +1,21 @@
+{
+  "class_id": "C2",
+  "class_name": "missing_input_delay",
+  "design": "gcd",
+  "design_config": "./designs/sky130hd/gcd/config.mk",
+  "editable_files": [
+    "impl.sdc"
+  ],
+  "expect_degrades": [
+    "signoff_setup_ws",
+    "signoff_setup_tns"
+  ],
+  "golden_sdc": "golden.sdc",
+  "in_v1_scope": false,
+  "instance_id": "sky130hd_gcd_C2",
+  "notes": "implementation-run slack IMPROVES; only golden-SDC signoff degrades",
+  "orfs_commit": "02ba50d53",
+  "platform": "sky130hd",
+  "silent_defect": true,
+  "validated": false
+}

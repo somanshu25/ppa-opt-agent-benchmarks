@@ -1,0 +1,22 @@
+{
+  "class_id": "C5",
+  "class_name": "io_overconstrain",
+  "design": "aes",
+  "design_config": "./designs/nangate45/aes/config.mk",
+  "editable_files": [
+    "impl.sdc"
+  ],
+  "expect_degrades": [
+    "inst_area",
+    "power_total",
+    "utilization"
+  ],
+  "golden_sdc": "golden.sdc",
+  "in_v1_scope": true,
+  "instance_id": "nangate45_aes_C5",
+  "notes": "clk_io_pct 0.2 -> 0.45; flow still passes all gates",
+  "orfs_commit": "02ba50d53",
+  "platform": "nangate45",
+  "silent_defect": false,
+  "validated": false
+}

@@ -1,0 +1,23 @@
+{
+  "class_id": "C1",
+  "class_name": "unit_slip",
+  "design": "gcd",
+  "design_config": "./designs/sky130hd/gcd/config.mk",
+  "editable_files": [
+    "impl.sdc"
+  ],
+  "expect_degrades": [
+    "setup_ws",
+    "setup_tns",
+    "inst_area",
+    "power_total"
+  ],
+  "golden_sdc": "golden.sdc",
+  "in_v1_scope": false,
+  "instance_id": "sky130hd_gcd_C1",
+  "notes": "period 1.1 -> 0.0011 (divided by 1000.0)",
+  "orfs_commit": "02ba50d53",
+  "platform": "sky130hd",
+  "silent_defect": false,
+  "validated": false
+}
