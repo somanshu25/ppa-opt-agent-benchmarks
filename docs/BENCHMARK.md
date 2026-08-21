@@ -1,8 +1,14 @@
-# Benchmark Specification
+# Benchmark Specifications
 
-`sdc-repair-v1` — SDC constraint repair on the OpenROAD flow.
+Two benchmarks: `sdc-repair-v1` (HP-A, constraint repair) and `knob-opt-v1`
+(HP-C, budgeted die-area minimisation). Both use the SWE-bench / Terminal-Bench
+shape: environment, task, grader.
 
-Structured as SWE-bench and Terminal-Bench are: **environment, task, grader.**
+---
+
+# Benchmark 1 — `sdc-repair-v1`
+
+
 
 ---
 
@@ -255,3 +261,160 @@ gate anything.
 - **The SDC corpus bounds coverage.** All 83 ORFS SDCs are a four-command
   monoculture with zero generated clocks, so classes touching uncertainty,
   false paths or clock groups have nothing to remove.
+
+---
+
+# Benchmark 2 — `knob-opt-v1`
+
+Budgeted die-area minimisation via flow knobs. HP-C.
+
+Same three-part shape (environment, task, grader), but a **different problem
+class**, and the differences are the interesting part: nothing is broken, so
+there is no defect to repair and no hidden answer to protect.
+
+---
+
+## a) Task description
+
+The design already builds correctly and meets timing. It is also larger than it
+needs to be. Shrink the die by tuning flow knobs, without breaking correctness,
+inside a fixed run budget.
+
+| | |
+|---|---|
+| **Given** | the design at its default config, the permitted knob space with ranges, a **12-run budget**, and a shell with the full flow |
+| **Deliverable** | `/work/knobs.json` — a knob-value map. Nothing else is collected |
+| **Objective** | reduce `finish__design__die__area` by at least **2%** |
+
+The agent is told the gates, the budget, and that timing is a gate rather than a
+score. It is also told to write best-so-far to the deliverable after *every*
+trial, so a truncated run degrades gracefully — a lesson learned the hard way
+(F10).
+
+## b) Setup
+
+Same pinned environment as `sdc-repair-v1`: ORFS `02ba50d53`, `openroad/orfs`,
+Nangate45, gcd, ~40 s per flow run.
+
+**No injection and no randomisation.** There is no hidden reference — the
+baseline config is public and the agent is meant to beat it. Sanitisation is
+correspondingly lighter: only `rules-base.json` is removed, since it states
+upstream's expected area and hints at the achievable target.
+
+**Knob allowlist, not denylist.** A denylist catches `SKIP_DETAILED_ROUTE`, but
+the real hazard is `SDC_FILE` — an agent free to set arbitrary make variables
+could point the flow at constraints of its own choosing and walk straight
+through the sign-off gate. The allowlist derives from ORFS's own
+`autotuner.json`, minus `_SDC_*` (the SDC lever wearing a knob costume) and
+`_FR_*` (needs platform Tcl rewriting), plus two curated floorplan knobs:
+
+```
+CELL_PAD_IN_SITES_DETAIL_PLACEMENT   int    [0, 3]
+CELL_PAD_IN_SITES_GLOBAL_PLACEMENT   int    [0, 3]
+CORE_MARGIN                          int    [1, 3]
+CORE_UTILIZATION                     int    [30, 85]
+CTS_CLUSTER_DIAMETER                 int    [20, 400]
+CTS_CLUSTER_SIZE                     int    [10, 200]
+PLACE_DENSITY                        float  [0.3, 0.95]
+PLACE_DENSITY_LB_ADDON               float  [0.0, 0.2]
+```
+
+**`CORE_UTILIZATION` intentionally extends past what works.** Measured: 77
+succeeds at −27.09% die area; 78 dies in global placement with `FLW-0024`.
+Capping the range at the optimum would reduce the task to "read the allowlist,
+pick the maximum". With the range wider than the working range, overshooting
+costs the whole run — which is the actual engineering problem.
+
+## c) Expected output
+
+`knobs.json`, e.g. `{"CORE_UTILIZATION": 77, "PLACE_DENSITY_LB_ADDON": 0.0}`.
+The grader emits `resolved`, per-assertion detail, and a score carrying
+`die_area_delta_pct`, `power_delta_pct`, `inst_area_delta_pct` and `runs_used`.
+
+## d) Grading method
+
+Same discipline as `sdc-repair-v1`: the agent's own run directory is never
+trusted. The flow is re-run from clean with exactly the submitted knobs, and the
+layout is re-timed against the design's own constraints — which the agent was
+not permitted to touch, so they are held out without needing to be hidden.
+
+Illegal knobs are **not** forwarded to make. The violation is recorded and the
+run proceeds at default config, so a rejected submission cannot still influence
+the measurement.
+
+### The objective was chosen by measurement
+
+A 19-run one-at-a-time sweep over the permitted space (F11):
+
+```
+die_area   -25.29% .. +78.01%     <- tunable
+inst_area   -0.54% ..  +0.86%     <- flat
+```
+
+`inst_area` — what the repair grader scores — is fixed by synthesis and timing
+repair. `die_area` is the footprint that costs money. Running the sweep before
+building the grader is what caught this.
+
+### Assertions
+
+**PASS_TO_PASS** — `flow_completed`, `flow_errors`, `drc_errors`,
+`antenna_violations`, `placement_violations`, `signoff_setup_ws`,
+`signoff_setup_tns`, `signoff_hold_ws`, `no_disabled_checks`, `knobs_permitted`,
+`within_budget`.
+
+**FAIL_TO_PASS** — `die_area_improved`: `die_area <= baseline × 0.98`.
+
+```
+resolved = all(PASS_TO_PASS) AND all(FAIL_TO_PASS)
+```
+
+### Two deliberate differences from the repair grader
+
+**1. `area_not_ballooned` is removed.** It caps area at baseline × 1.05 —
+precisely the thing this benchmark asks the agent to change.
+
+**2. The timing gate is "still closes" (`ws >= 0`), not "no worse than
+baseline".** Repair restores, so a timing regression is failure. Optimisation is
+explicitly allowed to *spend* slack to buy area. This distinction is not
+cosmetic: under the repair gate, the true optimum (`util=77`, WS `+0.011` vs
+baseline `+0.016`) **fails over 5 ps** while closing comfortably.
+
+**3. There is an improvement threshold at all.** With nothing broken, every
+assertion passes at baseline, so without a threshold the null agent wins by
+doing nothing — the same degenerate case P2P-alone had in repair.
+
+### Validated before any agent saw it
+
+| submission | resolved | expected | die area | delta |
+|---|---|---|---|---|
+| null (no knobs) | no | no | 1278 | 0.0% |
+| optimum (`util=77`) | **yes** | yes | 932 | **−27.09%** |
+| overshoot (`util=85`) | no | no | flow died | — |
+| cheat (`SDC_FILE=…`) | no | no | 1278 | rejected by allowlist |
+
+**4/4 correct** — and the probe caught the timing-gate mis-specification above
+before it reached an agent.
+
+## Baseline agent results
+
+| run | spec said | submitted | die area | runs | resolved |
+|---|---|---|---|---|---|
+| v1 | "no worse than baseline" | `util=68` | −18.09% | 9/12 | yes |
+| v2 | "timing still closes" | `util=77, addon=0.0` | **−27.09%** | 11/12 | yes |
+
+Both resolve. The gap between them is the finding: the prompt was not updated
+when the gate was, and the agent — reasoning correctly against an ambiguous
+rubric — deliberately rejected a measured 24.3% configuration to satisfy both
+readings. **A one-paragraph inconsistency cost 33% of the achievable
+improvement.** See F12.
+
+## Known limits
+
+- **Single-knob in practice.** Five of the eight permitted knobs are inert on
+  gcd — CTS clustering has nothing to cluster with 7 clock buffers, and
+  `PLACE_DENSITY` does nothing at either end. This measures budgeted search
+  against a hard cliff, not multi-objective search breadth.
+- **No AutoTuner comparison yet.** ORFS ships a real non-LLM optimiser over the
+  same space. Running it at equal budget is the highest-value remaining
+  addition and needs no grader changes.
+- **One design, one platform**, as with `sdc-repair-v1`.

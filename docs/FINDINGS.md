@@ -325,6 +325,10 @@ and the only defence is refusing to accept a run that produced no evidence.
 
 ## F9 — Baseline agent (Claude Code, headless): 3/4 resolved
 
+> **Superseded by F10.** The one failure was a task-design defect, not an agent
+> limitation; after the fix the score is 4/4. Kept as recorded because the
+> failure is the reason the fix exists.
+
 `claude -p` inside `ppa-bench/orfs-agent` (ORFS + Claude Code), one throwaway
 container per instance, `--max-turns 40`. The agent had the real toolchain and
 could build the design and read its own QoR. Only `public/` was staged; the

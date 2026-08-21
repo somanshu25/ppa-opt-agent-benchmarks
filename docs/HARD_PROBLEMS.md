@@ -6,7 +6,7 @@ inputs/outputs/evidence it needs, how it can be *correctly* measured, and what
 product falls out of solving it.
 
 Every number cited here was measured in this environment. Sources are
-`docs/FINDINGS.md` (F1–F9) and `docs/BENCHMARK.md`.
+`docs/FINDINGS.md` (F1–F12) and `docs/BENCHMARK.md`.
 
 ---
 
@@ -72,11 +72,11 @@ verification.
 |---|---|---|---|
 | **HP-A** | Constraint integrity / SDC repair | ✅ built + validated (F7–F9) | 10 validation (baseline shared per seed) + 10 sign-off re-times; 4 decoy; 4 agent |
 | **HP-B** | QoR regression root-cause | ❌ none | 0 |
-| **HP-C** | Budgeted multi-objective closure | ❌ none | 0 |
+| **HP-C** | Budgeted die-area minimisation | ✅ built + validated (F11–F12) | 19 knob sweep + 7 cliff + 8 grader probe; 2 agent |
 | **HP-D** | Top-level → block budgeting | ❌ none | 0 (hierarchical flow never run here) |
 
-Only HP-A is built. HP-B–HP-D are *defined* problems with argued designs. That
-scoping is deliberate and stated in full at the end.
+**HP-A and HP-C are built.** HP-B and HP-D are *defined* problems with argued
+designs. That scoping is deliberate and stated in full at the end.
 
 ---
 
@@ -171,12 +171,17 @@ disaster.
 Randomised, secret-keyed goldens defeat memorisation: an instance that did not
 exist before we generated it cannot have been in training data.
 
-**Baseline agent (F9):** Claude Code headless, one throwaway container per
-instance, `public/` only, leak audit clean — **3/4 resolved**, $3.04 total. C1
-recovered both randomised periods (0.69, 0.58) exactly, which required
-recognising and inverting the ×1000 unit slip rather than recalling upstream's
-0.46. C5_s2 failed on **budget, not reasoning**: it ran a genuine parameter
-sweep, hit `--max-turns 40` mid-sweep, and never wrote its conclusion back.
+**Baseline agent (F9, F10):** Claude Code headless, one throwaway container per
+instance, `public/` only, leak audit clean — **4/4 resolved**. C1 recovered both
+randomised periods (0.69, 0.58) exactly, which required recognising and
+inverting the ×1000 unit slip rather than recalling upstream's 0.46.
+
+C5_s2 initially failed on **budget, not reasoning**: it ran a genuine parameter
+sweep, hit `--max-turns 40` mid-sweep, and never wrote its conclusion back, so
+it was graded as the null agent. That was a **task-design defect**. Two fixes —
+require writing best-so-far to the deliverable after *every* trial, and report
+`terminal_reason` so truncation is never conflated with a wrong answer — then a
+re-run at the *same* 40-turn budget resolved it (F10).
 
 ### 5. Product
 
@@ -258,75 +263,157 @@ requested piece of tooling in a physical design team's workflow.
 
 ---
 
-# HP-C — Budgeted multi-objective closure
+# HP-C — Budgeted die-area minimisation
 
 *The actual "PPA optimisation agent" — improving a design nobody broke.*
-**Status: defined. Zero instances built. Hardest and most valuable.**
+**Status: built, validated, and baselined. Two agent runs.**
 
 ### 1. Why it is hard
 
 There is **no ground truth**, because nothing was injected. "Better" is a
-judgment call over a Pareto surface, not a pass/fail. The action space is huge
-(flow knobs × constraints × floorplan), evaluations are expensive, and there is
-no gradient. And the budget is part of the problem: an agent that finds a great
-answer after 400 flow runs has not solved the industrial problem.
+judgment over a Pareto surface, not a pass/fail. The action space is large,
+evaluations are expensive, there is no gradient, and the budget is part of the
+problem: an agent that finds a great answer after 400 flow runs has not solved
+the industrial problem.
+
+It also has a structural difference from repair that changes the grading shape.
+In repair, something is broken, so assertions fail on the injected run and pass
+on the fix — that is what FAIL_TO_PASS means. **Here nothing is broken.** Every
+assertion passes at baseline, so there is no fail-to-pass flip to define, and
+left alone the null agent wins by changing nothing.
 
 ### 2. Why coding agents fail
 
-**R1 at full force**, plus a failure mode we measured directly. LLM agents are
-notably bad at sample-efficient search under a hard budget, and the cost
-asymmetry is stark (F9):
+**R1 at full force**, plus a cost asymmetry measured directly (F9, F10):
 
 | task shape | wall | cost | finished? |
 |---|---|---|---|
-| repair (C1_s1, C1_s2, C3_s1) | ~140 s | ~$0.22 | ✅ |
-| search (C5_s2) | **1088 s** | **$2.39** | ❌ hit `max_turns` mid-sweep |
+| repair (C1_s1, C1_s2, C3_s1) | ~140 s | ~$0.22 | yes |
+| search (C5_s2) | 1088 s | $2.39 | no — hit `max_turns` mid-sweep |
 
-The search task cost **~10× the repair tasks in both time and money and still
-did not finish.** Its *method was right* — it built flow variants `io020`,
-`io025`, `io030`, `io035` to measure the I/O budget empirically — it simply ran
-out of budget and never wrote its conclusion back. That ratio is the argument
-that HP-C is a genuinely different problem, and that **run budget must be an
-explicit, measured, graded part of it** rather than an incidental limit.
-
-R2 applies too: with no injected defect, the only thing standing between the
-agent and a degenerate "improvement" is the gate structure.
+The search task cost roughly **7x the wall time and 6x the money** of a repair
+task and consumed its whole turn budget both times it was run. That is the
+argument that run budget must be an **explicit, measured, graded** dimension
+rather than an incidental limit.
 
 ### 3. Inputs / outputs / evidence
 
 | | |
 |---|---|
-| **Input** | a clean design, a public baseline QoR to beat, a permitted knob/constraint space, and an explicit **run budget** |
-| **Output** | a configuration (knob values + constraints) and the resulting layout; plus the number of flow runs consumed |
-| **Evidence** | full stage metrics per trial, the agent's own search trace |
+| **Input** | a clean design at its default config, the permitted knob space with ranges, and an explicit **12-run budget** |
+| **Output** | `/work/knobs.json` — a knob-value map. Nothing else is collected |
+| **Evidence** | full stage metrics per trial, the search trace, and the count of flow runs consumed |
 
-Note what is *absent*: there is **no hidden reference**. HP-C avoids HP-A's
-fairness problem by construction — nothing must be guessed, only beaten.
+Note what is *absent*: **no hidden reference**. Nothing must be guessed, only
+beaten. This is why HP-C sidesteps the fairness question that hung over C5.
 
 ### 4. How it is correctly measured
 
-**Pareto dominance versus the public baseline, with timing and DRC as gates, not
-scores.** If timing is scored rather than gated, an agent trades 3× area for
-10 ps and calls it a win. Report **runs consumed** as a first-class result, not a
-footnote — an answer found in 8 runs and the same answer found in 400 are not
-the same result.
+**Objective set by measurement, not assumption.** A 19-run one-at-a-time sweep
+over the permitted knobs (F11) found:
 
-The knob space must be *measured before it is graded*: `ppa_bench/knob_sweep.py`
-exists for exactly this — one-at-a-time sensitivity over the permitted knobs, so
-the improvement threshold is set from what the knobs actually move rather than
-from a config file. If the permitted knobs only shift area by a fraction of a
-percent, the objective is the wrong one, and it is better to learn that in ten
-minutes of sweeping than after building a grader around it.
+```
+die_area   -25.29% .. +78.01%      <- tunable
+inst_area   -0.54% ..  +0.86%      <- flat
+```
 
-The strongest available comparator: **ORFS ships AutoTuner**, a real, published,
-non-LLM optimiser over the same knob space in `autotuner.json`. That upgrades
-the claim from *"our agent scored 3/4"* to *"the agent beat / matched / lost to
-AutoTuner at equal run budget"* — a far harder claim to wave away. It reuses the
-same gates-and-score grader.
+`inst_area`, the metric the repair grader uses, is fixed by synthesis and timing
+repair and barely responds to placement knobs. `die_area` is the physical
+footprint — what silicon costs — and moves by a factor of 2.4. **The objective
+had to change**, and only running the sweep revealed that.
 
-Honest limitation: this is the **weakest benchmark** of the four precisely
-because "better" is a judgment call. It is best framed as the product vision,
-with A and B leading the benchmark.
+**Two deliberate departures from the repair grader:**
+
+- `area_not_ballooned` is **removed**. It caps area at baseline x 1.05, which is
+  precisely what this benchmark asks the agent to change.
+- The timing gate is **"still closes" (`ws >= 0`), not "no worse than
+  baseline"**. Repair restores, so regression is failure; optimisation is
+  explicitly allowed to *spend* slack to buy area.
+
+**The FAIL_TO_PASS analogue is an improvement threshold** — `die_area <=
+baseline x 0.98`. Without it the null agent passes every gate by doing nothing,
+the same degenerate case P2P-alone had in HP-A.
+
+**Gates (PASS_TO_PASS):** `flow_completed`, `flow_errors`, `drc_errors`,
+`antenna_violations`, `placement_violations`, `signoff_setup_ws`,
+`signoff_setup_tns`, `signoff_hold_ws`, `no_disabled_checks`,
+`knobs_permitted`, `within_budget`.
+
+**Allowlist, not denylist.** A denylist stops `SKIP_DETAILED_ROUTE`, but the
+real hazard is `SDC_FILE` — an agent free to set arbitrary make variables can
+point the flow at constraints of its own choosing and walk straight through the
+sign-off gate. The allowlist is the ORFS `autotuner.json` space, minus `_SDC_*`
+pseudo-knobs (the SDC lever wearing a knob costume) and `_FR_*` (requires
+rewriting platform Tcl).
+
+**The permitted range deliberately overshoots what works.** Measured: `util=77`
+gives -27.09% and succeeds; `util=78` dies in global placement with FLW-0024.
+The allowlist extends to **85**. Capping at the optimum would make the task
+"read the allowlist, pick the maximum" — a lookup. With the range wider than the
+working range, overshooting costs the entire run, which is the real engineering
+problem: pack as tight as you dare.
+
+**Grader validated 4/4 on reference submissions before any agent saw it** (F12):
+
+| submission | resolved | expected | die area | delta |
+|---|---|---|---|---|
+| null | no | no | 1278 | 0.0% |
+| optimum (`util=77`) | **yes** | yes | 932 | **-27.09%** |
+| overshoot (`util=85`) | no | no | flow died | — |
+| cheat (`SDC_FILE=...`) | no | no | 1278 | rejected by allowlist |
+
+The probe caught a real gate mis-specification first: the reference optimum
+initially **failed**, because the timing gate still demanded "no worse than
+baseline". Same value as the `set_propagated_clock` catch — a self-test finding
+a silently-wrong gate before it reached an agent.
+
+### The result worth reporting: a spec ambiguity cost 33% of the objective
+
+The prompt was not updated when the gate was. It still read *"sign-off timing is
+no worse than the baseline"* while the grader accepted any non-negative slack.
+Same agent, same 12-run budget, same tools; **the only change between the two
+runs was that one paragraph.**
+
+| run | spec said | submitted | die area | runs used |
+|---|---|---|---|---|
+| v1 | "no worse than baseline" | `util=68` | **-18.09%** | 9/12 |
+| v2 | "timing still closes" | `util=77, addon=0.0` | **-27.09%** | 11/12 |
+
+v2 hit the reference optimum exactly. The agent explained its v1 choice itself:
+
+> "u68 is the local optimum where setup worst-slack (0.01699) actually **beats**
+> baseline (0.016009) rather than merely staying positive. That means it passes
+> the timing gate under **both** the strict reading and the loose reading,
+> unlike u70-u74 which shrink further but regress setup slack below baseline."
+
+It had *measured* `u74` at 24.3% reduction with positive slack and deliberately
+rejected it, hedging against an ambiguous rubric. **That is correct behaviour
+against the specification it was given.** The nine percentage points it left on
+the table were a benchmark defect, not an agent limitation.
+
+**Why this matters more than the score.** The gap between the agent result and
+the measured reference optimum is what surfaced the defect. Without a reference,
+-18.09% reads as a solid pass and the contradiction ships unnoticed. A reference
+optimum is therefore not just a scoring aid — it is how you discover that your
+task description and your grader disagree. That is a **third failure mode**
+alongside "agent games the grader" and "agent finds the answer", and the most
+invisible of the three: every gate passes, the agent behaves sensibly, and the
+benchmark quietly measures compliance with a contradiction.
+
+### Honest limitation: this is a single-knob task
+
+Five of the eight permitted knobs are **inert** on gcd (F11). CTS clustering has
+nothing to cluster on a design with 7 clock buffers; `PLACE_DENSITY` does
+nothing at either end. The effective space is `CORE_UTILIZATION` (dominant),
+`CORE_MARGIN`, and `PLACE_DENSITY_LB_ADDON` (weak) — so this instance
+demonstrates *budgeted search with a hard cliff*, not multi-objective search
+breadth. aes is where more knobs would bite, at 8.7 min/run.
+
+**Not yet done: the AutoTuner comparison.** ORFS ships AutoTuner, a real,
+published, non-LLM optimiser over the same `autotuner.json` space. Running it at
+equal budget would upgrade the claim from "the agent hit the reference optimum"
+to "the agent beat / matched / lost to AutoTuner at 12 runs". That is the single
+highest-value addition remaining for HP-C, and it reuses this grader unchanged.
 
 ### 5. Product
 
@@ -474,8 +561,10 @@ the decision a lead engineer wants to approve rather than delegate.
 ## Scoping, and one reversal worth recording
 
 **HP-A leads.** It has a validated grader, eight measured instances, a 4/4 decoy
-result and a real agent baseline. HP-B, HP-C and HP-D are well-argued defined
-problems with zero instances between them.
+result and a 4/4 agent baseline. **HP-C is built too** — its own grader,
+validated 4/4 on reference submissions, with a measured reference optimum and
+two agent runs. HP-B and HP-D remain well-argued defined problems with zero
+instances between them.
 
 **This ordering is a reversal.** An earlier version of this analysis recommended
 making **HP-D the centrepiece of Task 1**, on the strength of the
@@ -490,23 +579,45 @@ grader and measured baselines is worth more than four shallow unvalidated ones.
 
 ### Known weaknesses, stated rather than hidden
 
-- **One lever of three.** The three levers available to a PPA agent are flow
-  knobs, SDC, and RTL/netlist. Only **SDC** has been baselined — 4 agent runs.
-  Knobs: 0. RTL: 0.
+- **Two levers of three.** The three levers available to a PPA agent are flow
+  knobs, SDC, and RTL/netlist. **SDC** has 4 agent runs (HP-A) and **flow knobs**
+  have 2 (HP-C). **RTL/netlist: 0** — and it is the lever where cheating is
+  easiest and most catastrophic, since it needs a logical-equivalence gate that
+  does not exist here yet.
 - **One design, one platform.** Everything validated is nangate45/gcd (~1100
   instances). aes at 8.7 min/run is the generalisation test and has not been run.
   On gcd specifically, **I/O timing is irrelevant** — the critical path is
   register-to-register — which is exactly why C2 was inert and C3/C5 were
   marginal. Class selection has to be matched to the design.
-- **C5's fairness is unresolved.** Its golden `clk_io_pct` is 0.15, drawn at
-  random; the agent swept 0.20–0.35 and had no way to derive 0.15 from anything
-  observable. Unlike C1, where the unit slip makes the answer reconstructible,
-  C5 under a randomised golden may require guessing an arbitrary constant. This
-  is a live weakness in the HP-A instance set — and the cleanest argument for
-  HP-C's design, where there is no hidden reference at all, only a public
-  baseline to beat.
+- **C5's fairness — resolved, and the concern was wrong.** It was previously
+  recorded here that C5 might require guessing an arbitrary constant, since its
+  golden `clk_io_pct` is 0.15 and the agent had no way to derive it. The re-run
+  settled it: the agent submitted **0.35** and **resolved**, because its layout
+  re-times as well as the golden's (`signoff_setup_ws` 0.121806 vs baseline
+  0.119967). The acceptable band is wide — 0.45 is genuinely harmful, anything
+  at or below ~0.35 is indistinguishable from the reference. The concern was
+  wrong for a load-bearing reason: **grading is behavioural, not
+  diff-matching.** The question is never "did you recover the reference value"
+  but "is the design you produced as good", which is what makes randomised
+  goldens fair for value-recovery tasks generally.
 - **`area_not_ballooned` is class-scoped.** Correct for repair; it would wrongly
-  block an HP-C agent that legitimately trades area for timing.
+  block an optimisation agent that legitimately trades area for timing. HP-C
+  therefore drops it, and swaps `inst_area` for `die_area` — measured, the
+  former moves ±0.9% across the whole knob space while the latter moves −25% to
+  +78% (F11).
+- **A third failure mode exists, and we hit it.** Beyond "agent games the
+  grader" and "agent finds the answer" there is **"the task description and the
+  grader disagree"**. HP-C's prompt said timing must be no worse than baseline
+  while its grader accepted any non-negative slack; the agent hedged and lost
+  **33% of the achievable improvement** (F12). It is the most invisible of the
+  three — every gate passes and the agent looks sensible — and it is only
+  detectable by comparing against a *measured reference optimum*.
+- **HP-C is a single-knob task.** Five of its eight permitted knobs are inert on
+  gcd. It demonstrates budgeted search against a hard cliff, not multi-objective
+  search breadth.
+- **The AutoTuner comparison has not been run.** ORFS ships a real non-LLM
+  optimiser over the same knob space; comparing against it at equal budget is
+  the highest-value addition remaining, and needs no grader changes.
 - **The SDC corpus bounds coverage.** All 83 ORFS SDCs are a four-command
   monoculture with zero generated clocks (F3), so classes touching uncertainty,
   false paths or clock groups have nothing to remove.

@@ -72,20 +72,51 @@ Sampling is keyed on a secret held outside the agent-visible tree — without it
 the public seed plus this repo's own sampler would recompute the golden in one
 line.
 
+## Two benchmarks
+
+| | problem | task | objective | status |
+|---|---|---|---|---|
+| **`sdc-repair-v1`** | HP-A | diagnose and repair a defective SDC | restore baseline QoR | 4 validated instances, agent **4/4** |
+| **`knob-opt-v1`** | HP-C | shrink the die by tuning flow knobs | `die_area` under correctness gates | grader **4/4** on probes, agent hit the reference optimum |
+
+They differ in a way that changes the grading shape. In repair something *is*
+broken, so assertions flip fail-to-pass. In optimisation **nothing is broken** —
+every assertion passes at baseline — so the FAIL_TO_PASS analogue becomes an
+improvement threshold, without which the null agent wins by doing nothing.
+
+Full specifications, including the assertion lists, are in
+[`docs/BENCHMARK.md`](docs/BENCHMARK.md); the problem definitions are in
+[`docs/HARD_PROBLEMS.md`](docs/HARD_PROBLEMS.md).
+
 ## Layout
 
 ```
 ppa_bench/
-  metrics.py             merge 16 ORFS stage JSONs -> canonical QoR
-  injector.py            SDC defect operators (C1, C2, C3, C5 + CX probe)
-  randomize.py           secret-keyed golden sampling
-  generate_instances.py  materialise public/ + private/
-  grader.py              P2P / F2P assertions, verdict, score
-  validate.py            BASELINE_PASS / BROKEN_FAIL
-tcl/signoff_sta.tcl      re-time a finished layout against a golden SDC
-bin/signoff.sh           sign-off driver
-docs/FINDINGS.md         measured results, including the negatives
-docs/PLAN.md             build plan and scope decisions
+  metrics.py                 merge 16 ORFS stage JSONs -> canonical QoR
+  baseline.py                freeze measured baselines; enforce the self-test
+  grader.py                  repair assertions (P2P / F2P), verdict, score
+  # sdc-repair-v1
+  injector.py                SDC defect operators (C1, C2, C3, C5 + CX probe)
+  randomize.py               secret-keyed golden sampling
+  generate_instances.py      materialise public/ + private/
+  validate.py                BASELINE_PASS / BROKEN_FAIL
+  decoys.py                  oracle / null / cheat_loose / cheat_knob
+  grade_agent.py             grade an agent's submitted SDC
+  # knob-opt-v1
+  knobs.py                   knob allowlist, ranges, submission validation
+  knob_sweep.py              measure what the knobs actually move
+  optimize.py                optimisation assertions (gates + improvement)
+  make_optimize_instance.py  build the HP-C instance
+  grade_hpc.py               grade a submitted knobs.json
+tcl/signoff_sta.tcl          re-time a finished layout against a golden SDC
+bin/signoff.sh               sign-off driver
+bin/run_agent.sh             headless agent, sanitised container (repair)
+bin/run_agent_hpc.sh         headless agent + budget counting (optimisation)
+docker/Dockerfile.agent      ORFS + Claude Code
+docs/HARD_PROBLEMS.md        Task 1: HP-A..HP-D
+docs/BENCHMARK.md            Task 2: both benchmark specifications
+docs/FINDINGS.md             measured results, including the negatives
+docs/PLAN.md                 build plan and scope decisions
 ```
 
 Each instance:
