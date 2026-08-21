@@ -29,6 +29,25 @@ from ppa_bench import grader, baseline
 from ppa_bench.validate import run_flow, run_signoff, FLOW
 
 
+def terminal_reason(run_dir: str) -> str:
+    """Why the agent stopped, from its stream-json transcript.
+
+    Reported alongside the verdict because "wrong answer" and "ran out of
+    turns" are different failures and must not be conflated. C5 initially
+    scored as a null agent purely because it was truncated mid-sweep before
+    writing its conclusion; a headline pass-rate that hides that is misleading.
+    """
+    path = os.path.join(run_dir, "transcript.jsonl")
+    if not os.path.isfile(path):
+        return "unknown"
+    try:
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            tail = fh.readlines()[-1]
+        return json.loads(tail).get("terminal_reason", "unknown")
+    except (OSError, IndexError, json.JSONDecodeError):
+        return "unknown"
+
+
 def grade_submission(inst_dir: str, submitted_sdc: str, work: str,
                      tag: str = "agent") -> dict:
     inst_dir = os.path.abspath(inst_dir)
@@ -86,6 +105,7 @@ def grade_submission(inst_dir: str, submitted_sdc: str, work: str,
         # different but equally correct constraint must still pass, so this is
         # never an assertion.
         "matches_golden_exactly": submitted.strip() == golden_text.strip(),
+        "terminal_reason": terminal_reason(os.path.dirname(submitted_sdc)),
         "report": verdict.report(),
     }
 
@@ -113,7 +133,7 @@ def main() -> None:
 
     print("\n" + "=" * 88)
     print("{:16} {:9} {:>9} {:>10} {:>10} {:>8}  {}".format(
-        "instance", "resolved", "fin_ws", "signoff_ws", "base_sgn", "area", "failed"))
+        "instance", "resolved", "fin_ws", "signoff_ws", "base_sgn", "area", "terminal / failed"))
     print("-" * 88)
     for r in results:
         f = lambda v: "{:.5f}".format(v) if isinstance(v, float) else "-"  # noqa: E731
@@ -121,7 +141,7 @@ def main() -> None:
             r["instance_id"].replace("nangate45_gcd_", ""),
             "YES" if r["resolved"] else "no",
             f(r["finish_ws"]), f(r["signoff_ws"]), f(r["baseline_signoff_ws"]),
-            f(r["area"]), ",".join(r["failed_assertions"]) or "-"))
+            f(r["area"]), (r.get("terminal_reason","?") + " / " + (",".join(r["failed_assertions"]) or "-"))))
     n = sum(1 for r in results if r["resolved"])
     print("\nscore: {}/{} resolved -> {}".format(n, len(results), args.out))
 

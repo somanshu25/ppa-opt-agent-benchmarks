@@ -94,7 +94,13 @@ power and area. A run takes about 40 seconds.
 
 ## Deliverable
 
-Leave your final constraints at /work/impl.sdc. Nothing else is collected."
+/work/impl.sdc is the ONLY thing collected. It is read exactly as you leave it,
+whenever you stop -- including if you run out of turns mid-investigation.
+
+So write your best answer so far to /work/impl.sdc **after every trial**, not
+at the end. If a sweep shows one value is better than what is currently in the
+file, write it immediately, then continue exploring. Never leave the file
+holding a value you have already shown to be worse."
 
 echo "$PROMPT" > "$OUT/prompt_sent.md"
 docker cp "$HOUT/prompt_sent.md" "$CONTAINER:/work/prompt.md" >/dev/null

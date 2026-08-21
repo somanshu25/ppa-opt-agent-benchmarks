@@ -395,3 +395,60 @@ no way to derive 0.15 from anything observable. Unlike C1, where the unit slip
 makes the answer reconstructible, C5 under a randomised golden may require
 guessing an arbitrary constant. HP-C avoids this by construction: there is no
 hidden reference, only a public baseline to beat.
+
+---
+
+## F10 — C5 re-run after the task fix: 4/4, and behavioural grading vindicated
+
+F9's C5 failure was a **task-design defect, not an agent limitation**. The agent
+had run a correct parameter sweep, hit `max_turns` mid-search, and never wrote
+its conclusion to the deliverable, so it was graded as the null agent.
+
+Two changes, then a re-run at the **same 40-turn budget** so the fix is tested
+in isolation:
+
+1. The prompt now requires writing best-so-far to the deliverable *after every
+   trial*, so a truncated run degrades gracefully instead of submitting nothing.
+2. `terminal_reason` is reported in every verdict, so budget exhaustion can
+   never again be mistaken for a wrong answer.
+
+The checkpointing was directly observable mid-run: `/work/impl.sdc` moved
+0.45 -> 0.20 -> 0.35 while the agent swept `io000 … io040`. At any point it
+would have submitted something real.
+
+| run | submitted | resolved | terminal | wall | cost |
+|---|---|---|---|---|---|
+| F9 original | nothing (file unchanged) | no | **max_turns** | 1088 s | $2.39 |
+| after fix | `clk_io_pct = 0.35` | **YES** | completed | 976 s | $1.23 |
+
+**Baseline agent score is now 4/4.**
+
+### The instance was not unfair after all
+
+I had flagged C5 as possibly unlearnable: its golden `clk_io_pct` is 0.15, drawn
+at random, and the agent has no way to derive that specific constant.
+
+It submitted **0.35** and resolved:
+
+```
+signoff_setup_ws = 0.121806   (want >= 0.119967)   PASS
+area             = 673.778    vs baseline 673.512  (+0.039%)
+```
+
+Re-timed against the 0.15 reference, the agent's layout is as good as the
+golden's. So the acceptable band is wide -- 0.45 is genuinely harmful (area
+862.6, sign-off WS 0.0439) but anything at or below ~0.35 is indistinguishable
+from the reference.
+
+The concern was wrong, and it was wrong for a load-bearing reason: **grading is
+behavioural, not diff-matching.** The question is never "did you recover the
+reference value" but "is the design you produced as good". An agent that finds a
+different, equally good answer passes -- which is the property that makes
+randomised goldens fair for value-recovery tasks generally.
+
+### What this cost
+
+Repair tasks: ~140 s, $0.22. Search task: ~1000 s, $1.23-$2.39. The search task
+is roughly 7x the wall time and 6x the cost of a repair task, and consumed its
+whole turn budget both times. That is the empirical case for making run budget
+an explicit, measured dimension of HP-C rather than an incidental limit.
