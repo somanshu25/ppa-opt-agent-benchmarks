@@ -1,4 +1,4 @@
-"""Build an HP-C optimisation instance.
+"""Build an HP-B optimisation instance.
 
 Much simpler than a repair instance, because there is no hidden answer to
 protect.  Nothing is injected and nothing is randomised: the agent is handed
@@ -99,7 +99,7 @@ def main() -> None:
     args = ap.parse_args()
 
     space = load_space(FLOW, args.platform, args.design)
-    inst_id = "{}_{}_HPC".format(args.platform, args.design)
+    inst_id = "{}_{}_HPB".format(args.platform, args.design)
     inst_dir = os.path.join(args.out, inst_id)
     pub, priv = os.path.join(inst_dir, "public"), os.path.join(inst_dir, "private")
     shutil.rmtree(inst_dir, ignore_errors=True)
@@ -108,7 +108,7 @@ def main() -> None:
 
     manifest = {
         "instance_id": inst_id,
-        "problem": "HP-C",
+        "problem": "HP-B",
         "task": "minimise die area under correctness gates",
         "platform": args.platform,
         "design": args.design,

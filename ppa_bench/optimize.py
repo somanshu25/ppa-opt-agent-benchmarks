@@ -1,4 +1,4 @@
-"""HP-C: budgeted flow-knob optimisation.
+"""HP-B: budgeted flow-knob optimisation.
 
 A different problem shape from the repair benchmark, and the difference matters
 for grading.

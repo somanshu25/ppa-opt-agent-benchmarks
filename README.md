@@ -107,11 +107,11 @@ ppa_bench/
   knob_sweep.py              measure what the knobs actually move
   optimize.py                optimisation assertions (gates + improvement)
   make_optimize_instance.py  build the HP-B instance
-  grade_hpc.py               grade a submitted knobs.json
+  grade_hpb.py               grade a submitted knobs.json
 tcl/signoff_sta.tcl          re-time a finished layout against a golden SDC
 bin/signoff.sh               sign-off driver
 bin/run_agent.sh             headless agent, sanitised container (repair)
-bin/run_agent_hpc.sh         headless agent + budget counting (optimisation)
+bin/run_agent_hpb.sh         headless agent + budget counting (optimisation)
 docker/Dockerfile.agent      ORFS + Claude Code
 docs/HARD_PROBLEMS.md        Task 1: HP-A..HP-D
 docs/BENCHMARK.md            Task 2: both benchmark specifications

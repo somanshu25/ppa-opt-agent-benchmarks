@@ -1,4 +1,4 @@
-"""Grade an HP-C optimisation submission.
+"""Grade an HP-B optimisation submission.
 
 Same discipline as the repair grader: the agent's own run directory is never
 trusted. The flow is re-run from clean with exactly the submitted knobs, and
@@ -19,7 +19,7 @@ from ppa_bench.optimize import grade_optimize, Budget
 from ppa_bench.validate import run_signoff, FLOW
 import subprocess
 
-BASELINE_VARIANT = "hpc_base"
+BASELINE_VARIANT = "hpb_base"
 
 
 def run_flow_knobs(config: str, variant: str, knob_args: list, log: str) -> None:
@@ -57,9 +57,9 @@ def main() -> None:
     ap.add_argument("instance")
     ap.add_argument("submission", help="path to the agent's knobs.json")
     ap.add_argument("--runs-used", type=int, default=None)
-    ap.add_argument("--tag", default="hpc")
-    ap.add_argument("--work", default="/tmp/ppa_hpc")
-    ap.add_argument("--out", default="/ppa-bench/results/hpc_runs.json")
+    ap.add_argument("--tag", default="hpb")
+    ap.add_argument("--work", default="/tmp/ppa_hpb")
+    ap.add_argument("--out", default="/ppa-bench/results/hpb_runs.json")
     args = ap.parse_args()
 
     inst_dir = os.path.abspath(args.instance)

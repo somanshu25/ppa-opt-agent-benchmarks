@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Run a headless agent on an HP-C optimisation instance.
+# Run a headless agent on an HP-B optimisation instance.
 #
-#   run_agent_hpc.sh <instance_dir> <out_dir> [max_turns]
+#   run_agent_hpb.sh <instance_dir> <out_dir> [max_turns]
 #
 # Differs from run_agent.sh in three ways:
 #   * the deliverable is knobs.json, not impl.sdc
@@ -20,7 +20,7 @@ MAX_TURNS=${3:-60}
 : "${ANTHROPIC_API_KEY:?ANTHROPIC_API_KEY must be set (not echoed)}"
 
 NAME=$(basename "$INSTANCE")
-CONTAINER="ppabench_hpc_${NAME}"
+CONTAINER="ppabench_hpb_${NAME}"
 IMAGE=${AGENT_IMAGE:-ppa-bench/orfs-agent:latest}
 
 PLATFORM=$(grep -oP '"platform":\s*"\K[^"]+' "$INSTANCE/public/instance.json")
@@ -34,7 +34,7 @@ HOUT=$(hostpath "$(cd "$OUT" && pwd)")
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
 docker run -d --name "$CONTAINER" "$IMAGE" sleep infinity >/dev/null
 
-# There is no hidden answer in HP-C, so sanitisation is lighter than for
+# There is no hidden answer in HP-B, so sanitisation is lighter than for
 # repair. rules-base.json still goes: it states upstream's expected area, which
 # is a hint about the achievable target.
 echo "[$NAME] preparing workspace"

@@ -4,7 +4,7 @@
   "editable_files": [
     "knobs.json"
   ],
-  "instance_id": "nangate45_gcd_HPC",
+  "instance_id": "nangate45_gcd_HPB",
   "knob_space": {
     "CELL_PAD_IN_SITES_DETAIL_PLACEMENT": {
       "minmax": [
@@ -74,7 +74,7 @@
   "min_improvement_pct": 2.0,
   "orfs_commit": "02ba50d53",
   "platform": "nangate45",
-  "problem": "HP-C",
+  "problem": "HP-B",
   "run_budget": 12,
   "task": "minimise die area under correctness gates"
 }

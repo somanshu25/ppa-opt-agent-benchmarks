@@ -42,5 +42,5 @@
     "setup_tns": 0,
     "setup_ws": 0.016009
   },
-  "variant": "hpc_base"
+  "variant": "hpb_base"
 }
