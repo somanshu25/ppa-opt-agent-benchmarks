@@ -1,0 +1,1967 @@
+mkdir -p results/nangate45/gcd/noise_ng45_c4/
+echo 0.46 > results/nangate45/gcd/noise_ng45_c4/clock_period.txt
+/OpenROAD-flow-scripts/flow/scripts/synth.sh /OpenROAD-flow-scripts/flow/scripts/synth_canonicalize.tcl ./logs/nangate45/gcd/noise_ng45_c4/1_1_yosys_canonicalize.log
+Using ABC area script.
+Extracting clock period from SDC file: ./results/nangate45/gcd/noise_ng45_c4/clock_period.txt
+Setting clock period to 0.46
+1. Executing Liberty frontend: /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+2. Executing Liberty frontend: /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+3. Executing Verilog-2005 frontend: /OpenROAD-flow-scripts/flow/designs/src/gcd/gcd.v
+4. Executing Verilog-2005 frontend: /OpenROAD-flow-scripts/flow/platforms/nangate45/cells_clkgate.v
+5. Executing HIERARCHY pass (managing design hierarchy).
+6. Executing AST frontend in derive mode using pre-parsed AST for module `\gcd'.
+6.1. Analyzing design hierarchy..
+6.2. Executing AST frontend in derive mode using pre-parsed AST for module `\GcdUnitDpathRTL_0x4d0fc71ead8d3d9e'.
+6.3. Executing AST frontend in derive mode using pre-parsed AST for module `\GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e'.
+6.4. Analyzing design hierarchy..
+6.5. Executing AST frontend in derive mode using pre-parsed AST for module `\RegRst_0x9f365fdf6c8998a'.
+6.6. Executing AST frontend in derive mode using pre-parsed AST for module `\RegEn_0x68db79c4ec1d6e5b'.
+6.7. Executing AST frontend in derive mode using pre-parsed AST for module `\Subtractor_0x422b1f52edd46a85'.
+6.8. Executing AST frontend in derive mode using pre-parsed AST for module `\Mux_0xdd6473406d1a99a'.
+6.9. Executing AST frontend in derive mode using pre-parsed AST for module `\Mux_0x683fa1a418b072c9'.
+6.10. Executing AST frontend in derive mode using pre-parsed AST for module `\ZeroComparator_0x422b1f52edd46a85'.
+6.11. Executing AST frontend in derive mode using pre-parsed AST for module `\LtComparator_0x422b1f52edd46a85'.
+6.12. Analyzing design hierarchy..
+6.13. Analyzing design hierarchy..
+7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Warning: Ignoring module ZeroComparator_0x422b1f52edd46a85 because it contains processes (run 'proc' command first).
+Warning: Ignoring module Mux_0x683fa1a418b072c9 because it contains processes (run 'proc' command first).
+Warning: Ignoring module Mux_0xdd6473406d1a99a because it contains processes (run 'proc' command first).
+Warning: Ignoring module Subtractor_0x422b1f52edd46a85 because it contains processes (run 'proc' command first).
+Warning: Ignoring module RegEn_0x68db79c4ec1d6e5b because it contains processes (run 'proc' command first).
+Warning: Ignoring module RegRst_0x9f365fdf6c8998a because it contains processes (run 'proc' command first).
+Warning: Ignoring module GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e because it contains processes (run 'proc' command first).
+Warning: Ignoring module LtComparator_0x422b1f52edd46a85 because it contains processes (run 'proc' command first).
+8. Executing RTLIL backend.
+Warnings: 8 unique messages, 8 total
+End of script. Logfile hash: 36dfe98f3e, time: 0.10s, user: 0.08s, system: 0.01s, MEM: 43.51 MB peak
+Yosys 0.68+post (git sha1 UNKNOWN, Release, GNU /usr/local/bin/wrapped-cc/g++ 11.4.0)
+Time spent: 79% 4x read_liberty (0 sec), 11% 4x read_verilog (0 sec), ...
+Elapsed time: 0:00.10[h:]min:sec. CPU time: user 0.09 sys 0.01 (99%). Peak memory: 46984KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+1_1_yosys_canonicalize    .rtlil          0             45 061b4cd4004130e38a0d
+/OpenROAD-flow-scripts/flow/scripts/synth.sh /OpenROAD-flow-scripts/flow/scripts/synth.tcl ./logs/nangate45/gcd/noise_ng45_c4/1_2_yosys.log
+Using ABC area script.
+Extracting clock period from SDC file: ./results/nangate45/gcd/noise_ng45_c4/clock_period.txt
+Setting clock period to 0.46
+1. Executing RTLIL frontend.
+2. Executing HIERARCHY pass (managing design hierarchy).
+2.1. Analyzing design hierarchy..
+2.2. Analyzing design hierarchy..
+3. Executing SYNTH pass.
+3.1. Executing HIERARCHY pass (managing design hierarchy).
+3.1.1. Analyzing design hierarchy..
+3.1.2. Analyzing design hierarchy..
+3.2. Executing PROC pass (convert processes to netlists).
+3.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+3.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+3.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+3.2.4. Executing PROC_INIT pass (extract init attributes).
+3.2.5. Executing PROC_ARST pass (detect async resets in processes).
+3.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+3.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+3.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+Warning: Latch inferred for signal `\GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e.\do_sub' from process `\GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e.$proc$/OpenROAD-flow-scripts/flow/designs/src/gcd/gcd.v:277$1049': $auto$proc_dlatch.cc:547:proc_dlatch$1263
+Warning: Latch inferred for signal `\GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e.\do_swap' from process `\GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e.$proc$/OpenROAD-flow-scripts/flow/designs/src/gcd/gcd.v:277$1049': $auto$proc_dlatch.cc:547:proc_dlatch$1266
+3.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+3.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+3.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+3.2.12. Executing OPT_EXPR pass (perform const folding).
+3.3. Executing CHECK pass (checking for obvious problems).
+3.4. Executing FLATTEN pass (flatten design).
+3.5. Executing OPT_EXPR pass (perform const folding).
+3.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.7. Executing CHECK pass (checking for obvious problems).
+3.8. Executing OPT pass (performing simple optimizations).
+3.8.1. Executing OPT_EXPR pass (perform const folding).
+3.8.2. Executing OPT_MERGE pass (detect identical cells).
+3.8.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+3.8.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+3.8.5. Executing OPT_MERGE pass (detect identical cells).
+3.8.6. Executing OPT_DFF pass (perform DFF optimizations).
+3.8.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.8.8. Executing OPT_EXPR pass (perform const folding).
+3.8.9. Rerunning OPT passes. (Maybe there is more to do..)
+3.8.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+3.8.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+3.8.12. Executing OPT_MERGE pass (detect identical cells).
+3.8.13. Executing OPT_DFF pass (perform DFF optimizations).
+3.8.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.8.15. Executing OPT_EXPR pass (perform const folding).
+3.8.16. Finished fast OPT passes. (There is nothing left to do.)
+3.9. Executing FSM pass (extract and optimize FSM).
+3.9.1. Executing FSM_DETECT pass (finding FSMs in design).
+3.9.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+3.9.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+3.9.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.9.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+3.9.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+3.9.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+3.9.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+3.10. Executing OPT pass (performing simple optimizations).
+3.10.1. Executing OPT_EXPR pass (perform const folding).
+3.10.2. Executing OPT_MERGE pass (detect identical cells).
+3.10.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+3.10.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+3.10.5. Executing OPT_MERGE pass (detect identical cells).
+3.10.6. Executing OPT_DFF pass (perform DFF optimizations).
+3.10.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.10.8. Executing OPT_EXPR pass (perform const folding).
+3.10.9. Rerunning OPT passes. (Maybe there is more to do..)
+3.10.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+3.10.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+3.10.12. Executing OPT_MERGE pass (detect identical cells).
+3.10.13. Executing OPT_DFF pass (perform DFF optimizations).
+3.10.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.10.15. Executing OPT_EXPR pass (perform const folding).
+3.10.16. Finished fast OPT passes. (There is nothing left to do.)
+3.11. Executing WREDUCE pass (reducing word size of cells).
+3.12. Executing PEEPOPT pass (run peephole optimizers).
+3.13. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.14. Executing ALUMACC pass (create $alu and $macc cells).
+3.15. Executing SHARE pass (SAT-based resource sharing).
+3.16. Executing OPT pass (performing simple optimizations).
+3.16.1. Executing OPT_EXPR pass (perform const folding).
+3.16.2. Executing OPT_MERGE pass (detect identical cells).
+3.16.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+3.16.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+3.16.5. Executing OPT_MERGE pass (detect identical cells).
+3.16.6. Executing OPT_DFF pass (perform DFF optimizations).
+3.16.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.16.8. Executing OPT_EXPR pass (perform const folding).
+3.16.9. Rerunning OPT passes. (Maybe there is more to do..)
+3.16.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+3.16.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+3.16.12. Executing OPT_MERGE pass (detect identical cells).
+3.16.13. Executing OPT_DFF pass (perform DFF optimizations).
+3.16.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.16.15. Executing OPT_EXPR pass (perform const folding).
+3.16.16. Finished fast OPT passes. (There is nothing left to do.)
+3.17. Executing MEMORY pass.
+3.17.1. Executing OPT_MEM pass (optimize memories).
+3.17.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+3.17.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+3.17.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+3.17.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+3.17.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.17.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+3.17.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+3.17.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+3.17.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+3.18. Executing OPT_CLEAN pass (remove unused cells and wires).
+4. Executing SYNTH pass.
+4.1. Executing OPT pass (performing simple optimizations).
+4.1.1. Executing OPT_EXPR pass (perform const folding).
+4.1.2. Executing OPT_MERGE pass (detect identical cells).
+4.1.3. Executing OPT_DFF pass (perform DFF optimizations).
+4.1.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+4.1.5. Finished fast OPT passes.
+4.2. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+4.3. Executing OPT pass (performing simple optimizations).
+4.3.1. Executing OPT_EXPR pass (perform const folding).
+4.3.2. Executing OPT_MERGE pass (detect identical cells).
+4.3.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+4.3.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+4.3.5. Executing OPT_MERGE pass (detect identical cells).
+4.3.6. Executing OPT_SHARE pass.
+4.3.7. Executing OPT_DFF pass (perform DFF optimizations).
+4.3.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+4.3.9. Executing OPT_EXPR pass (perform const folding).
+4.3.10. Finished fast OPT passes. (There is nothing left to do.)
+4.4. Executing TECHMAP pass (map to technology primitives).
+4.4.1. Executing Verilog-2005 frontend: /OpenROAD-flow-scripts/tools/install/yosys/bin/../share/yosys/techmap.v
+4.4.2. Executing Verilog-2005 frontend: /OpenROAD-flow-scripts/flow/platforms/common/lcu_kogge_stone.v
+4.4.3. Continuing TECHMAP pass.
+4.5. Executing OPT pass (performing simple optimizations).
+4.5.1. Executing OPT_EXPR pass (perform const folding).
+4.5.2. Executing OPT_MERGE pass (detect identical cells).
+4.5.3. Executing OPT_DFF pass (perform DFF optimizations).
+4.5.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+4.5.5. Finished fast OPT passes.
+4.6. Executing HIERARCHY pass (managing design hierarchy).
+4.6.1. Analyzing design hierarchy..
+4.6.2. Analyzing design hierarchy..
+4.7. Printing statistics.
+4.8. Executing CHECK pass (checking for obvious problems).
+5. Executing OPT pass (performing simple optimizations).
+5.1. Executing OPT_EXPR pass (perform const folding).
+5.2. Executing OPT_MERGE pass (detect identical cells).
+5.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+5.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+5.5. Executing OPT_MERGE pass (detect identical cells).
+5.6. Executing OPT_DFF pass (perform DFF optimizations).
+5.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+5.8. Executing OPT_EXPR pass (perform const folding).
+5.9. Rerunning OPT passes. (Maybe there is more to do..)
+5.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+5.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+5.12. Executing OPT_MERGE pass (detect identical cells).
+5.13. Executing OPT_DFF pass (perform DFF optimizations).
+5.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+5.15. Executing OPT_EXPR pass (perform const folding).
+5.16. Finished fast OPT passes. (There is nothing left to do.)
+6. Executing DFFLEGALIZE pass (convert FFs to types supported by the target).
+7. Executing TECHMAP pass (map to technology primitives).
+7.1. Executing Verilog-2005 frontend: /OpenROAD-flow-scripts/flow/platforms/nangate45/cells_latch.v
+7.2. Continuing TECHMAP pass.
+8. Executing DFFLIBMAP pass (mapping DFF cells to sequential cells from liberty file).
+8.1. Executing DFFLEGALIZE pass (convert FFs to types supported by the target).
+9. Executing OPT pass (performing simple optimizations).
+9.1. Executing OPT_EXPR pass (perform const folding).
+9.2. Executing OPT_MERGE pass (detect identical cells).
+9.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+9.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+9.5. Executing OPT_MERGE pass (detect identical cells).
+9.6. Executing OPT_DFF pass (perform DFF optimizations).
+9.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+9.8. Executing OPT_EXPR pass (perform const folding).
+9.9. Rerunning OPT passes. (Maybe there is more to do..)
+9.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+9.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+9.12. Executing OPT_MERGE pass (detect identical cells).
+9.13. Executing OPT_DFF pass (perform DFF optimizations).
+9.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+9.15. Executing OPT_EXPR pass (perform const folding).
+9.16. Finished fast OPT passes. (There is nothing left to do.)
+10. Executing SETUNDEF pass (replace undef values with defined constants).
+abc -script /OpenROAD-flow-scripts/flow/scripts/abc_area.script -liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib -dont_use TAPCELL_X1 -dont_use FILLCELL_X1 -dont_use AOI211_X1 -dont_use OAI211_X1 -constr ./objects/nangate45/gcd/noise_ng45_c4/abc.constr -D 0.46
+11. Executing ABC pass (technology mapping using ABC).
+11.1. Extracting gate netlist of module `\gcd' to `<abc-temp-dir>/input.blif'..
+11.1.1. Executed ABC.
+11.1.2. Re-integrating ABC results.
+12. Executing SPLITNETS pass (splitting up multi-bit signals).
+13. Executing OPT_CLEAN pass (remove unused cells and wires).
+14. Executing HILOMAP pass (mapping to constant drivers).
+15. Executing INSBUF pass (insert buffer cells for connected wires).
+16. Executing CHECK pass (checking for obvious problems).
+17. Printing statistics.
+18. Executing CHECK pass (checking for obvious problems).
+19. Executing Verilog backend.
+19.1. Executing BMUXMAP pass.
+19.2. Executing DEMUXMAP pass.
+Warnings: 2 unique messages, 2 total
+End of script. Logfile hash: ba2ce396f9, time: 0.37s, user: 0.16s, system: 0.06s, MEM: 47.11 MB peak
+Yosys 0.68+post (git sha1 UNKNOWN, Release, GNU /usr/local/bin/wrapped-cc/g++ 11.4.0)
+Time spent: 39% 1x abc (0 sec), 10% 21x opt_clean (0 sec), ...
+Elapsed time: 0:00.37[h:]min:sec. CPU time: user 0.29 sys 0.08 (99%). Peak memory: 49608KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+1_2_yosys                 .v              0             48 0c59fafd3497fabb039a
+cp /OpenROAD-flow-scripts/flow/designs/nangate45/gcd/constraint.sdc results/nangate45/gcd/noise_ng45_c4/1_2_yosys.sdc
+touch -r /OpenROAD-flow-scripts/flow/designs/nangate45/gcd/constraint.sdc results/nangate45/gcd/noise_ng45_c4/1_2_yosys.sdc
+OpenROAD 26Q3-1470-g3ea4d70110 
+Features included (+) or not (-): +GPU +GUI +Python
+This program is licensed under the BSD-3 license. See the LICENSE file for details.
+Components of this program may be licensed under more restrictive licenses which must be honored.
+[INFO ORD-0030] Using 4 thread(s).
+mkdir -p ./objects/nangate45/gcd/noise_ng45_c4
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 1_synth synth_odb
+Running synth_odb.tcl, stage 1_synth
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+[INFO ODB-0227] LEF file: /OpenROAD-flow-scripts/flow/platforms/nangate45/lef/NangateOpenCellLibrary.tech.lef, created 22 layers, 27 vias
+[INFO ODB-0227] LEF file: /OpenROAD-flow-scripts/flow/platforms/nangate45/lef/NangateOpenCellLibrary.macro.mod.lef, created 135 library cells
+link_design gcd
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/1_2_yosys.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+eliminate_dead_logic
+Removed 0 unused instances and 0 unused nets.
+Design area 627 um^2 100% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/1_synth.odb
+write_sdc -no_timestamp ./results/nangate45/gcd/noise_ng45_c4/1_synth.sdc
+Elapsed time: 0:00.26[h:]min:sec. CPU time: user 0.23 sys 0.03 (99%). Peak memory: 117536KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+1_synth                   .odb            0            114 51d0925da5800feaed89
+1_synth                   .sdc                             7fe61694c034e1755ac1
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 2_1_floorplan floorplan
+Running floorplan.tcl, stage 2_1_floorplan
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/1_synth.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/1_synth.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+
+==========================================================================
+Floorplan check_setup
+--------------------------------------------------------------------------
+number instances in verilog is 513
+[INFO IFP-0107] Defining die area using utilization: 55.00% and aspect ratio: 1.
+[WARNING IFP-0028] Core area lower left (1.000, 1.000) snapped to (1.140, 1.400).
+[INFO IFP-0001] Added 23 rows of 176 site FreePDK45_38x28_10R_NP_162NW_34O.
+[INFO IFP-0100] Die BBox:  (  0.000  0.000 ) ( 35.755 35.755 ) um
+[INFO IFP-0101] Core BBox: (  1.140  1.400 ) ( 34.580 33.600 ) um
+[INFO IFP-0102] Core area:                         1076.768 um^2
+[INFO IFP-0103] Total instances area:               626.696 um^2
+[INFO IFP-0104] Effective utilization:                0.582
+[INFO IFP-0105] Number of instances:                    513
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/make_tracks.tcl
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/fastroute.tcl
+Repair tie lo fanout...
+Repair tie hi fanout...
+repair_timing -setup_margin 0 -hold_margin 0 -repair_tns 100 -setup -skip_last_gasp -sequence unbuffer,sizeup,swap,vt_swap -verbose
+[WARNING EST-0027] no estimated parasitics. Using wire load models.
+[INFO RSZ-0100] Repair move sequence: UnbufferMove SizeUpMove SwapPinsMove 
+[INFO RSZ-0098] No setup violations found
+[INFO RSZ-0505] Runtime: 0.04s
+Default units for flow
+ time 1ns
+ capacitance 1fF
+ resistance 1kohm
+ voltage 1v
+ current 1mA
+ power 1nW
+ distance 1um
+   Layer   | Unit Resistance | Unit Capacitance 
+           |       (kohm/um) |          (fF/um)
+------------------------------------------------
+    metal1 |        5.43e-03 |         7.42e-02
+    metal2 |        3.57e-03 |         8.34e-02
+    metal3 |        3.57e-03 |         1.04e-01
+    metal4 |        1.50e-03 |         1.19e-01
+    metal5 |        1.50e-03 |         1.09e-01
+    metal6 |        1.50e-03 |         1.14e-01
+    metal7 |        1.88e-04 |         1.17e-01
+    metal8 |        1.88e-04 |         9.45e-02
+    metal9 |        3.75e-05 |         1.06e-01
+   metal10 |        3.75e-05 |         7.37e-01
+------------------------------------------------
+
+   Layer   | Via Resistance 
+           |         (kohm) 
+----------------------------
+      via1 |       5.00e-03 
+      via2 |       5.00e-03 
+      via3 |       5.00e-03 
+      via4 |       3.00e-03 
+      via5 |       3.00e-03 
+      via6 |       3.00e-03 
+      via7 |       1.00e-03 
+      via8 |       1.00e-03 
+      via9 |       5.00e-04 
+----------------------------
+Report metrics stage 2, floorplan final...
+
+==========================================================================
+floorplan final report_design_area
+--------------------------------------------------------------------------
+Design area 627 um^2 58% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/2_1_floorplan.odb
+write_sdc -no_timestamp ./results/nangate45/gcd/noise_ng45_c4/2_1_floorplan.sdc
+Elapsed time: 0:00.36[h:]min:sec. CPU time: user 0.31 sys 0.06 (102%). Peak memory: 136568KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+2_1_floorplan             .odb            0            133 d705ca7ed560ec422e9f
+2_1_floorplan             .sdc                             7fe61694c034e1755ac1
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 2_2_floorplan_macro macro_place
+Running macro_place.tcl, stage 2_2_floorplan_macro
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/2_1_floorplan.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_1_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+No macros found: Skipping macro_placement
+Design area 627 um^2 58% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/2_2_floorplan_macro.odb
+Elapsed time: 0:00.25[h:]min:sec. CPU time: user 0.24 sys 0.02 (99%). Peak memory: 115304KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+2_2_floorplan_macro       .odb            0            112 d705ca7ed560ec422e9f
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 2_3_floorplan_tapcell tapcell
+Running tapcell.tcl, stage 2_3_floorplan_tapcell
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/2_2_floorplan_macro.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_1_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+[INFO TAP-0004] Inserted 46 endcaps.
+[INFO TAP-0005] Inserted 0 tapcells.
+Design area 639 um^2 59% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/2_3_floorplan_tapcell.odb
+Elapsed time: 0:00.24[h:]min:sec. CPU time: user 0.21 sys 0.03 (98%). Peak memory: 115252KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+2_3_floorplan_tapcell     .odb            0            112 0b0132b88316906357a7
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 2_4_floorplan_pdn pdn
+Running pdn.tcl, stage 2_4_floorplan_pdn
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/2_3_floorplan_tapcell.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_1_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+[INFO PDN-0001] Inserting grid: grid
+[INFO PDN-0500] Runtime: 0.00s
+Design area 639 um^2 59% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/2_4_floorplan_pdn.odb
+Elapsed time: 0:00.26[h:]min:sec. CPU time: user 0.23 sys 0.02 (98%). Peak memory: 116952KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+2_4_floorplan_pdn         .odb            0            114 ca02aeb6b7d76b13849d
+cp ./results/nangate45/gcd/noise_ng45_c4/2_4_floorplan_pdn.odb ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.odb
+cp ./results/nangate45/gcd/noise_ng45_c4/2_1_floorplan.sdc ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.sdc
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 3_1_place_gp_skip_io global_place_skip_io
+Running global_place_skip_io.tcl, stage 3_1_place_gp_skip_io
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+[INFO GPL-0022] Initialize gpl and calculate uniform density.
+Placement density is 0.754000005722046, computed from PLACE_DENSITY_LB_ADDON  0.20 and lower bound 0.6800000071525574
+global_placement -skip_io -density 0.754000005722046 -pad_left 0 -pad_right 0
+[INFO GPL-0001] ---- Initialize GPL Main Data Structures
+[INFO GPL-0002] DBU: 2000
+[INFO GPL-0003] SiteSize: (  0.190  1.400 ) um
+[INFO GPL-0004] CoreBBox: (  1.140  1.400 ) ( 34.580 33.600 ) um
+[INFO GPL-0016] Core area:                    1076.768 um^2
+[INFO GPL-0036] Movable instances area:        626.696 um^2
+[INFO GPL-0037] Total instances area:          638.932 um^2
+[INFO GPL-0035] Pin density area adjust:        96.449 um^2
+[INFO GPL-0032] ---- Initialize Region: Top-level
+[INFO GPL-0006] Number of instances:               559
+[INFO GPL-0007] Movable instances:                 513
+[INFO GPL-0008] Fixed instances:                    46
+[INFO GPL-0009] Dummy instances:                     0
+[INFO GPL-0010] Number of nets:                    584
+[INFO GPL-0011] Number of pins:                   1613
+[INFO GPL-0012] Die BBox:       (  0.000  0.000 ) ( 35.755 35.755 ) um
+[INFO GPL-0013] Placement BBox: (  1.140  1.400 ) ( 34.580 33.600 ) um
+[INFO GPL-0014] Region name: top-level.
+[INFO GPL-0015] Region area:                  1076.768 um^2
+[INFO GPL-0017] Fixed instances area:           12.236 um^2
+[INFO GPL-0018] Movable instances area:        723.145 um^2
+[INFO GPL-0019] Utilization:                    67.931 %
+[INFO GPL-0020] Standard cells area:           723.145 um^2
+[INFO GPL-0021] Large instances area:            0.000 um^2
+[INFO GPL-0005] ---- Execute Conjugate Gradient Initial Placement.
+[INFO GPL-0051] Source of initial instance position counters:
+	Odb location = 0	Core center = 513	Region center = 0
+[INFO GPL-0033] ---- Initialize Nesterov Region: Top-level
+[INFO GPL-0023] Placement target density:       0.7540
+[INFO GPL-0024] Movable insts average area:      1.410 um^2
+[INFO GPL-0025] Ideal bin area:                  1.870 um^2
+[INFO GPL-0026] Ideal bin count:                   575
+[INFO GPL-0027] Total bin area:               1076.768 um^2
+[INFO GPL-0028] Bin count (X, Y):          16 ,     16
+[INFO GPL-0029] Bin size (W * H):       2.090 *  2.013 um
+[INFO GPL-0030] Number of bins:                    256
+[INFO GPL-0084] ---- Execute Nesterov Global Placement.
+[INFO GPL-0031] HPWL: Half-Perimeter Wirelength
+Iteration | Overflow |     HPWL (um) |  HPWL(%) |   Penalty | Group
+---------------------------------------------------------------
+        0 |   0.9822 |  3.121295e+02 |   +0.00% |  4.05e-14 |      
+       10 |   0.9778 |  2.235280e+02 |  -28.39% |  6.61e-14 |      
+       20 |   0.9757 |  2.214055e+02 |   -0.95% |  1.08e-13 |      
+       30 |   0.9760 |  2.212085e+02 |   -0.09% |  1.75e-13 |      
+       40 |   0.9761 |  2.213305e+02 |   +0.06% |  2.85e-13 |      
+       50 |   0.9760 |  2.213750e+02 |   +0.02% |  4.65e-13 |      
+       60 |   0.9759 |  2.213625e+02 |   -0.01% |  7.57e-13 |      
+       70 |   0.9757 |  2.214870e+02 |   +0.06% |  1.23e-12 |      
+       80 |   0.9754 |  2.217415e+02 |   +0.11% |  2.01e-12 |      
+       90 |   0.9748 |  2.222100e+02 |   +0.21% |  3.27e-12 |      
+      100 |   0.9737 |  2.230390e+02 |   +0.37% |  5.33e-12 |      
+      110 |   0.9725 |  2.246070e+02 |   +0.70% |  8.69e-12 |      
+      120 |   0.9718 |  2.275920e+02 |   +1.33% |  1.41e-11 |      
+      130 |   0.9666 |  2.373235e+02 |   +4.28% |  2.30e-11 |      
+      140 |   0.9645 |  3.053145e+02 |  +28.65% |  3.75e-11 |      
+      150 |   0.9191 |  4.981765e+02 |  +63.17% |  6.11e-11 |      
+      160 |   0.8967 |  6.515015e+02 |  +30.78% |  9.96e-11 |      
+      170 |   0.8798 |  7.450085e+02 |  +14.35% |  1.62e-10 |      
+      180 |   0.8448 |  8.826245e+02 |  +18.47% |  2.64e-10 |      
+      190 |   0.8083 |  1.018833e+03 |  +15.43% |  4.30e-10 |      
+      200 |   0.7741 |  1.135372e+03 |  +11.44% |  7.01e-10 |      
+      210 |   0.7329 |  1.284559e+03 |  +13.14% |  1.14e-09 |      
+      220 |   0.6858 |  1.412747e+03 |   +9.98% |  1.86e-09 |      
+      230 |   0.6400 |  1.555166e+03 |  +10.08% |  3.03e-09 |      
+      240 |   0.5952 |  1.675213e+03 |   +7.72% |  4.93e-09 |      
+      250 |   0.5387 |  1.803618e+03 |   +7.66% |  8.04e-09 |      
+      260 |   0.4892 |  1.929468e+03 |   +6.98% |  1.31e-08 |      
+      270 |   0.4353 |  2.032053e+03 |   +5.32% |  2.13e-08 |      
+      280 |   0.3727 |  2.120108e+03 |   +4.33% |  3.47e-08 |      
+      290 |   0.3201 |  2.181874e+03 |   +2.91% |  5.38e-08 |      
+      300 |   0.2749 |  2.230736e+03 |   +2.24% |  7.93e-08 |      
+      310 |   0.2319 |  2.269482e+03 |   +1.74% |  1.17e-07 |      
+      320 |   0.2005 |  2.296729e+03 |   +1.20% |  1.72e-07 |      
+      330 |   0.1747 |  2.319528e+03 |   +0.99% |  2.53e-07 |      
+      340 |   0.1459 |  2.335498e+03 |   +0.69% |  3.73e-07 |      
+      350 |   0.1248 |  2.343595e+03 |   +0.35% |  5.50e-07 |      
+      360 |   0.1011 |  2.358387e+03 |   +0.63% |  8.10e-07 |      
+      361 |   0.0993 |  2.360352e+03 |          |  8.75e-07 |      
+---------------------------------------------------------------
+[INFO GPL-1001] Global placement finished at iteration 361
+[INFO GPL-1002] Placed Cell Area              723.1450
+[INFO GPL-1003] Available Free Area          1064.5320
+[INFO GPL-1004] Minimum Feasible Density        0.6800 (cell_area / free_area)
+[INFO GPL-1006]   Suggested Target Densities:
+[INFO GPL-1007]     - For 90% usage of free space: 0.7548
+[INFO GPL-1008]     - For 80% usage of free space: 0.8491
+[INFO GPL-1014] Final placement area: 723.14 (+0.00%)
+Design area 639 um^2 59% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/3_1_place_gp_skip_io.odb
+Elapsed time: 0:00.33[h:]min:sec. CPU time: user 0.48 sys 0.03 (156%). Peak memory: 117208KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+3_1_place_gp_skip_io      .odb            0            114 523d43604fee68919fdb
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 3_2_place_iop io_placement
+Running io_placement.tcl, stage 3_2_place_iop
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/3_1_place_gp_skip_io.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+place_pins -hor_layers metal5 -ver_layers metal6
+Found 0 macro blocks.
+Using 2 tracks default min distance between IO pins.
+[INFO PPL-0001] Number of available slots 240
+[INFO PPL-0002] Number of I/O             54
+[INFO PPL-0003] Number of I/O w/sink      54
+[INFO PPL-0004] Number of I/O w/o sink    0
+[INFO PPL-0005] Slots per section         200
+[INFO PPL-0008] Successfully assigned pins to sections.
+[INFO PPL-0012] I/O nets HPWL: 534.67 um.
+Design area 639 um^2 59% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/3_2_place_iop.odb
+Elapsed time: 0:00.25[h:]min:sec. CPU time: user 0.23 sys 0.02 (99%). Peak memory: 115760KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+3_2_place_iop             .odb            0            113 2e7a40bf01bbb8a7bf29
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 3_3_place_gp global_place
+Running global_place.tcl, stage 3_3_place_gp
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/3_2_place_iop.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+[INFO RSZ-0026] Removed 15 buffers.
+Perform port buffering...
+[INFO RSZ-0027] Inserted 35 BUF_X1 input buffers.
+[INFO RSZ-0028] Inserted 18 BUF_X1 output buffers.
+[INFO GPL-0022] Initialize gpl and calculate uniform density.
+Placement density is 0.7779999828338623, computed from PLACE_DENSITY_LB_ADDON  0.20 and lower bound 0.7099999785423279
+global_placement -density 0.7779999828338623 -pad_left 0 -pad_right 0 -routability_driven -timing_driven -force_center_initial_place -min_phi_coef 0.95 -max_phi_coef 1.05
+[INFO GPL-0001] ---- Initialize GPL Main Data Structures
+[INFO GPL-0002] DBU: 2000
+[INFO GPL-0003] SiteSize: (  0.190  1.400 ) um
+[INFO GPL-0004] CoreBBox: (  1.140  1.400 ) ( 34.580 33.600 ) um
+[INFO GPL-0016] Core area:                    1076.768 um^2
+[INFO GPL-0036] Movable instances area:        650.104 um^2
+[INFO GPL-0037] Total instances area:          662.340 um^2
+[INFO GPL-0035] Pin density area adjust:        96.356 um^2
+[INFO GPL-0032] ---- Initialize Region: Top-level
+[INFO GPL-0006] Number of instances:               597
+[INFO GPL-0007] Movable instances:                 551
+[INFO GPL-0008] Fixed instances:                    46
+[INFO GPL-0009] Dummy instances:                     0
+[INFO GPL-0010] Number of nets:                    622
+[INFO GPL-0011] Number of pins:                   1743
+[INFO GPL-0012] Die BBox:       (  0.000  0.000 ) ( 35.755 35.755 ) um
+[INFO GPL-0013] Placement BBox: (  1.140  1.400 ) ( 34.580 33.600 ) um
+[INFO GPL-0014] Region name: top-level.
+[INFO GPL-0015] Region area:                  1076.768 um^2
+[INFO GPL-0017] Fixed instances area:           12.236 um^2
+[INFO GPL-0018] Movable instances area:        746.460 um^2
+[INFO GPL-0019] Utilization:                    70.121 %
+[INFO GPL-0020] Standard cells area:           746.460 um^2
+[INFO GPL-0021] Large instances area:            0.000 um^2
+[INFO GPL-0005] ---- Execute Conjugate Gradient Initial Placement.
+[INFO GPL-0051] Source of initial instance position counters:
+	Odb location = 0	Core center = 551	Region center = 0
+[InitialPlace]  Iter: 1 conjugate gradient residual: 0.00000010 HPWL: 8283842
+[InitialPlace]  Iter: 2 conjugate gradient residual: 0.00000008 HPWL: 5767774
+[InitialPlace]  Iter: 3 conjugate gradient residual: 0.00000012 HPWL: 5776766
+[InitialPlace]  Iter: 4 conjugate gradient residual: 0.00000011 HPWL: 5789048
+[InitialPlace]  Iter: 5 conjugate gradient residual: 0.00000012 HPWL: 5778123
+[INFO GPL-0033] ---- Initialize Nesterov Region: Top-level
+[INFO GPL-0023] Placement target density:       0.7780
+[INFO GPL-0024] Movable insts average area:      1.355 um^2
+[INFO GPL-0025] Ideal bin area:                  1.741 um^2
+[INFO GPL-0026] Ideal bin count:                   618
+[INFO GPL-0027] Total bin area:               1076.768 um^2
+[INFO GPL-0028] Bin count (X, Y):          16 ,     16
+[INFO GPL-0029] Bin size (W * H):       2.090 *  2.013 um
+[INFO GPL-0030] Number of bins:                    256
+[INFO GPL-0084] ---- Execute Nesterov Global Placement.
+[INFO GPL-0031] HPWL: Half-Perimeter Wirelength
+Iteration | Overflow |     HPWL (um) |  HPWL(%) |   Penalty | Group
+---------------------------------------------------------------
+        0 |   0.8789 |  1.401681e+03 |   +0.00% |  3.42e-14 |      
+       10 |   0.7473 |  1.728411e+03 |  +23.31% |  5.58e-14 |      
+       20 |   0.7276 |  1.753675e+03 |   +1.46% |  9.08e-14 |      
+       30 |   0.7289 |  1.750786e+03 |   -0.16% |  1.48e-13 |      
+       40 |   0.7318 |  1.747498e+03 |   -0.19% |  2.41e-13 |      
+       50 |   0.7309 |  1.751588e+03 |   +0.23% |  3.93e-13 |      
+       60 |   0.7299 |  1.752485e+03 |   +0.05% |  6.39e-13 |      
+       70 |   0.7305 |  1.750629e+03 |   -0.11% |  1.04e-12 |      
+       80 |   0.7305 |  1.750162e+03 |   -0.03% |  1.70e-12 |      
+       90 |   0.7300 |  1.750757e+03 |   +0.03% |  2.76e-12 |      
+      100 |   0.7298 |  1.751534e+03 |   +0.04% |  4.50e-12 |      
+      110 |   0.7295 |  1.753082e+03 |   +0.09% |  7.33e-12 |      
+      120 |   0.7286 |  1.755488e+03 |   +0.14% |  1.19e-11 |      
+      130 |   0.7273 |  1.758859e+03 |   +0.19% |  1.95e-11 |      
+      140 |   0.7253 |  1.764245e+03 |   +0.31% |  3.17e-11 |      
+      150 |   0.7220 |  1.772530e+03 |   +0.47% |  5.16e-11 |      
+      160 |   0.7160 |  1.784707e+03 |   +0.69% |  8.41e-11 |      
+      170 |   0.7068 |  1.802724e+03 |   +1.01% |  1.37e-10 |      
+      180 |   0.6971 |  1.829127e+03 |   +1.46% |  2.23e-10 |      
+      190 |   0.6809 |  1.862845e+03 |   +1.84% |  3.63e-10 |      
+      200 |   0.6592 |  1.905532e+03 |   +2.29% |  5.92e-10 |      
+      210 |   0.6371 |  1.956672e+03 |   +2.68% |  9.64e-10 |      
+[INFO GPL-0100] Timing-driven iteration 1/2, virtual: false.
+[INFO GPL-0101]    Iter: 212, overflow: 0.634, keep resizer changes at: 1, HPWL: 3928046
+Iteration |   Area    | Resized | Buffers | Nets repaired | Remaining
+---------------------------------------------------------------------
+        0 |     +0.0% |       0 |       0 |             0 |       622
+    final |     +0.0% |       0 |       0 |             0 |         0
+---------------------------------------------------------------------
+   Iter   |    Area   | Removed | Inserted |   Pins
+          |           | Buffers | Buffers  | Remaining
+-------------------------------------------------------
+        0 |     +0.0% |       0 |        0 |       586
+       58 |     +0.0% |       0 |        0 |       528
+      116 |     +0.0% |       0 |        0 |       470
+      174 |     +0.8% |       0 |        5 |       412
+      232 |     +1.0% |       0 |        6 |       354
+      290 |     +1.1% |       0 |        7 |       296
+      348 |     +1.4% |       0 |        9 |       238
+      406 |     +1.6% |       0 |       10 |       180
+      464 |     +2.0% |       0 |       12 |       122
+      522 |     +2.0% |       0 |       12 |        64
+      580 |     +2.1% |       0 |       13 |         6
+    final |     +2.1% |       0 |       13 |         0
+-------------------------------------------------------
+[INFO GPL-0106] Timing-driven: worst slack 2.0936669e-11
+[INFO GPL-0107] Timing-driven: repair_design delta area: 13.832 um^2 (+1.85%)
+[INFO GPL-0108] Timing-driven: repair_design, gpl delta gcells: 13 (+2.36%)
+[INFO GPL-0109] Timing-driven: repair_design, gcells created: 13, deleted: 0
+[INFO GPL-0110] Timing-driven: new target density: 0.7909935
+Iteration | Overflow |     HPWL (um) |  HPWL(%) |   Penalty | Group
+---------------------------------------------------------------
+      220 |   0.6020 |  2.134765e+03 |   +9.10% |  1.57e-09 |      
+[INFO GPL-0038] Routability snapshot saved at iter = 222
+      221 |   0.5983 |  2.137537e+03 |          |           |      
+      230 |   0.5814 |  2.168825e+03 |   +1.60% |  2.56e-09 |      
+      240 |   0.5491 |  2.226464e+03 |   +2.66% |  4.17e-09 |      
+      250 |   0.5010 |  2.316676e+03 |   +4.05% |  6.79e-09 |      
+      260 |   0.4561 |  2.370644e+03 |   +2.33% |  1.11e-08 |      
+      270 |   0.4153 |  2.409742e+03 |   +1.65% |  1.80e-08 |      
+      280 |   0.3713 |  2.474474e+03 |   +2.69% |  2.93e-08 |      
+      290 |   0.3174 |  2.541949e+03 |   +2.73% |  4.59e-08 |      
+[INFO GPL-0040] Routability iteration: 1
+[INFO GPL-0041] Total routing overflow: 0.0000
+[INFO GPL-0042] Number of overflowed tiles: 0 (0.00%)
+[INFO GPL-0043] Average top 0.5% routing congestion: 0.7254
+[INFO GPL-0044] Average top 1.0% routing congestion: 0.7189
+[INFO GPL-0045] Average top 2.0% routing congestion: 0.7143
+[INFO GPL-0046] Average top 5.0% routing congestion: 0.6906
+[INFO GPL-0047] Routability iteration weighted routing congestion: 0.7222
+[INFO GPL-0050] Weighted routing congestion is lower than target routing congestion(1.0100), end routability optimization.
+[INFO GPL-0090] Routability finished. Target routing congestion achieved succesfully.
+Iteration | Overflow |     HPWL (um) |  HPWL(%) |   Penalty | Group
+---------------------------------------------------------------
+      300 |   0.2795 |  2.566465e+03 |   +0.96% |  6.76e-08 |      
+      310 |   0.2473 |  2.616291e+03 |   +1.94% |  9.96e-08 |      
+      320 |   0.2173 |  2.652577e+03 |   +1.39% |  1.47e-07 |      
+[INFO GPL-0100] Timing-driven iteration 2/2, virtual: false.
+[INFO GPL-0101]    Iter: 329, overflow: 0.194, keep resizer changes at: 1, HPWL: 5351502
+Iteration |   Area    | Resized | Buffers | Nets repaired | Remaining
+---------------------------------------------------------------------
+        0 |     +0.0% |       0 |       0 |             0 |       635
+    final |     +0.0% |       0 |       0 |             0 |         0
+---------------------------------------------------------------------
+   Iter   |    Area   | Removed | Inserted |   Pins
+          |           | Buffers | Buffers  | Remaining
+-------------------------------------------------------
+        0 |     +0.0% |       0 |        0 |       586
+       58 |     +0.0% |       0 |        0 |       528
+      116 |     +0.0% |       0 |        0 |       470
+      174 |     -0.6% |       5 |        1 |       412
+      232 |     -0.5% |       6 |        3 |       354
+      290 |     -0.5% |       7 |        4 |       296
+      348 |     -0.7% |       9 |        5 |       238
+      406 |     -0.7% |      10 |        6 |       180
+      464 |     -0.8% |      12 |        7 |       122
+      522 |     -0.8% |      12 |        7 |        64
+      580 |     -0.7% |      13 |        9 |         6
+    final |     -0.7% |      13 |        9 |         0
+-------------------------------------------------------
+[INFO GPL-0106] Timing-driven: worst slack 2.2252894e-11
+[INFO GPL-0107] Timing-driven: repair_design delta area: -4.522 um^2 (-0.59%)
+[INFO GPL-0108] Timing-driven: repair_design, gpl delta gcells: -4 (-0.71%)
+[INFO GPL-0109] Timing-driven: repair_design, gcells created: 9, deleted: 13
+[INFO GPL-0110] Timing-driven: new target density: 0.78674567
+Iteration | Overflow |     HPWL (um) |  HPWL(%) |   Penalty | Group
+---------------------------------------------------------------
+      330 |   0.1875 |  2.666599e+03 |   +0.53% |  2.16e-07 |      
+      340 |   0.1674 |  2.685385e+03 |   +0.70% |  3.18e-07 |      
+      350 |   0.1478 |  2.698382e+03 |   +0.48% |  4.69e-07 |      
+      360 |   0.1170 |  2.714284e+03 |   +0.59% |  6.91e-07 |      
+      370 |   0.1043 |  2.710430e+03 |   -0.14% |  1.02e-06 |      
+      374 |   0.0999 |  2.717678e+03 |          |  1.24e-06 |      
+---------------------------------------------------------------
+[INFO GPL-1001] Global placement finished at iteration 374
+[INFO GPL-1017] Routability mode iteration count: 72
+[INFO GPL-1005] Routability final weighted congestion: 0.7086
+[INFO GPL-1002] Placed Cell Area              755.7700
+[INFO GPL-1003] Available Free Area          1064.5320
+[INFO GPL-1004] Minimum Feasible Density        0.7100 (cell_area / free_area)
+[INFO GPL-1006]   Suggested Target Densities:
+[INFO GPL-1007]     - For 90% usage of free space: 0.7888
+[INFO GPL-1008]     - For 80% usage of free space: 0.8874
+[INFO GPL-1011] Original area (um^2): 746.46
+[INFO GPL-1012] Total routability artificial inflation: 0.00 (+0.00%)
+[INFO GPL-1013] Total timing-driven delta area: 9.31 (+1.25%)
+[INFO GPL-1014] Final placement area: 755.77 (+1.25%)
+estimate_parasitics -placement
+Report metrics stage 3, global place...
+
+==========================================================================
+global place report_design_area
+--------------------------------------------------------------------------
+Design area 672 um^2 62% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/3_3_place_gp.odb
+Elapsed time: 0:00.81[h:]min:sec. CPU time: user 1.04 sys 0.22 (155%). Peak memory: 291784KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+3_3_place_gp              .odb            0            284 77cc029d6822e20d34fe
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 3_4_place_resized resize
+Running resize.tcl, stage 3_4_place_resized
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/3_3_place_gp.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+estimate_parasitics -placement
+Perform buffer insertion and gate resizing...
+repair_design -verbose
+Iteration |   Area    | Resized | Buffers | Nets repaired | Remaining
+---------------------------------------------------------------------
+        0 |     +0.0% |       0 |       0 |             0 |       631
+       10 |     +0.0% |       0 |       0 |             0 |       621
+       20 |     +0.0% |       0 |       0 |             0 |       611
+       30 |     +0.0% |       0 |       0 |             0 |       601
+       40 |     +0.0% |       0 |       0 |             0 |       591
+       50 |     +0.0% |       0 |       0 |             0 |       581
+       60 |     +0.0% |       0 |       0 |             0 |       571
+       70 |     +0.0% |       0 |       0 |             0 |       561
+       80 |     +0.0% |       0 |       0 |             0 |       551
+       90 |     +0.0% |       0 |       0 |             0 |       541
+      100 |     +0.0% |       0 |       0 |             0 |       531
+      110 |     +0.0% |       0 |       0 |             0 |       521
+      120 |     +0.0% |       0 |       0 |             0 |       511
+      130 |     +0.0% |       0 |       0 |             0 |       501
+      140 |     +0.0% |       0 |       0 |             0 |       491
+      150 |     +0.0% |       0 |       0 |             0 |       481
+      160 |     +0.0% |       0 |       0 |             0 |       471
+      170 |     +0.0% |       0 |       0 |             0 |       461
+      180 |     +0.0% |       0 |       0 |             0 |       451
+      190 |     +0.0% |       0 |       0 |             0 |       441
+      200 |     +0.0% |       0 |       0 |             0 |       431
+      210 |     +0.0% |       0 |       0 |             0 |       421
+      220 |     +0.0% |       0 |       0 |             0 |       411
+      230 |     +0.0% |       0 |       0 |             0 |       401
+      240 |     +0.0% |       0 |       0 |             0 |       391
+      250 |     +0.0% |       0 |       0 |             0 |       381
+      260 |     +0.0% |       0 |       0 |             0 |       371
+      270 |     +0.0% |       0 |       0 |             0 |       361
+      280 |     +0.0% |       0 |       0 |             0 |       351
+      290 |     +0.0% |       0 |       0 |             0 |       341
+      300 |     +0.0% |       0 |       0 |             0 |       331
+      310 |     +0.0% |       0 |       0 |             0 |       321
+      320 |     +0.0% |       0 |       0 |             0 |       311
+      330 |     +0.0% |       0 |       0 |             0 |       301
+      340 |     +0.0% |       0 |       0 |             0 |       291
+      350 |     +0.0% |       0 |       0 |             0 |       281
+      360 |     +0.0% |       0 |       0 |             0 |       271
+      370 |     +0.0% |       0 |       0 |             0 |       261
+      380 |     +0.0% |       0 |       0 |             0 |       251
+      390 |     +0.0% |       0 |       0 |             0 |       241
+      400 |     +0.0% |       0 |       0 |             0 |       231
+      410 |     +0.0% |       0 |       0 |             0 |       221
+      420 |     +0.0% |       0 |       0 |             0 |       211
+      430 |     +0.0% |       0 |       0 |             0 |       201
+      440 |     +0.0% |       0 |       0 |             0 |       191
+      450 |     +0.0% |       0 |       0 |             0 |       181
+      460 |     +0.0% |       0 |       0 |             0 |       171
+      470 |     +0.0% |       0 |       0 |             0 |       161
+      480 |     +0.0% |       0 |       0 |             0 |       151
+      490 |     +0.0% |       0 |       0 |             0 |       141
+      500 |     +0.0% |       0 |       0 |             0 |       131
+      510 |     +0.0% |       0 |       0 |             0 |       121
+      520 |     +0.0% |       0 |       0 |             0 |       111
+      530 |     +0.0% |       0 |       0 |             0 |       101
+      540 |     +0.0% |       0 |       0 |             0 |        91
+      550 |     +0.0% |       0 |       0 |             0 |        81
+      560 |     +0.0% |       0 |       0 |             0 |        71
+      570 |     +0.0% |       0 |       0 |             0 |        61
+      580 |     +0.0% |       0 |       0 |             0 |        51
+      590 |     +0.0% |       0 |       0 |             0 |        41
+      600 |     +0.0% |       0 |       0 |             0 |        31
+      610 |     +0.0% |       0 |       0 |             0 |        21
+      620 |     +0.0% |       0 |       0 |             0 |        11
+      630 |     +0.0% |       0 |       0 |             0 |         1
+    final |     +0.0% |       0 |       0 |             0 |         0
+---------------------------------------------------------------------
+[INFO RSZ-0504] Runtime: 0.04s
+Floating nets: 
+Report metrics stage 3, resizer...
+
+==========================================================================
+resizer report_design_area
+--------------------------------------------------------------------------
+Design area 672 um^2 62% utilization.
+Instance count before 606, after 606
+Pin count before 1707, after 1707
+write_db ./results/nangate45/gcd/noise_ng45_c4/3_4_place_resized.odb
+Elapsed time: 0:00.46[h:]min:sec. CPU time: user 0.44 sys 0.07 (110%). Peak memory: 134484KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+3_4_place_resized         .odb            0            131 77cc029d6822e20d34fe
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 3_5_place_dp detail_place
+Running detail_place.tcl, stage 3_5_place_dp
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/3_4_place_resized.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/2_floorplan.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+detailed_placement
+[INFO DPL-0006] Core area: 1076.77 um^2
+[INFO DPL-0007] Movable instances area: 659.41 um^2
+[INFO DPL-0008] Fixed instances area within core: 12.24 um^2
+[INFO DPL-0009] Utilization: 62.4%
+[INFO DPL-0005] Diamond search max displacement: +/- 500 sites horizontally, +/- 100 rows vertically.
+[INFO DPL-1102] Legalizing using negotiation legalizer.
+[INFO DPL-1103] Negotiation base search window: +/-20 sites horizontally, +/-5 rows vertically 
+	Automatic search window extension enabled.
+	Search window extendable up to the max displacement cap of +/-500 sites, +/-100 rows near walls.
+[INFO DPL-1104] NegotiationLegalizer DRC penalty: 5.
+[INFO DPL-0392] Negotiation cell height distribution (1 unique row-count(s)):
+[INFO DPL-0393]   height 1 row(s): 606 cells
+          |      Total |  Illegal |  Illegal
+Iteration | Violations |    Cells |    Sites
+---------------------------------------------
+        0 |          8 |         4 |         4
+        1 |          0 |         0 |         0
+Negotiation phase 1 converged at iteration 1.
+[INFO DPL-0500] Runtime: 0.00s
+Placement Analysis
+---------------------------------
+total displacement        847.2 u
+average displacement        1.4 u
+max displacement            7.2 u
+original HPWL            2735.1 u
+legalized HPWL           3418.6 u
+delta HPWL                   25 %
+
+improve_placement -max_displacement "5 1"
+Detailed placement improvement.
+[INFO DPL-0401] Setting random seed to 1.
+[INFO DPL-0402] Setting maximum displacement 5 1 to 14000 2800 units.
+[INFO DPL-0320] Collected 100 fixed cells.
+[INFO DPL-0318] Collected 560 single height cells.
+[INFO DPL-0321] Collected 0 wide cells.
+[INFO DPL-0322] Image (2280, 2800) - (69160, 67200)
+[INFO DPL-0310] Assigned 560 cells into segments.  Movement in X-direction is 0.000000, movement in Y-direction is 0.000000.
+[INFO DPL-0313] Found 0 cells in wrong regions.
+[INFO DPL-0315] Found 0 row alignment problems.
+[INFO DPL-0314] Found 0 site alignment problems.
+[INFO DPL-0311] Found 0 overlaps between adjacent cells.
+[INFO DPL-0312] Found 0 edge spacing violations and 0 padding violations.
+[INFO DPL-0303] Running algorithm for independent set matching.
+[INFO DPL-0300] Set matching objective is wirelength.
+[INFO DPL-0301] Pass   1 of matching; objective is 6.822830e+06.
+[INFO DPL-0302] End of matching; objective is 6.792820e+06, improvement is 0.44 percent.
+[INFO DPL-0303] Running algorithm for global swaps.
+[INFO DPL-0306] Pass   1 of global swaps; hpwl is 6.499180e+06.
+[INFO DPL-0306] Pass   2 of global swaps; hpwl is 6.456135e+06.
+[INFO DPL-0307] End of global swaps; objective is 6.456135e+06, improvement is 4.96 percent.
+[INFO DPL-0303] Running algorithm for vertical swaps.
+[INFO DPL-0308] Pass   1 of vertical swaps; hpwl is 6.381630e+06.
+[INFO DPL-0308] Pass   2 of vertical swaps; hpwl is 6.347245e+06.
+[INFO DPL-0309] End of vertical swaps; objective is 6.347245e+06, improvement is 1.69 percent.
+[INFO DPL-0303] Running algorithm for reordering.
+[INFO DPL-0304] Pass   1 of reordering; objective is 6.323655e+06.
+[INFO DPL-0305] End of reordering; objective is 6.323655e+06, improvement is 0.37 percent.
+[INFO DPL-0303] Running algorithm for random improvement.
+[INFO DPL-0324] Random improver is using random generator.
+[INFO DPL-0325] Random improver is using hpwl objective.
+[INFO DPL-0326] Random improver cost string is (a).
+[INFO DPL-0332] End of pass, Generator random called 11200 times.
+[INFO DPL-0335] Generator random, Cumulative attempts 11200, swaps 1986, moves  3299 since last reset.
+[INFO DPL-0333] End of pass, Objective hpwl, Initial cost 6.323655e+06, Scratch cost 6.139520e+06, Incremental cost 6.139520e+06, Mismatch? N
+[INFO DPL-0338] End of pass, Total cost is 6.139520e+06.
+[INFO DPL-0327] Pass   1 of random improver; improvement in cost is 2.91 percent.
+[INFO DPL-0332] End of pass, Generator random called 11200 times.
+[INFO DPL-0335] Generator random, Cumulative attempts 22400, swaps 3780, moves  6725 since last reset.
+[INFO DPL-0333] End of pass, Objective hpwl, Initial cost 6.139520e+06, Scratch cost 6.088010e+06, Incremental cost 6.088010e+06, Mismatch? N
+[INFO DPL-0338] End of pass, Total cost is 6.088010e+06.
+[INFO DPL-0327] Pass   2 of random improver; improvement in cost is 0.84 percent.
+[INFO DPL-0328] End of random improver; improvement is 3.726405 percent.
+[INFO DPL-0380] Cell flipping.
+[INFO DPL-0382] Changed 0 cell orientations for row compatibility.
+[INFO DPL-0383] Performed 180 cell flips.
+[INFO DPL-0384] End of flipping; objective is 5.983455e+06, improvement is 1.72 percent.
+[INFO DPL-0313] Found 0 cells in wrong regions.
+[INFO DPL-0315] Found 0 row alignment problems.
+[INFO DPL-0314] Found 0 site alignment problems.
+[INFO DPL-0311] Found 0 overlaps between adjacent cells.
+[INFO DPL-0312] Found 0 edge spacing violations and 0 padding violations.
+Detailed Improvement Results
+------------------------------------------
+Original HPWL             3418.6 u (    1526.3,     1892.3)
+Final HPWL                2999.0 u (    1476.3,     1522.7)
+Delta HPWL                 -12.3 % (      -3.3,      -19.5)
+
+optimize_mirroring
+[INFO DPL-0020] Mirrored 24 instances
+[INFO DPL-0021] HPWL before            2999.0 u
+[INFO DPL-0022] HPWL after             2998.5 u
+[INFO DPL-0023] HPWL delta               -0.0 %
+[INFO FLW-0012] Placement violations .
+estimate_parasitics -placement
+Report metrics stage 3, detailed place...
+
+==========================================================================
+detailed place report_design_area
+--------------------------------------------------------------------------
+Design area 672 um^2 62% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/3_5_place_dp.odb
+write_sdc -no_timestamp ./results/nangate45/gcd/noise_ng45_c4/3_place.sdc
+Elapsed time: 0:00.48[h:]min:sec. CPU time: user 0.47 sys 0.05 (108%). Peak memory: 121708KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+3_5_place_dp              .odb            0            118 5f5d90652f5547631004
+cp ./results/nangate45/gcd/noise_ng45_c4/3_5_place_dp.odb ./results/nangate45/gcd/noise_ng45_c4/3_place.odb
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 4_1_cts cts
+Running cts.tcl, stage 4_1_cts
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/3_place.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/3_place.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+clock_tree_synthesis -sink_clustering_enable -repair_clock_nets
+[INFO CTS-0050] Root buffer is CLKBUF_X3.
+[INFO CTS-0051] Sink buffer is CLKBUF_X3.
+[INFO CTS-0052] The following clock buffers will be used for CTS:
+                    CLKBUF_X3
+[INFO CTS-0049] Characterization buffer is CLKBUF_X3.
+[INFO CTS-0007] Net "clk" found for clock "core_clock".
+[INFO CTS-0010]  Clock net "clk" has 35 sinks.
+[INFO CTS-0008] TritonCTS found 1 clock nets.
+[INFO CTS-0097] Characterization used 1 buffer(s) types.
+[INFO CTS-0201] 0 blockages from hard placement blockages and placed macros will be used.
+[INFO CTS-0027] Generating H-Tree topology for net clk.
+[INFO CTS-0028]  Total number of sinks: 35.
+[INFO CTS-0090]  Sinks will be clustered based on buffer max cap.
+[INFO CTS-0030]  Number of static layers: 0.
+[INFO CTS-0020]  Wire segment unit: 14000  dbu (7 um).
+[INFO CTS-0023]  Original sink region: [(5890, 4030), (49590, 65630)].
+[INFO CTS-0024]  Normalized sink region: [(0.420714, 0.287857), (3.54214, 4.68786)].
+[INFO CTS-0025]     Width:  3.1214.
+[INFO CTS-0026]     Height: 4.4000.
+ Level 1
+    Direction: Vertical
+    Sinks per sub-region: 18
+    Sub-region size: 3.1214 X 2.2000
+[INFO CTS-0034]     Segment length (rounded): 1.
+ Level 2
+    Direction: Horizontal
+    Sinks per sub-region: 9
+    Sub-region size: 1.5607 X 2.2000
+[INFO CTS-0034]     Segment length (rounded): 1.
+[INFO CTS-0038]  Stop criterion found. Sink region hpwl is smaller than max wirelength (591.189 um) and max number of sinks is 15.
+[INFO CTS-0035]  Number of sinks covered: 35.
+[INFO CTS-0018]     Created 5 clock buffers.
+[INFO CTS-0012]     Minimum number of buffers in the clock path: 2.
+[INFO CTS-0013]     Maximum number of buffers in the clock path: 2.
+[INFO CTS-0015]     Created 5 clock nets.
+[INFO CTS-0016]     Fanout distribution for the current clock = 8:2, 9:1, 10:1..
+[INFO CTS-0017]     Max level of the clock tree: 2.
+[INFO CTS-0098] Clock net "clk"
+[INFO CTS-0099]  Sinks 38
+[INFO CTS-0100]  Leaf buffers 0
+[INFO CTS-0101]  Average sink wire length 47.05 um
+[INFO CTS-0102]  Path depth 2 - 2
+[INFO CTS-0207]  Dummy loads inserted 3
+[INFO CTS-0500] Runtime: 0.71s
+estimate_parasitics -placement
+detailed_placement
+[INFO DPL-0006] Core area: 1076.77 um^2
+[INFO DPL-0007] Movable instances area: 667.93 um^2
+[INFO DPL-0008] Fixed instances area within core: 12.24 um^2
+[INFO DPL-0009] Utilization: 63.2%
+[INFO DPL-0005] Diamond search max displacement: +/- 500 sites horizontally, +/- 100 rows vertically.
+[INFO DPL-1102] Legalizing using negotiation legalizer.
+[INFO DPL-1103] Negotiation base search window: +/-20 sites horizontally, +/-5 rows vertically 
+	Automatic search window extension enabled.
+	Search window extendable up to the max displacement cap of +/-500 sites, +/-100 rows near walls.
+[INFO DPL-1104] NegotiationLegalizer DRC penalty: 5.
+[INFO DPL-0392] Negotiation cell height distribution (1 unique row-count(s)):
+[INFO DPL-0393]   height 1 row(s): 614 cells
+          |      Total |  Illegal |  Illegal
+Iteration | Violations |    Cells |    Sites
+---------------------------------------------
+        0 |          0 |         0 |         0
+Negotiation phase 1 converged at iteration 0.
+[INFO DPL-0500] Runtime: 0.00s
+Placement Analysis
+---------------------------------
+total displacement        165.5 u
+average displacement        0.3 u
+max displacement            7.5 u
+original HPWL            3090.8 u
+legalized HPWL           3157.5 u
+delta HPWL                    2 %
+
+estimate_parasitics -placement
+repair_timing -setup_margin 0 -hold_margin 0 -repair_tns 100 -verbose
+[INFO RSZ-0100] Repair move sequence: UnbufferMove SizeUpMove SwapPinsMove BufferMove CloneMove SplitLoadMove 
+[INFO RSZ-0098] No setup violations found
+[INFO RSZ-0505] Runtime: 0.03s
+[INFO RSZ-0033] No hold violations found.
+[INFO RSZ-0506] Runtime: 0.01s
+Repair timing output passed lec test
+detailed_placement
+[INFO DPL-0006] Core area: 1076.77 um^2
+[INFO DPL-0007] Movable instances area: 667.93 um^2
+[INFO DPL-0008] Fixed instances area within core: 12.24 um^2
+[INFO DPL-0009] Utilization: 63.2%
+[INFO DPL-0005] Diamond search max displacement: +/- 500 sites horizontally, +/- 100 rows vertically.
+[INFO DPL-1102] Legalizing using negotiation legalizer.
+[INFO DPL-1103] Negotiation base search window: +/-20 sites horizontally, +/-5 rows vertically 
+	Automatic search window extension enabled.
+	Search window extendable up to the max displacement cap of +/-500 sites, +/-100 rows near walls.
+[INFO DPL-1104] NegotiationLegalizer DRC penalty: 5.
+[INFO DPL-0392] Negotiation cell height distribution (1 unique row-count(s)):
+[INFO DPL-0393]   height 1 row(s): 614 cells
+[INFO DPL-0500] Runtime: 0.00s
+Placement Analysis
+---------------------------------
+total displacement          0.0 u
+average displacement        0.0 u
+max displacement            0.0 u
+original HPWL            3157.5 u
+legalized HPWL           3157.5 u
+delta HPWL                    0 %
+
+estimate_parasitics -placement
+Report metrics stage 4, cts final...
+
+==========================================================================
+cts final report_design_area
+--------------------------------------------------------------------------
+Design area 680 um^2 63% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/4_1_cts.odb
+write_sdc -no_timestamp ./results/nangate45/gcd/noise_ng45_c4/4_cts.sdc
+Elapsed time: 0:01.37[h:]min:sec. CPU time: user 1.31 sys 0.15 (107%). Peak memory: 148032KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+4_1_cts                   .odb            1            144 6868663540a9bad77c4c
+cp ./results/nangate45/gcd/noise_ng45_c4/4_1_cts.odb ./results/nangate45/gcd/noise_ng45_c4/4_cts.odb
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 5_1_grt global_route
+Running global_route.tcl, stage 5_1_grt
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/4_cts.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/4_cts.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+pin_access
+[INFO DRT-0149] Reading tech and libs.
+
+Units:                2000
+Number of layers:     21
+Number of macros:     135
+Number of vias:       33
+Number of viarulegen: 19
+
+[INFO DRT-0150] Reading design.
+
+Design:                   gcd
+Die area:                 ( 0 0 ) ( 71510 71510 )
+Number of track patterns: 20
+Number of DEF vias:       0
+Number of components:     614
+Number of terminals:      54
+Number of snets:          2
+Number of nets:           636
+
+[INFO DRT-0167] List of default vias:
+  Layer via2
+    default via: via2_5
+  Layer via3
+    default via: via3_2
+  Layer via4
+    default via: via4_0
+  Layer via5
+    default via: via5_0
+  Layer via6
+    default via: via6_0
+  Layer via7
+    default via: via7_0
+  Layer via8
+    default via: via8_0
+  Layer via9
+    default via: via9_0
+[INFO DRT-0162] Library cell analysis.
+[INFO DRT-0163] Instance analysis.
+[INFO DRT-0164] Number of unique instances = 58.
+[INFO DRT-0168] Init region query.
+[INFO DRT-0024]   Complete active.
+[INFO DRT-0024]   Complete Fr_VIA.
+[INFO DRT-0024]   Complete metal1.
+[INFO DRT-0024]   Complete via1.
+[INFO DRT-0024]   Complete metal2.
+[INFO DRT-0024]   Complete via2.
+[INFO DRT-0024]   Complete metal3.
+[INFO DRT-0024]   Complete via3.
+[INFO DRT-0024]   Complete metal4.
+[INFO DRT-0024]   Complete via4.
+[INFO DRT-0024]   Complete metal5.
+[INFO DRT-0024]   Complete via5.
+[INFO DRT-0024]   Complete metal6.
+[INFO DRT-0024]   Complete via6.
+[INFO DRT-0024]   Complete metal7.
+[INFO DRT-0024]   Complete via7.
+[INFO DRT-0024]   Complete metal8.
+[INFO DRT-0024]   Complete via8.
+[INFO DRT-0024]   Complete metal9.
+[INFO DRT-0024]   Complete via9.
+[INFO DRT-0024]   Complete metal10.
+[INFO DRT-0033] active shape region query size = 0.
+[INFO DRT-0033] FR_VIA shape region query size = 0.
+[INFO DRT-0033] metal1 shape region query size = 7853.
+[INFO DRT-0033] via1 shape region query size = 108.
+[INFO DRT-0033] metal2 shape region query size = 72.
+[INFO DRT-0033] via2 shape region query size = 108.
+[INFO DRT-0033] metal3 shape region query size = 72.
+[INFO DRT-0033] via3 shape region query size = 108.
+[INFO DRT-0033] metal4 shape region query size = 45.
+[INFO DRT-0033] via4 shape region query size = 60.
+[INFO DRT-0033] metal5 shape region query size = 37.
+[INFO DRT-0033] via5 shape region query size = 60.
+[INFO DRT-0033] metal6 shape region query size = 41.
+[INFO DRT-0033] via6 shape region query size = 24.
+[INFO DRT-0033] metal7 shape region query size = 9.
+[INFO DRT-0033] via7 shape region query size = 0.
+[INFO DRT-0033] metal8 shape region query size = 0.
+[INFO DRT-0033] via8 shape region query size = 0.
+[INFO DRT-0033] metal9 shape region query size = 0.
+[INFO DRT-0033] via9 shape region query size = 0.
+[INFO DRT-0033] metal10 shape region query size = 0.
+[INFO DRT-0165] Start pin access.
+[INFO DRT-0078]   Complete 292 pins.
+[INFO DRT-0081]   Complete 58 unique inst patterns.
+[INFO DRT-0084]   Complete 279 groups.
+#scanned instances     = 614
+#unique  instances     = 58
+#stdCellGenAp          = 1324
+#stdCellValidPlanarAp  = 0
+#stdCellValidViaAp     = 1000
+#stdCellPinNoAp        = 0
+#stdCellPinCnt         = 1720
+#instTermValidViaApCnt = 0
+#macroGenAp            = 0
+#macroValidPlanarAp    = 0
+#macroValidViaAp       = 0
+#macroNoAp             = 0
+[INFO DRT-0166] Complete pin access.
+[INFO DRT-0267] cpu time = 00:00:09, elapsed time = 00:00:02, memory = 114.22 (MB), peak = 113.77 (MB)
+global_route -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c4/congestion.rpt -congestion_iterations 30 -congestion_report_iter_step 5 -verbose
+[INFO GRT-0020] Min routing layer: metal2
+[INFO GRT-0021] Max routing layer: metal10
+[INFO GRT-0022] Global adjustment: 0%
+[INFO GRT-0023] Grid origin: (0, 0)
+[INFO GRT-0088] Layer metal1  Track-Pitch = 0.1400  line-2-Via Pitch: 0.1350
+[INFO GRT-0088] Layer metal2  Track-Pitch = 0.1900  line-2-Via Pitch: 0.1400
+[INFO GRT-0088] Layer metal3  Track-Pitch = 0.1400  line-2-Via Pitch: 0.1400
+[INFO GRT-0088] Layer metal4  Track-Pitch = 0.2800  line-2-Via Pitch: 0.2800
+[INFO GRT-0088] Layer metal5  Track-Pitch = 0.2800  line-2-Via Pitch: 0.2800
+[INFO GRT-0088] Layer metal6  Track-Pitch = 0.2800  line-2-Via Pitch: 0.2800
+[INFO GRT-0088] Layer metal7  Track-Pitch = 0.8000  line-2-Via Pitch: 0.8000
+[INFO GRT-0088] Layer metal8  Track-Pitch = 0.8000  line-2-Via Pitch: 0.8000
+[INFO GRT-0088] Layer metal9  Track-Pitch = 1.6000  line-2-Via Pitch: 1.6000
+[INFO GRT-0088] Layer metal10 Track-Pitch = 1.6000  line-2-Via Pitch: 1.6000
+[INFO GRT-0003] Macros: 0
+[INFO GRT-0004] Blockages: 0
+[INFO GRT-0019] Found 6 clock nets.
+[INFO GRT-0001] Minimum degree: 2
+[INFO GRT-0002] Maximum degree: 30
+
+[INFO GRT-0053] Routing resources analysis:
+          Routing      Original      Derated      Resource
+Layer     Direction    Resources     Resources    Reduction (%)
+---------------------------------------------------------------
+metal1     Horizontal          0             0          0.00%
+metal2     Vertical         1958           935          52.25%
+metal3     Horizontal       2768          1353          51.12%
+metal4     Vertical         1331           935          29.75%
+metal5     Horizontal       1376           975          29.14%
+metal6     Vertical         1396           991          29.01%
+metal7     Horizontal        414           291          29.71%
+metal8     Vertical          484           341          29.55%
+metal9     Horizontal        242           143          40.91%
+metal10    Vertical          242           143          40.91%
+---------------------------------------------------------------
+
+[INFO GRT-0197] Via related to pin nodes: 2703
+[INFO GRT-0198] Via related Steiner nodes: 27
+[INFO GRT-0199] Via filling finished.
+[INFO GRT-0111] Final number of vias: 3288
+[INFO GRT-0112] Final usage 3D: 11190
+
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Congestion
+---------------------------------------------------------------------------------------
+metal1               0             0            0.00%             0 /  0 /  0
+metal2             935           552           59.04%             0 /  0 /  0
+metal3            1353           586           43.31%             0 /  0 /  0
+metal4             935           145           15.51%             0 /  0 /  0
+metal5             975            43            4.41%             0 /  0 /  0
+metal6             991             0            0.00%             0 /  0 /  0
+metal7             291             0            0.00%             0 /  0 /  0
+metal8             341             0            0.00%             0 /  0 /  0
+metal9             143             0            0.00%             0 /  0 /  0
+metal10            143             0            0.00%             0 /  0 /  0
+---------------------------------------------------------------------------------------
+Total             6107          1326           21.71%             0 /  0 /  0
+
+[INFO GRT-0018] Total wirelength: 6421 um
+[INFO GRT-0014] Routed nets: 617
+[INFO GRT-0303] Global routing runtime = 00:00:00
+[WARNING STA-0450] virtual clock vclk_core_clock can not be propagated.
+estimate_parasitics -global_routing
+Perform buffer insertion and gate resizing...
+repair_design -verbose
+Iteration |   Area    | Resized | Buffers | Nets repaired | Remaining
+---------------------------------------------------------------------
+        0 |     +0.0% |       0 |       0 |             0 |       639
+       10 |     +0.0% |       0 |       0 |             0 |       629
+       20 |     +0.0% |       0 |       0 |             0 |       619
+       30 |     +0.0% |       0 |       0 |             0 |       609
+       40 |     +0.0% |       0 |       0 |             0 |       599
+       50 |     +0.0% |       0 |       0 |             0 |       589
+       60 |     +0.0% |       0 |       0 |             0 |       579
+       70 |     +0.0% |       0 |       0 |             0 |       569
+       80 |     +0.0% |       0 |       0 |             0 |       559
+       90 |     +0.0% |       0 |       0 |             0 |       549
+      100 |     +0.0% |       0 |       0 |             0 |       539
+      110 |     +0.0% |       0 |       0 |             0 |       529
+      120 |     +0.0% |       0 |       0 |             0 |       519
+      130 |     +0.0% |       0 |       0 |             0 |       509
+      140 |     +0.0% |       0 |       0 |             0 |       499
+      150 |     +0.0% |       0 |       0 |             0 |       489
+      160 |     +0.0% |       0 |       0 |             0 |       479
+      170 |     +0.0% |       0 |       0 |             0 |       469
+      180 |     +0.0% |       0 |       0 |             0 |       459
+      190 |     +0.0% |       0 |       0 |             0 |       449
+      200 |     +0.0% |       0 |       0 |             0 |       439
+      210 |     +0.0% |       0 |       0 |             0 |       429
+      220 |     +0.0% |       0 |       0 |             0 |       419
+      230 |     +0.0% |       0 |       0 |             0 |       409
+      240 |     +0.0% |       0 |       0 |             0 |       399
+      250 |     +0.0% |       0 |       0 |             0 |       389
+      260 |     +0.0% |       0 |       0 |             0 |       379
+      270 |     +0.0% |       0 |       0 |             0 |       369
+      280 |     +0.0% |       0 |       0 |             0 |       359
+      290 |     +0.0% |       0 |       0 |             0 |       349
+      300 |     +0.0% |       0 |       0 |             0 |       339
+      310 |     +0.0% |       0 |       0 |             0 |       329
+      320 |     +0.0% |       0 |       0 |             0 |       319
+      330 |     +0.0% |       0 |       0 |             0 |       309
+      340 |     +0.0% |       0 |       0 |             0 |       299
+      350 |     +0.0% |       0 |       0 |             0 |       289
+      360 |     +0.0% |       0 |       0 |             0 |       279
+      370 |     +0.0% |       0 |       0 |             0 |       269
+      380 |     +0.0% |       0 |       0 |             0 |       259
+      390 |     +0.0% |       0 |       0 |             0 |       249
+      400 |     +0.0% |       0 |       0 |             0 |       239
+      410 |     +0.0% |       0 |       0 |             0 |       229
+      420 |     +0.0% |       0 |       0 |             0 |       219
+      430 |     +0.0% |       0 |       0 |             0 |       209
+      440 |     +0.0% |       0 |       0 |             0 |       199
+      450 |     +0.0% |       0 |       0 |             0 |       189
+      460 |     +0.0% |       0 |       0 |             0 |       179
+      470 |     +0.0% |       0 |       0 |             0 |       169
+      480 |     +0.0% |       0 |       0 |             0 |       159
+      490 |     +0.0% |       0 |       0 |             0 |       149
+      500 |     +0.0% |       0 |       0 |             0 |       139
+      510 |     +0.0% |       0 |       0 |             0 |       129
+      520 |     +0.0% |       0 |       0 |             0 |       119
+[WARNING RSZ-0104] Net _487_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _486_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _485_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _484_ only has one pin. Check if it is intended to be dangling.
+      530 |     +0.0% |       0 |       0 |             0 |       109
+[WARNING RSZ-0104] Net _483_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _482_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _481_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _480_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _479_ only has one pin. Check if it is intended to be dangling.
+      540 |     +0.0% |       0 |       0 |             0 |        99
+[WARNING RSZ-0104] Net _477_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _492_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _491_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _490_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _489_ only has one pin. Check if it is intended to be dangling.
+      550 |     +0.0% |       0 |       0 |             0 |        89
+[WARNING RSZ-0104] Net _488_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _495_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _478_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _494_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _493_ only has one pin. Check if it is intended to be dangling.
+      560 |     +0.0% |       0 |       0 |             0 |        79
+      570 |     +0.0% |       0 |       0 |             0 |        69
+      580 |     +0.0% |       0 |       0 |             0 |        59
+      590 |     +0.0% |       0 |       0 |             0 |        49
+      600 |     +0.0% |       0 |       0 |             0 |        39
+      610 |     +0.0% |       0 |       0 |             0 |        29
+      620 |     +0.0% |       0 |       0 |             0 |        19
+      630 |     +0.0% |       0 |       0 |             0 |         9
+    final |     +0.0% |       0 |       0 |             0 |         0
+---------------------------------------------------------------------
+[INFO RSZ-0504] Runtime: 0.05s
+global_route -start_incremental
+detailed_placement
+[INFO DPL-0006] Core area: 1076.77 um^2
+[INFO DPL-0007] Movable instances area: 667.93 um^2
+[INFO DPL-0008] Fixed instances area within core: 12.24 um^2
+[INFO DPL-0009] Utilization: 63.2%
+[INFO DPL-0005] Diamond search max displacement: +/- 500 sites horizontally, +/- 100 rows vertically.
+[INFO DPL-1102] Legalizing using negotiation legalizer.
+[INFO DPL-1103] Negotiation base search window: +/-20 sites horizontally, +/-5 rows vertically 
+	Automatic search window extension enabled.
+	Search window extendable up to the max displacement cap of +/-500 sites, +/-100 rows near walls.
+[INFO DPL-1104] NegotiationLegalizer DRC penalty: 5.
+[INFO DPL-0392] Negotiation cell height distribution (1 unique row-count(s)):
+[INFO DPL-0393]   height 1 row(s): 614 cells
+[INFO DPL-0500] Runtime: 0.00s
+Placement Analysis
+---------------------------------
+total displacement          0.0 u
+average displacement        0.0 u
+max displacement            0.0 u
+original HPWL            3157.5 u
+legalized HPWL           3157.5 u
+delta HPWL                    0 %
+
+global_route -end_incremental -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c4/congestion_post_repair_design.rpt
+Repair setup and hold violations...
+estimate_parasitics -global_routing
+repair_timing -setup_margin 0 -hold_margin 0 -repair_tns 100 -verbose
+[INFO RSZ-0100] Repair move sequence: UnbufferMove SizeUpMove SwapPinsMove BufferMove CloneMove SplitLoadMove 
+[INFO RSZ-0094] Found 3 endpoints with setup violations.
+[INFO RSZ-0099] Repairing 3 out of 3 (100.00%) violating endpoints...
+   Iter   | Removed | Resized | Inserted | Cloned |  Pin  |   Area   |    WNS   |   StTNS    |   EnTNS    |  Viol  |  Worst  
+          | Buffers |  Gates  | Buffers  |  Gates | Swaps |          |          |            |            | Endpts | St/EnPt 
+------------------------------------------------------------------------------------------------------------------------------
+       0* |       0 |       0 |        0 |      0 |     0 |    +0.0% |   -0.015 |       -0.0 |       -0.0 |      3 | resp_msg[11]
+       6* |       0 |       5 |        0 |      0 |     0 |    +0.4% |   -0.002 |       -0.0 |       -0.0 |      3 | resp_msg[11]
+       8* |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      3 | resp_msg[12]
+       9* |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      3 | resp_msg[12]
+       9* |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      3 | resp_msg[12]
+    final |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      0 | resp_msg[12]
+------------------------------------------------------------------------------------------------------------------------------
+[INFO RSZ-0051] Resized 6 instances: 6 up, 0 up match, 0 down, 0 VT
+[INFO RSZ-0505] Runtime: 0.30s
+[INFO RSZ-0033] No hold violations found.
+[INFO RSZ-0506] Runtime: 0.00s
+global_route -start_incremental
+detailed_placement
+[INFO DPL-0006] Core area: 1076.77 um^2
+[INFO DPL-0007] Movable instances area: 671.12 um^2
+[INFO DPL-0008] Fixed instances area within core: 12.24 um^2
+[INFO DPL-0009] Utilization: 63.5%
+[INFO DPL-0005] Diamond search max displacement: +/- 500 sites horizontally, +/- 100 rows vertically.
+[INFO DPL-1102] Legalizing using negotiation legalizer.
+[INFO DPL-1103] Negotiation base search window: +/-20 sites horizontally, +/-5 rows vertically 
+	Automatic search window extension enabled.
+	Search window extendable up to the max displacement cap of +/-500 sites, +/-100 rows near walls.
+[INFO DPL-1104] NegotiationLegalizer DRC penalty: 5.
+[INFO DPL-0392] Negotiation cell height distribution (1 unique row-count(s)):
+[INFO DPL-0393]   height 1 row(s): 614 cells
+          |      Total |  Illegal |  Illegal
+Iteration | Violations |    Cells |    Sites
+---------------------------------------------
+        0 |          0 |         0 |         0
+Negotiation phase 1 converged at iteration 0.
+[INFO DPL-0500] Runtime: 0.00s
+Placement Analysis
+---------------------------------
+total displacement         10.3 u
+average displacement        0.0 u
+max displacement            3.8 u
+original HPWL            3158.6 u
+legalized HPWL           3171.1 u
+delta HPWL                    0 %
+
+check_placement -verbose
+global_route -end_incremental -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c4/congestion_post_repair_timing.rpt
+estimate_parasitics -global_routing
+global_route -start_incremental
+global_route -end_incremental -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c4/congestion_post_recover_power.rpt
+Repair antennas...
+[WARNING GRT-0246] No diode with LEF class CORE ANTENNACELL found.
+[INFO ANT-0002] Found 0 net violations.
+[INFO ANT-0001] Found 0 pin violations.
+Estimate parasitics...
+estimate_parasitics -global_routing
+Report metrics stage 5, global route...
+
+==========================================================================
+global route report_design_area
+--------------------------------------------------------------------------
+Design area 683 um^2 63% utilization.
+[INFO FLW-0007] clock core_clock period 0.460000
+[WARNING FLW-0010] more than one clock found. Skipping sdc update.
+[INFO FLW-0011] Path endpoint path count 75
+write_db ./results/nangate45/gcd/noise_ng45_c4/5_1_grt.odb
+write_sdc -no_timestamp ./results/nangate45/gcd/noise_ng45_c4/5_1_grt.sdc
+Elapsed time: 0:03.68[h:]min:sec. CPU time: user 11.35 sys 0.36 (318%). Peak memory: 296468KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+5_1_grt                   .odb            3            289 62bcbb73dcea28211a5e
+5_1_grt                   .sdc                             6dc41493824210708c18
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 5_2_route detail_route
+Running detail_route.tcl, stage 5_2_route
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/5_1_grt.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/5_1_grt.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+[WARNING STA-0450] virtual clock vclk_core_clock can not be propagated.
+detailed_route -output_drc ./reports/nangate45/gcd/noise_ng45_c4/5_route_drc.rpt -output_maze ./results/nangate45/gcd/noise_ng45_c4/maze.log -droute_end_iter 64 -verbose 1 -drc_report_iter_step 5
+[INFO DRT-0149] Reading tech and libs.
+
+Units:                2000
+Number of layers:     21
+Number of macros:     135
+Number of vias:       33
+Number of viarulegen: 19
+
+[INFO DRT-0150] Reading design.
+
+Design:                   gcd
+Die area:                 ( 0 0 ) ( 71510 71510 )
+Number of track patterns: 20
+Number of DEF vias:       0
+Number of components:     614
+Number of terminals:      54
+Number of snets:          2
+Number of nets:           636
+
+[INFO DRT-0167] List of default vias:
+  Layer via2
+    default via: via2_5
+  Layer via3
+    default via: via3_2
+  Layer via4
+    default via: via4_0
+  Layer via5
+    default via: via5_0
+  Layer via6
+    default via: via6_0
+  Layer via7
+    default via: via7_0
+  Layer via8
+    default via: via8_0
+  Layer via9
+    default via: via9_0
+[INFO DRT-0162] Library cell analysis.
+[INFO DRT-0163] Instance analysis.
+[INFO DRT-0164] Number of unique instances = 58.
+[INFO DRT-0168] Init region query.
+[INFO DRT-0024]   Complete active.
+[INFO DRT-0024]   Complete Fr_VIA.
+[INFO DRT-0024]   Complete metal1.
+[INFO DRT-0024]   Complete via1.
+[INFO DRT-0024]   Complete metal2.
+[INFO DRT-0024]   Complete via2.
+[INFO DRT-0024]   Complete metal3.
+[INFO DRT-0024]   Complete via3.
+[INFO DRT-0024]   Complete metal4.
+[INFO DRT-0024]   Complete via4.
+[INFO DRT-0024]   Complete metal5.
+[INFO DRT-0024]   Complete via5.
+[INFO DRT-0024]   Complete metal6.
+[INFO DRT-0024]   Complete via6.
+[INFO DRT-0024]   Complete metal7.
+[INFO DRT-0024]   Complete via7.
+[INFO DRT-0024]   Complete metal8.
+[INFO DRT-0024]   Complete via8.
+[INFO DRT-0024]   Complete metal9.
+[INFO DRT-0024]   Complete via9.
+[INFO DRT-0024]   Complete metal10.
+[INFO DRT-0033] active shape region query size = 0.
+[INFO DRT-0033] FR_VIA shape region query size = 0.
+[INFO DRT-0033] metal1 shape region query size = 7889.
+[INFO DRT-0033] via1 shape region query size = 108.
+[INFO DRT-0033] metal2 shape region query size = 72.
+[INFO DRT-0033] via2 shape region query size = 108.
+[INFO DRT-0033] metal3 shape region query size = 72.
+[INFO DRT-0033] via3 shape region query size = 108.
+[INFO DRT-0033] metal4 shape region query size = 45.
+[INFO DRT-0033] via4 shape region query size = 60.
+[INFO DRT-0033] metal5 shape region query size = 37.
+[INFO DRT-0033] via5 shape region query size = 60.
+[INFO DRT-0033] metal6 shape region query size = 41.
+[INFO DRT-0033] via6 shape region query size = 24.
+[INFO DRT-0033] metal7 shape region query size = 9.
+[INFO DRT-0033] via7 shape region query size = 0.
+[INFO DRT-0033] metal8 shape region query size = 0.
+[INFO DRT-0033] via8 shape region query size = 0.
+[INFO DRT-0033] metal9 shape region query size = 0.
+[INFO DRT-0033] via9 shape region query size = 0.
+[INFO DRT-0033] metal10 shape region query size = 0.
+[INFO DRT-0165] Start pin access.
+[INFO DRT-0078]   Complete 292 pins.
+[INFO DRT-0081]   Complete 58 unique inst patterns.
+[INFO DRT-0084]   Complete 279 groups.
+#scanned instances     = 614
+#unique  instances     = 58
+#stdCellGenAp          = 1324
+#stdCellValidPlanarAp  = 0
+#stdCellValidViaAp     = 1000
+#stdCellPinNoAp        = 0
+#stdCellPinCnt         = 1720
+#instTermValidViaApCnt = 0
+#macroGenAp            = 0
+#macroValidPlanarAp    = 0
+#macroValidViaAp       = 0
+#macroNoAp             = 0
+[INFO DRT-0166] Complete pin access.
+[INFO DRT-0267] cpu time = 00:00:10, elapsed time = 00:00:02, memory = 255.67 (MB), peak = 255.27 (MB)
+
+[INFO DRT-0157] Number of guides:     3804
+
+[INFO DRT-0169] Post process guides.
+[INFO DRT-0176] GCELLGRID X 0 DO 12 STEP 5700 ;
+[INFO DRT-0177] GCELLGRID Y 0 DO 12 STEP 5700 ;
+[INFO DRT-0028]   Complete active.
+[INFO DRT-0028]   Complete Fr_VIA.
+[INFO DRT-0028]   Complete metal1.
+[INFO DRT-0028]   Complete via1.
+[INFO DRT-0028]   Complete metal2.
+[INFO DRT-0028]   Complete via2.
+[INFO DRT-0028]   Complete metal3.
+[INFO DRT-0028]   Complete via3.
+[INFO DRT-0028]   Complete metal4.
+[INFO DRT-0028]   Complete via4.
+[INFO DRT-0028]   Complete metal5.
+[INFO DRT-0028]   Complete via5.
+[INFO DRT-0028]   Complete metal6.
+[INFO DRT-0028]   Complete via6.
+[INFO DRT-0028]   Complete metal7.
+[INFO DRT-0028]   Complete via7.
+[INFO DRT-0028]   Complete metal8.
+[INFO DRT-0028]   Complete via8.
+[INFO DRT-0028]   Complete metal9.
+[INFO DRT-0028]   Complete via9.
+[INFO DRT-0028]   Complete metal10.
+[INFO DRT-0178] Init guide query.
+[INFO DRT-0035]   Complete active (guide).
+[INFO DRT-0035]   Complete Fr_VIA (guide).
+[INFO DRT-0035]   Complete metal1 (guide).
+[INFO DRT-0035]   Complete via1 (guide).
+[INFO DRT-0035]   Complete metal2 (guide).
+[INFO DRT-0035]   Complete via2 (guide).
+[INFO DRT-0035]   Complete metal3 (guide).
+[INFO DRT-0035]   Complete via3 (guide).
+[INFO DRT-0035]   Complete metal4 (guide).
+[INFO DRT-0035]   Complete via4 (guide).
+[INFO DRT-0035]   Complete metal5 (guide).
+[INFO DRT-0035]   Complete via5 (guide).
+[INFO DRT-0035]   Complete metal6 (guide).
+[INFO DRT-0035]   Complete via6 (guide).
+[INFO DRT-0035]   Complete metal7 (guide).
+[INFO DRT-0035]   Complete via7 (guide).
+[INFO DRT-0035]   Complete metal8 (guide).
+[INFO DRT-0035]   Complete via8 (guide).
+[INFO DRT-0035]   Complete metal9 (guide).
+[INFO DRT-0035]   Complete via9 (guide).
+[INFO DRT-0035]   Complete metal10 (guide).
+[INFO DRT-0036] active guide region query size = 0.
+[INFO DRT-0036] FR_VIA guide region query size = 0.
+[INFO DRT-0036] metal1 guide region query size = 1326.
+[INFO DRT-0036] via1 guide region query size = 0.
+[INFO DRT-0036] metal2 guide region query size = 1016.
+[INFO DRT-0036] via2 guide region query size = 0.
+[INFO DRT-0036] metal3 guide region query size = 511.
+[INFO DRT-0036] via3 guide region query size = 0.
+[INFO DRT-0036] metal4 guide region query size = 95.
+[INFO DRT-0036] via4 guide region query size = 0.
+[INFO DRT-0036] metal5 guide region query size = 58.
+[INFO DRT-0036] via5 guide region query size = 0.
+[INFO DRT-0036] metal6 guide region query size = 29.
+[INFO DRT-0036] via6 guide region query size = 0.
+[INFO DRT-0036] metal7 guide region query size = 0.
+[INFO DRT-0036] via7 guide region query size = 0.
+[INFO DRT-0036] metal8 guide region query size = 0.
+[INFO DRT-0036] via8 guide region query size = 0.
+[INFO DRT-0036] metal9 guide region query size = 0.
+[INFO DRT-0036] via9 guide region query size = 0.
+[INFO DRT-0036] metal10 guide region query size = 0.
+[INFO DRT-0179] Init gr pin query.
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 256.86 (MB), peak = 256.52 (MB)
+[INFO DRT-0245] skipped writing guide updates to database.
+[INFO DRT-0181] Start track assignment.
+[INFO DRT-0184] Done with 1140 vertical wires in 1 frboxes and 1895 horizontal wires in 1 frboxes.
+[INFO DRT-0186] Done with 313 vertical wires in 1 frboxes and 334 horizontal wires in 1 frboxes.
+[INFO DRT-0182] Complete track assignment.
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 264.64 (MB), peak = 264.29 (MB)
+[INFO DRT-0187] Start routing data preparation.
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 264.67 (MB), peak = 264.29 (MB)
+[INFO DRT-0194] Start detail routing.
+[INFO DRT-0195] Start 0th optimization iteration.
+    Completing 20% with 0 violations.
+    elapsed time = 00:00:01, memory = 276.20 (MB).
+    Completing 50% with 29 violations.
+    elapsed time = 00:00:03, memory = 297.26 (MB).
+    Completing 70% with 38 violations.
+    elapsed time = 00:00:03, memory = 316.65 (MB).
+    Completing 100% with 50 violations.
+    elapsed time = 00:00:04, memory = 316.65 (MB).
+[INFO DRT-0199]   Number of violations = 59.
+Viol/Layer      metal2   via2 metal3
+Cut Spacing          0      1      0
+Metal Spacing        3      0      1
+Recheck              6      0      3
+Short               44      0      1
+[INFO DRT-0267] cpu time = 00:00:04, elapsed time = 00:00:04, memory = 861.23 (MB), peak = 860.78 (MB)
+Total wire length = 3679 um.
+Total wire length on LAYER metal1 = 0 um.
+Total wire length on LAYER metal2 = 1628 um.
+Total wire length on LAYER metal3 = 1674 um.
+Total wire length on LAYER metal4 = 269 um.
+Total wire length on LAYER metal5 = 64 um.
+Total wire length on LAYER metal6 = 43 um.
+Total wire length on LAYER metal7 = 0 um.
+Total wire length on LAYER metal8 = 0 um.
+Total wire length on LAYER metal9 = 0 um.
+Total wire length on LAYER metal10 = 0 um.
+Total number of vias = 3300.
+Up-via summary (total 3300):
+
+---------------
+ active       0
+ metal1    1717
+ metal2    1369
+ metal3     124
+ metal4      61
+ metal5      29
+ metal6       0
+ metal7       0
+ metal8       0
+ metal9       0
+---------------
+       3300
+
+
+[INFO DRT-0195] Start 1st optimization iteration.
+    Completing 20% with 59 violations.
+    elapsed time = 00:00:00, memory = 861.23 (MB).
+    Completing 50% with 61 violations.
+    elapsed time = 00:00:01, memory = 874.43 (MB).
+    Completing 70% with 48 violations.
+    elapsed time = 00:00:02, memory = 874.43 (MB).
+    Completing 100% with 29 violations.
+    elapsed time = 00:00:03, memory = 885.70 (MB).
+[INFO DRT-0199]   Number of violations = 29.
+Viol/Layer      metal2 metal3
+Short               27      2
+[INFO DRT-0267] cpu time = 00:00:04, elapsed time = 00:00:04, memory = 886.70 (MB), peak = 901.28 (MB)
+Total wire length = 3631 um.
+Total wire length on LAYER metal1 = 0 um.
+Total wire length on LAYER metal2 = 1602 um.
+Total wire length on LAYER metal3 = 1661 um.
+Total wire length on LAYER metal4 = 262 um.
+Total wire length on LAYER metal5 = 61 um.
+Total wire length on LAYER metal6 = 43 um.
+Total wire length on LAYER metal7 = 0 um.
+Total wire length on LAYER metal8 = 0 um.
+Total wire length on LAYER metal9 = 0 um.
+Total wire length on LAYER metal10 = 0 um.
+Total number of vias = 3265.
+Up-via summary (total 3265):
+
+---------------
+ active       0
+ metal1    1716
+ metal2    1343
+ metal3     117
+ metal4      60
+ metal5      29
+ metal6       0
+ metal7       0
+ metal8       0
+ metal9       0
+---------------
+       3265
+
+
+[INFO DRT-0195] Start 2nd optimization iteration.
+    Completing 10% with 29 violations.
+    elapsed time = 00:00:00, memory = 886.70 (MB).
+    Completing 20% with 29 violations.
+    elapsed time = 00:00:00, memory = 886.70 (MB).
+    Completing 30% with 29 violations.
+    elapsed time = 00:00:00, memory = 886.70 (MB).
+    Completing 40% with 29 violations.
+    elapsed time = 00:00:00, memory = 886.70 (MB).
+    Completing 50% with 29 violations.
+    elapsed time = 00:00:00, memory = 886.70 (MB).
+    Completing 60% with 29 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 70% with 32 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 80% with 32 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 100% with 20 violations.
+    elapsed time = 00:00:03, memory = 891.25 (MB).
+[INFO DRT-0199]   Number of violations = 20.
+Viol/Layer      metal2
+Short               20
+[INFO DRT-0267] cpu time = 00:00:03, elapsed time = 00:00:03, memory = 891.25 (MB), peak = 911.05 (MB)
+Total wire length = 3619 um.
+Total wire length on LAYER metal1 = 0 um.
+Total wire length on LAYER metal2 = 1603 um.
+Total wire length on LAYER metal3 = 1644 um.
+Total wire length on LAYER metal4 = 266 um.
+Total wire length on LAYER metal5 = 64 um.
+Total wire length on LAYER metal6 = 41 um.
+Total wire length on LAYER metal7 = 0 um.
+Total wire length on LAYER metal8 = 0 um.
+Total wire length on LAYER metal9 = 0 um.
+Total wire length on LAYER metal10 = 0 um.
+Total number of vias = 3241.
+Up-via summary (total 3241):
+
+---------------
+ active       0
+ metal1    1715
+ metal2    1319
+ metal3     117
+ metal4      61
+ metal5      29
+ metal6       0
+ metal7       0
+ metal8       0
+ metal9       0
+---------------
+       3241
+
+
+[INFO DRT-0195] Start 3rd guides tiles iteration.
+    Completing 10% with 20 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 20% with 20 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 30% with 20 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 40% with 20 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 50% with 0 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 60% with 0 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 70% with 0 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 80% with 0 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+    Completing 100% with 0 violations.
+    elapsed time = 00:00:00, memory = 891.25 (MB).
+[INFO DRT-0199]   Number of violations = 0.
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 891.25 (MB), peak = 911.05 (MB)
+Total wire length = 3625 um.
+Total wire length on LAYER metal1 = 0 um.
+Total wire length on LAYER metal2 = 1588 um.
+Total wire length on LAYER metal3 = 1652 um.
+Total wire length on LAYER metal4 = 279 um.
+Total wire length on LAYER metal5 = 64 um.
+Total wire length on LAYER metal6 = 41 um.
+Total wire length on LAYER metal7 = 0 um.
+Total wire length on LAYER metal8 = 0 um.
+Total wire length on LAYER metal9 = 0 um.
+Total wire length on LAYER metal10 = 0 um.
+Total number of vias = 3281.
+Up-via summary (total 3281):
+
+---------------
+ active       0
+ metal1    1715
+ metal2    1345
+ metal3     131
+ metal4      61
+ metal5      29
+ metal6       0
+ metal7       0
+ metal8       0
+ metal9       0
+---------------
+       3281
+
+
+[INFO DRT-0198] Complete detail routing.
+Total wire length = 3625 um.
+Total wire length on LAYER metal1 = 0 um.
+Total wire length on LAYER metal2 = 1588 um.
+Total wire length on LAYER metal3 = 1652 um.
+Total wire length on LAYER metal4 = 279 um.
+Total wire length on LAYER metal5 = 64 um.
+Total wire length on LAYER metal6 = 41 um.
+Total wire length on LAYER metal7 = 0 um.
+Total wire length on LAYER metal8 = 0 um.
+Total wire length on LAYER metal9 = 0 um.
+Total wire length on LAYER metal10 = 0 um.
+Total number of vias = 3281.
+Up-via summary (total 3281):
+
+---------------
+ active       0
+ metal1    1715
+ metal2    1345
+ metal3     131
+ metal4      61
+ metal5      29
+ metal6       0
+ metal7       0
+ metal8       0
+ metal9       0
+---------------
+       3281
+
+
+[INFO DRT-0267] cpu time = 00:00:13, elapsed time = 00:00:12, memory = 891.37 (MB), peak = 911.05 (MB)
+
+[INFO DRT-0180] Post processing.
+[INFO DRT-0501] Runtime: 15.53s
+Took 15 seconds: detailed_route -output_drc ./reports/nangate45/gcd/noise_ng45_c4/5_route_drc.rpt -output_maze ./results/nangate45/gcd/noise_ng45_c4/maze.log -droute_end_iter 64 -verbose 1 -drc_report_iter_step 5
+[WARNING GRT-0246] No diode with LEF class CORE ANTENNACELL found.
+[INFO ANT-0002] Found 0 net violations.
+[INFO ANT-0001] Found 0 pin violations.
+[INFO ANT-0002] Found 0 net violations.
+[INFO ANT-0001] Found 0 pin violations.
+Design area 683 um^2 63% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/5_2_route.odb
+Elapsed time: 0:16.04[h:]min:sec. CPU time: user 24.71 sys 0.51 (157%). Peak memory: 932912KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+5_2_route                 .odb           16            911 165944b9613e9ea8d5a0
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 5_3_fillcell fillcell
+Running fillcell.tcl, stage 5_3_fillcell
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/5_2_route.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/5_1_grt.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+[WARNING STA-0450] virtual clock vclk_core_clock can not be propagated.
+filler_placement "FILLCELL_X1 FILLCELL_X2 FILLCELL_X4 FILLCELL_X8 FILLCELL_X16 FILLCELL_X32"
+[INFO DPL-0001] Placed 454 filler instances.
+Design area 683 um^2 63% utilization.
+write_db ./results/nangate45/gcd/noise_ng45_c4/5_3_fillcell.odb
+Elapsed time: 0:00.26[h:]min:sec. CPU time: user 0.22 sys 0.04 (99%). Peak memory: 118512KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+5_3_fillcell              .odb            0            115 63cc3b927ae7754d740a
+cp ./results/nangate45/gcd/noise_ng45_c4/5_3_fillcell.odb ./results/nangate45/gcd/noise_ng45_c4/5_route.odb
+cp ./results/nangate45/gcd/noise_ng45_c4/5_1_grt.sdc ./results/nangate45/gcd/noise_ng45_c4/5_route.sdc
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 6_1_fill density_fill
+Running density_fill.tcl, stage 6_1_fill
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/5_route.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/5_route.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+exec cp ./results/nangate45/gcd/noise_ng45_c4/5_route.odb ./results/nangate45/gcd/noise_ng45_c4/6_1_fill.odb
+Elapsed time: 0:00.26[h:]min:sec. CPU time: user 0.23 sys 0.02 (97%). Peak memory: 115968KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+6_1_fill                  .odb            0            113 63cc3b927ae7754d740a
+cp ./results/nangate45/gcd/noise_ng45_c4/5_route.sdc ./results/nangate45/gcd/noise_ng45_c4/6_1_fill.sdc
+/OpenROAD-flow-scripts/flow/scripts/flow.sh 6_report final_report
+Running final_report.tcl, stage 6_report
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c4/6_1_fill.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c4/6_1_fill.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+[WARNING STA-0450] virtual clock vclk_core_clock can not be propagated.
+write_db ./results/nangate45/gcd/noise_ng45_c4/6_final.odb
+write_sdc -no_timestamp ./results/nangate45/gcd/noise_ng45_c4/6_final.sdc
+Deleted 0 routing obstructions
+[INFO RCX-0431] Defined process_corner X with ext_model_index 0
+[INFO RCX-0029] Defined extraction corner X
+[WARNING RCX-0514] The ext_model_file option is deprecated. Use set_extraction_rules_file command instead.
+[INFO RCX-0435] Reading extraction model file /OpenROAD-flow-scripts/flow/platforms/nangate45/rcx_patterns.rules ...
+[INFO RCX-0436] RC segment generation gcd (max_merge_res 50.0) ...
+[INFO RCX-0040] Final 1688 rc segments
+[INFO RCX-0439] Coupling Cap extraction gcd ...
+[INFO RCX-0440] Coupling threshhold is 0.1000 fF, coupling capacitance less than 0.1000 fF will be grounded.
+[INFO RCX-0442] 48% of 3070 wires extracted
+[INFO RCX-0442] 100% of 3070 wires extracted
+[INFO RCX-0045] Extract 636 nets, 2305 rsegs, 2305 caps, 4344 ccs
+[INFO RCX-0443] 636 nets finished
+[INFO PSM-0040] All shapes on net VDD are connected.
+[INFO PSM-0073] Using bump pattern with x-pitch 140.0000um, y-pitch 140.0000um, and size 70.0000um with an reduction factor of 3x.
+########## IR report #################
+Net              : VDD
+Corner           : default
+Total power      : 2.45e-03 W
+Supply voltage   : 1.10e+00 V
+Worstcase voltage: 1.09e+00 V
+Average voltage  : 1.10e+00 V
+Average IR drop  : 1.96e-03 V
+Worstcase IR drop: 5.93e-03 V
+Percentage drop  : 0.54 %
+######################################
+[INFO PSM-0040] All shapes on net VSS are connected.
+[INFO PSM-0073] Using bump pattern with x-pitch 140.0000um, y-pitch 140.0000um, and size 70.0000um with an reduction factor of 3x.
+########## IR report #################
+Net              : VSS
+Corner           : default
+Total power      : 2.45e-03 W
+Supply voltage   : 0.00e+00 V
+Worstcase voltage: 3.17e-03 V
+Average voltage  : 1.80e-03 V
+Average IR drop  : 1.80e-03 V
+Worstcase IR drop: 3.17e-03 V
+Percentage drop  : 0.29 %
+######################################
+Cell type report:                       Count       Area
+  Fill cell                               454     393.41
+  Tap cell                                 46      12.24
+  Clock buffer                              6       7.45
+  Timing Repair Buffer                     62      51.60
+  Inverter                                 86      48.41
+  Clock inverter                            2       1.06
+  Sequential cell                          35     158.27
+  Multi-Input combinational cell          377     404.32
+  Total                                  1068    1076.77
+Report metrics stage 6, finish...
+
+==========================================================================
+finish report_design_area
+--------------------------------------------------------------------------
+Design area 683 um^2 63% utilization.
+[WARNING GUI-0076] QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
+Elapsed time: 0:01.69[h:]min:sec. CPU time: user 1.66 sys 0.12 (105%). Peak memory: 185336KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+6_report                                  1            180                  N/A
+cp /OpenROAD-flow-scripts/flow/platforms/nangate45/lef/NangateOpenCellLibrary.tech.lef ./objects/nangate45/gcd/noise_ng45_c4/klayout_tech.lef
+/usr/bin/python3 /OpenROAD-flow-scripts/flow/util/generate_klayout_tech.py \
+	--template /OpenROAD-flow-scripts/flow/platforms/nangate45/FreePDK45.lyt \
+	--output ./objects/nangate45/gcd/noise_ng45_c4/klayout.lyt \
+	--lef-files ./objects/nangate45/gcd/noise_ng45_c4/klayout_tech.lef /OpenROAD-flow-scripts/flow/platforms/nangate45/lef/NangateOpenCellLibrary.macro.mod.lef   \
+	--map-files 
+/usr/bin/python3 /OpenROAD-flow-scripts/flow/scripts/run_command.py --log /OpenROAD-flow-scripts/flow/logs/nangate45/gcd/noise_ng45_c4/6_1_merge.log --tee -- \
+        /OpenROAD-flow-scripts/flow/scripts/klayout.sh -zz -rd design_name=gcd \
+        -rd in_def=./results/nangate45/gcd/noise_ng45_c4/6_final.def \
+        -rd in_files="/OpenROAD-flow-scripts/flow/platforms/nangate45/gds/NangateOpenCellLibrary.gds  " \
+        -rd seal_file="" \
+        -rd out_file=./results/nangate45/gcd/noise_ng45_c4/6_1_merged.gds \
+        -rd tech_file=./objects/nangate45/gcd/noise_ng45_c4/klayout.lyt \
+        -rd layer_map= \
+        -r /OpenROAD-flow-scripts/flow/util/def2stream.py
+KLayout 0.30.7
+Warning: DEF UNITS does not match reader DBU (DEF UNITS is 2000 and corresponds to a DBU of 0.0005, but reader DBU is set to 0.0001) (line=5, cell=, file=6_final.def)
+[INFO] Reporting cells prior to loading DEF ...
+	/OpenROAD-flow-scripts/flow/platforms/nangate45/gds/NangateOpenCellLibrary.gds
+[INFO] GDS_ALLOW_EMPTY=fakeram.*
+[INFO] All LEF cells have matching GDS/OAS cells
+[INFO] No orphan cells in the final layout
+Elapsed time: 0:01.40[h:]min:sec. CPU time: user 1.23 sys 0.17 (99%). Peak memory: 436708KB.
+cp results/nangate45/gcd/noise_ng45_c4/6_1_merged.gds results/nangate45/gcd/noise_ng45_c4/6_final.gds
+./logs/nangate45/gcd/noise_ng45_c4
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+1_1_yosys_canonicalize    .rtlil          0             45 061b4cd4004130e38a0d
+1_2_yosys                 .v              0             48 0c59fafd3497fabb039a
+1_2_yosys                 .sdc                             21b872a6567721784485
+1_synth                   .odb            0            114 51d0925da5800feaed89
+1_synth                   .sdc                             7fe61694c034e1755ac1
+2_1_floorplan             .odb            0            133 d705ca7ed560ec422e9f
+2_1_floorplan             .sdc                             7fe61694c034e1755ac1
+2_2_floorplan_macro       .odb            0            112 d705ca7ed560ec422e9f
+2_3_floorplan_tapcell     .odb            0            112 0b0132b88316906357a7
+2_4_floorplan_pdn         .odb            0            114 ca02aeb6b7d76b13849d
+3_1_place_gp_skip_io      .odb            0            114 523d43604fee68919fdb
+3_2_place_iop             .odb            0            113 2e7a40bf01bbb8a7bf29
+3_3_place_gp              .odb            0            284 77cc029d6822e20d34fe
+3_4_place_resized         .odb            0            131 77cc029d6822e20d34fe
+3_5_place_dp              .odb            0            118 5f5d90652f5547631004
+4_1_cts                   .odb            1            144 6868663540a9bad77c4c
+5_1_grt                   .odb            3            289 62bcbb73dcea28211a5e
+5_1_grt                   .sdc                             6dc41493824210708c18
+5_2_route                 .odb           16            911 165944b9613e9ea8d5a0
+5_3_fillcell              .odb            0            115 63cc3b927ae7754d740a
+6_1_fill                  .odb            0            113 63cc3b927ae7754d740a
+6_1_fill                  .sdc                             6dc41493824210708c18
+6_1_merge                                 1            426                  N/A
+6_report                                  1            180                  N/A
+Total                                    22            911                     
+WALL_noise_ng45_c4=36.88

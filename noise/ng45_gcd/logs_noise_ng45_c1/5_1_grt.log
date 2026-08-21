@@ -1,0 +1,364 @@
+OpenROAD 26Q3-1470-g3ea4d70110 
+Features included (+) or not (-): +GPU +GUI +Python
+This program is licensed under the BSD-3 license. See the LICENSE file for details.
+Components of this program may be licensed under more restrictive licenses which must be honored.
+[INFO ORD-0030] Using 1 thread(s).
+read_liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+read_db ./results/nangate45/gcd/noise_ng45_c1/4_cts.odb
+read_sdc ./results/nangate45/gcd/noise_ng45_c1/4_cts.sdc
+source /OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl
+pin_access
+[INFO DRT-0149] Reading tech and libs.
+
+Units:                2000
+Number of layers:     21
+Number of macros:     135
+Number of vias:       33
+Number of viarulegen: 19
+
+[INFO DRT-0150] Reading design.
+
+Design:                   gcd
+Die area:                 ( 0 0 ) ( 71510 71510 )
+Number of track patterns: 20
+Number of DEF vias:       0
+Number of components:     614
+Number of terminals:      54
+Number of snets:          2
+Number of nets:           636
+
+[INFO DRT-0167] List of default vias:
+  Layer via2
+    default via: via2_5
+  Layer via3
+    default via: via3_2
+  Layer via4
+    default via: via4_0
+  Layer via5
+    default via: via5_0
+  Layer via6
+    default via: via6_0
+  Layer via7
+    default via: via7_0
+  Layer via8
+    default via: via8_0
+  Layer via9
+    default via: via9_0
+[INFO DRT-0162] Library cell analysis.
+[INFO DRT-0163] Instance analysis.
+[INFO DRT-0164] Number of unique instances = 58.
+[INFO DRT-0168] Init region query.
+[INFO DRT-0024]   Complete active.
+[INFO DRT-0024]   Complete Fr_VIA.
+[INFO DRT-0024]   Complete metal1.
+[INFO DRT-0024]   Complete via1.
+[INFO DRT-0024]   Complete metal2.
+[INFO DRT-0024]   Complete via2.
+[INFO DRT-0024]   Complete metal3.
+[INFO DRT-0024]   Complete via3.
+[INFO DRT-0024]   Complete metal4.
+[INFO DRT-0024]   Complete via4.
+[INFO DRT-0024]   Complete metal5.
+[INFO DRT-0024]   Complete via5.
+[INFO DRT-0024]   Complete metal6.
+[INFO DRT-0024]   Complete via6.
+[INFO DRT-0024]   Complete metal7.
+[INFO DRT-0024]   Complete via7.
+[INFO DRT-0024]   Complete metal8.
+[INFO DRT-0024]   Complete via8.
+[INFO DRT-0024]   Complete metal9.
+[INFO DRT-0024]   Complete via9.
+[INFO DRT-0024]   Complete metal10.
+[INFO DRT-0033] active shape region query size = 0.
+[INFO DRT-0033] FR_VIA shape region query size = 0.
+[INFO DRT-0033] metal1 shape region query size = 7853.
+[INFO DRT-0033] via1 shape region query size = 108.
+[INFO DRT-0033] metal2 shape region query size = 72.
+[INFO DRT-0033] via2 shape region query size = 108.
+[INFO DRT-0033] metal3 shape region query size = 72.
+[INFO DRT-0033] via3 shape region query size = 108.
+[INFO DRT-0033] metal4 shape region query size = 45.
+[INFO DRT-0033] via4 shape region query size = 60.
+[INFO DRT-0033] metal5 shape region query size = 37.
+[INFO DRT-0033] via5 shape region query size = 60.
+[INFO DRT-0033] metal6 shape region query size = 41.
+[INFO DRT-0033] via6 shape region query size = 24.
+[INFO DRT-0033] metal7 shape region query size = 9.
+[INFO DRT-0033] via7 shape region query size = 0.
+[INFO DRT-0033] metal8 shape region query size = 0.
+[INFO DRT-0033] via8 shape region query size = 0.
+[INFO DRT-0033] metal9 shape region query size = 0.
+[INFO DRT-0033] via9 shape region query size = 0.
+[INFO DRT-0033] metal10 shape region query size = 0.
+[INFO DRT-0165] Start pin access.
+[INFO DRT-0078]   Complete 292 pins.
+[INFO DRT-0081]   Complete 58 unique inst patterns.
+[INFO DRT-0084]   Complete 279 groups.
+#scanned instances     = 614
+#unique  instances     = 58
+#stdCellGenAp          = 1324
+#stdCellValidPlanarAp  = 0
+#stdCellValidViaAp     = 1000
+#stdCellPinNoAp        = 0
+#stdCellPinCnt         = 1720
+#instTermValidViaApCnt = 0
+#macroGenAp            = 0
+#macroValidPlanarAp    = 0
+#macroValidViaAp       = 0
+#macroNoAp             = 0
+[INFO DRT-0166] Complete pin access.
+[INFO DRT-0267] cpu time = 00:00:04, elapsed time = 00:00:04, memory = 113.83 (MB), peak = 113.72 (MB)
+global_route -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c1/congestion.rpt -congestion_iterations 30 -congestion_report_iter_step 5 -verbose
+[INFO GRT-0020] Min routing layer: metal2
+[INFO GRT-0021] Max routing layer: metal10
+[INFO GRT-0022] Global adjustment: 0%
+[INFO GRT-0023] Grid origin: (0, 0)
+[INFO GRT-0088] Layer metal1  Track-Pitch = 0.1400  line-2-Via Pitch: 0.1350
+[INFO GRT-0088] Layer metal2  Track-Pitch = 0.1900  line-2-Via Pitch: 0.1400
+[INFO GRT-0088] Layer metal3  Track-Pitch = 0.1400  line-2-Via Pitch: 0.1400
+[INFO GRT-0088] Layer metal4  Track-Pitch = 0.2800  line-2-Via Pitch: 0.2800
+[INFO GRT-0088] Layer metal5  Track-Pitch = 0.2800  line-2-Via Pitch: 0.2800
+[INFO GRT-0088] Layer metal6  Track-Pitch = 0.2800  line-2-Via Pitch: 0.2800
+[INFO GRT-0088] Layer metal7  Track-Pitch = 0.8000  line-2-Via Pitch: 0.8000
+[INFO GRT-0088] Layer metal8  Track-Pitch = 0.8000  line-2-Via Pitch: 0.8000
+[INFO GRT-0088] Layer metal9  Track-Pitch = 1.6000  line-2-Via Pitch: 1.6000
+[INFO GRT-0088] Layer metal10 Track-Pitch = 1.6000  line-2-Via Pitch: 1.6000
+[INFO GRT-0003] Macros: 0
+[INFO GRT-0004] Blockages: 0
+[INFO GRT-0019] Found 6 clock nets.
+[INFO GRT-0001] Minimum degree: 2
+[INFO GRT-0002] Maximum degree: 30
+
+[INFO GRT-0053] Routing resources analysis:
+          Routing      Original      Derated      Resource
+Layer     Direction    Resources     Resources    Reduction (%)
+---------------------------------------------------------------
+metal1     Horizontal          0             0          0.00%
+metal2     Vertical         1958           935          52.25%
+metal3     Horizontal       2768          1353          51.12%
+metal4     Vertical         1331           935          29.75%
+metal5     Horizontal       1376           975          29.14%
+metal6     Vertical         1396           991          29.01%
+metal7     Horizontal        414           291          29.71%
+metal8     Vertical          484           341          29.55%
+metal9     Horizontal        242           143          40.91%
+metal10    Vertical          242           143          40.91%
+---------------------------------------------------------------
+
+[INFO GRT-0197] Via related to pin nodes: 2703
+[INFO GRT-0198] Via related Steiner nodes: 27
+[INFO GRT-0199] Via filling finished.
+[INFO GRT-0111] Final number of vias: 3288
+[INFO GRT-0112] Final usage 3D: 11190
+
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Congestion
+---------------------------------------------------------------------------------------
+metal1               0             0            0.00%             0 /  0 /  0
+metal2             935           552           59.04%             0 /  0 /  0
+metal3            1353           586           43.31%             0 /  0 /  0
+metal4             935           145           15.51%             0 /  0 /  0
+metal5             975            43            4.41%             0 /  0 /  0
+metal6             991             0            0.00%             0 /  0 /  0
+metal7             291             0            0.00%             0 /  0 /  0
+metal8             341             0            0.00%             0 /  0 /  0
+metal9             143             0            0.00%             0 /  0 /  0
+metal10            143             0            0.00%             0 /  0 /  0
+---------------------------------------------------------------------------------------
+Total             6107          1326           21.71%             0 /  0 /  0
+
+[INFO GRT-0018] Total wirelength: 6421 um
+[INFO GRT-0014] Routed nets: 617
+[INFO GRT-0303] Global routing runtime = 00:00:00
+[WARNING STA-0450] virtual clock vclk_core_clock can not be propagated.
+estimate_parasitics -global_routing
+Perform buffer insertion and gate resizing...
+repair_design -verbose
+Iteration |   Area    | Resized | Buffers | Nets repaired | Remaining
+---------------------------------------------------------------------
+        0 |     +0.0% |       0 |       0 |             0 |       639
+       10 |     +0.0% |       0 |       0 |             0 |       629
+       20 |     +0.0% |       0 |       0 |             0 |       619
+       30 |     +0.0% |       0 |       0 |             0 |       609
+       40 |     +0.0% |       0 |       0 |             0 |       599
+       50 |     +0.0% |       0 |       0 |             0 |       589
+       60 |     +0.0% |       0 |       0 |             0 |       579
+       70 |     +0.0% |       0 |       0 |             0 |       569
+       80 |     +0.0% |       0 |       0 |             0 |       559
+       90 |     +0.0% |       0 |       0 |             0 |       549
+      100 |     +0.0% |       0 |       0 |             0 |       539
+      110 |     +0.0% |       0 |       0 |             0 |       529
+      120 |     +0.0% |       0 |       0 |             0 |       519
+      130 |     +0.0% |       0 |       0 |             0 |       509
+      140 |     +0.0% |       0 |       0 |             0 |       499
+      150 |     +0.0% |       0 |       0 |             0 |       489
+      160 |     +0.0% |       0 |       0 |             0 |       479
+      170 |     +0.0% |       0 |       0 |             0 |       469
+      180 |     +0.0% |       0 |       0 |             0 |       459
+      190 |     +0.0% |       0 |       0 |             0 |       449
+      200 |     +0.0% |       0 |       0 |             0 |       439
+      210 |     +0.0% |       0 |       0 |             0 |       429
+      220 |     +0.0% |       0 |       0 |             0 |       419
+      230 |     +0.0% |       0 |       0 |             0 |       409
+      240 |     +0.0% |       0 |       0 |             0 |       399
+      250 |     +0.0% |       0 |       0 |             0 |       389
+      260 |     +0.0% |       0 |       0 |             0 |       379
+      270 |     +0.0% |       0 |       0 |             0 |       369
+      280 |     +0.0% |       0 |       0 |             0 |       359
+      290 |     +0.0% |       0 |       0 |             0 |       349
+      300 |     +0.0% |       0 |       0 |             0 |       339
+      310 |     +0.0% |       0 |       0 |             0 |       329
+      320 |     +0.0% |       0 |       0 |             0 |       319
+      330 |     +0.0% |       0 |       0 |             0 |       309
+      340 |     +0.0% |       0 |       0 |             0 |       299
+      350 |     +0.0% |       0 |       0 |             0 |       289
+      360 |     +0.0% |       0 |       0 |             0 |       279
+      370 |     +0.0% |       0 |       0 |             0 |       269
+      380 |     +0.0% |       0 |       0 |             0 |       259
+      390 |     +0.0% |       0 |       0 |             0 |       249
+      400 |     +0.0% |       0 |       0 |             0 |       239
+      410 |     +0.0% |       0 |       0 |             0 |       229
+      420 |     +0.0% |       0 |       0 |             0 |       219
+      430 |     +0.0% |       0 |       0 |             0 |       209
+      440 |     +0.0% |       0 |       0 |             0 |       199
+      450 |     +0.0% |       0 |       0 |             0 |       189
+      460 |     +0.0% |       0 |       0 |             0 |       179
+      470 |     +0.0% |       0 |       0 |             0 |       169
+      480 |     +0.0% |       0 |       0 |             0 |       159
+      490 |     +0.0% |       0 |       0 |             0 |       149
+      500 |     +0.0% |       0 |       0 |             0 |       139
+      510 |     +0.0% |       0 |       0 |             0 |       129
+      520 |     +0.0% |       0 |       0 |             0 |       119
+[WARNING RSZ-0104] Net _487_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _486_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _485_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _484_ only has one pin. Check if it is intended to be dangling.
+      530 |     +0.0% |       0 |       0 |             0 |       109
+[WARNING RSZ-0104] Net _483_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _482_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _481_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _480_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _479_ only has one pin. Check if it is intended to be dangling.
+      540 |     +0.0% |       0 |       0 |             0 |        99
+[WARNING RSZ-0104] Net _477_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _492_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _491_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _490_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _489_ only has one pin. Check if it is intended to be dangling.
+      550 |     +0.0% |       0 |       0 |             0 |        89
+[WARNING RSZ-0104] Net _488_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _495_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _478_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _494_ only has one pin. Check if it is intended to be dangling.
+[WARNING RSZ-0104] Net _493_ only has one pin. Check if it is intended to be dangling.
+      560 |     +0.0% |       0 |       0 |             0 |        79
+      570 |     +0.0% |       0 |       0 |             0 |        69
+      580 |     +0.0% |       0 |       0 |             0 |        59
+      590 |     +0.0% |       0 |       0 |             0 |        49
+      600 |     +0.0% |       0 |       0 |             0 |        39
+      610 |     +0.0% |       0 |       0 |             0 |        29
+      620 |     +0.0% |       0 |       0 |             0 |        19
+      630 |     +0.0% |       0 |       0 |             0 |         9
+    final |     +0.0% |       0 |       0 |             0 |         0
+---------------------------------------------------------------------
+[INFO RSZ-0504] Runtime: 0.05s
+global_route -start_incremental
+detailed_placement
+[INFO DPL-0006] Core area: 1076.77 um^2
+[INFO DPL-0007] Movable instances area: 667.93 um^2
+[INFO DPL-0008] Fixed instances area within core: 12.24 um^2
+[INFO DPL-0009] Utilization: 63.2%
+[INFO DPL-0005] Diamond search max displacement: +/- 500 sites horizontally, +/- 100 rows vertically.
+[INFO DPL-1102] Legalizing using negotiation legalizer.
+[INFO DPL-1103] Negotiation base search window: +/-20 sites horizontally, +/-5 rows vertically 
+	Automatic search window extension enabled.
+	Search window extendable up to the max displacement cap of +/-500 sites, +/-100 rows near walls.
+[INFO DPL-1104] NegotiationLegalizer DRC penalty: 5.
+[INFO DPL-0392] Negotiation cell height distribution (1 unique row-count(s)):
+[INFO DPL-0393]   height 1 row(s): 614 cells
+[INFO DPL-0500] Runtime: 0.00s
+Placement Analysis
+---------------------------------
+total displacement          0.0 u
+average displacement        0.0 u
+max displacement            0.0 u
+original HPWL            3157.5 u
+legalized HPWL           3157.5 u
+delta HPWL                    0 %
+
+global_route -end_incremental -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c1/congestion_post_repair_design.rpt
+Repair setup and hold violations...
+estimate_parasitics -global_routing
+repair_timing -setup_margin 0 -hold_margin 0 -repair_tns 100 -verbose
+[INFO RSZ-0100] Repair move sequence: UnbufferMove SizeUpMove SwapPinsMove BufferMove CloneMove SplitLoadMove 
+[INFO RSZ-0094] Found 3 endpoints with setup violations.
+[INFO RSZ-0099] Repairing 3 out of 3 (100.00%) violating endpoints...
+   Iter   | Removed | Resized | Inserted | Cloned |  Pin  |   Area   |    WNS   |   StTNS    |   EnTNS    |  Viol  |  Worst  
+          | Buffers |  Gates  | Buffers  |  Gates | Swaps |          |          |            |            | Endpts | St/EnPt 
+------------------------------------------------------------------------------------------------------------------------------
+       0* |       0 |       0 |        0 |      0 |     0 |    +0.0% |   -0.015 |       -0.0 |       -0.0 |      3 | resp_msg[11]
+       6* |       0 |       5 |        0 |      0 |     0 |    +0.4% |   -0.002 |       -0.0 |       -0.0 |      3 | resp_msg[11]
+       8* |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      3 | resp_msg[12]
+       9* |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      3 | resp_msg[12]
+       9* |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      3 | resp_msg[12]
+    final |       0 |       6 |        0 |      0 |     0 |    +0.5% |    0.001 |        0.0 |        0.0 |      0 | resp_msg[12]
+------------------------------------------------------------------------------------------------------------------------------
+[INFO RSZ-0051] Resized 6 instances: 6 up, 0 up match, 0 down, 0 VT
+[INFO RSZ-0505] Runtime: 0.19s
+[INFO RSZ-0033] No hold violations found.
+[INFO RSZ-0506] Runtime: 0.00s
+global_route -start_incremental
+detailed_placement
+[INFO DPL-0006] Core area: 1076.77 um^2
+[INFO DPL-0007] Movable instances area: 671.12 um^2
+[INFO DPL-0008] Fixed instances area within core: 12.24 um^2
+[INFO DPL-0009] Utilization: 63.5%
+[INFO DPL-0005] Diamond search max displacement: +/- 500 sites horizontally, +/- 100 rows vertically.
+[INFO DPL-1102] Legalizing using negotiation legalizer.
+[INFO DPL-1103] Negotiation base search window: +/-20 sites horizontally, +/-5 rows vertically 
+	Automatic search window extension enabled.
+	Search window extendable up to the max displacement cap of +/-500 sites, +/-100 rows near walls.
+[INFO DPL-1104] NegotiationLegalizer DRC penalty: 5.
+[INFO DPL-0392] Negotiation cell height distribution (1 unique row-count(s)):
+[INFO DPL-0393]   height 1 row(s): 614 cells
+          |      Total |  Illegal |  Illegal
+Iteration | Violations |    Cells |    Sites
+---------------------------------------------
+        0 |          0 |         0 |         0
+Negotiation phase 1 converged at iteration 0.
+[INFO DPL-0500] Runtime: 0.00s
+Placement Analysis
+---------------------------------
+total displacement         10.3 u
+average displacement        0.0 u
+max displacement            3.8 u
+original HPWL            3158.6 u
+legalized HPWL           3171.1 u
+delta HPWL                    0 %
+
+check_placement -verbose
+global_route -end_incremental -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c1/congestion_post_repair_timing.rpt
+estimate_parasitics -global_routing
+global_route -start_incremental
+global_route -end_incremental -congestion_report_file ./reports/nangate45/gcd/noise_ng45_c1/congestion_post_recover_power.rpt
+Repair antennas...
+[WARNING GRT-0246] No diode with LEF class CORE ANTENNACELL found.
+[INFO ANT-0002] Found 0 net violations.
+[INFO ANT-0001] Found 0 pin violations.
+Estimate parasitics...
+estimate_parasitics -global_routing
+Report metrics stage 5, global route...
+
+==========================================================================
+global route report_design_area
+--------------------------------------------------------------------------
+Design area 683 um^2 63% utilization.
+[INFO FLW-0007] clock core_clock period 0.460000
+[WARNING FLW-0010] more than one clock found. Skipping sdc update.
+[INFO FLW-0011] Path endpoint path count 75
+write_db ./results/nangate45/gcd/noise_ng45_c1/5_1_grt.odb
+write_sdc -no_timestamp ./results/nangate45/gcd/noise_ng45_c1/5_1_grt.sdc
+Elapsed time: 0:05.30[h:]min:sec. CPU time: user 5.21 sys 0.18 (101%). Peak memory: 298356KB.
+Log                       Ext     Elapsed/s Peak Memory/MB sha1sum result [0:20)
+5_1_grt                   .odb            5            291 62bcbb73dcea28211a5e
+5_1_grt                   .sdc                             6dc41493824210708c18
