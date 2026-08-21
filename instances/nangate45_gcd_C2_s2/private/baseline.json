@@ -1,0 +1,47 @@
+{
+  "completed": true,
+  "golden_params": {
+    "clk_io_pct": 0.15,
+    "clk_period": 0.58
+  },
+  "qor": {
+    "antenna_viol": 0,
+    "clock_skew": 0.000877576,
+    "core_area": 1076.77,
+    "die_area": 1278.42,
+    "dpl_violations": 0,
+    "drc_errors": 0,
+    "drv_hold_viol": 0,
+    "drv_setup_viol": 0,
+    "errors": 0,
+    "fmax": 2254100000.0,
+    "hold_tns": 0,
+    "hold_ws": 0.110779,
+    "inst_area": 673.512,
+    "inst_count": 1086,
+    "nets": 632,
+    "power_leakage": 1.54102e-05,
+    "power_total": 0.00192727,
+    "repair_buf_area": 44.954,
+    "repair_buffers": 56,
+    "setup_tns": 0,
+    "setup_ws": 0.119967,
+    "synth_area": 626.696,
+    "utilization": 0.625494,
+    "warnings": 3,
+    "wirelength": 3628
+  },
+  "selftest": {
+    "exact": true,
+    "finish_setup_ws": 0.119967,
+    "signoff_setup_ws": 0.119967
+  },
+  "signoff": {
+    "fmax": 2254100000.0,
+    "hold_tns": 0,
+    "hold_ws": 0.110779,
+    "setup_tns": 0,
+    "setup_ws": 0.119967
+  },
+  "variant": "val_base_nangate45_gcd_s2"
+}

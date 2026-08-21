@@ -29,7 +29,7 @@ import subprocess
 import sys
 
 from ppa_bench.metrics import parse_run
-from ppa_bench import grader
+from ppa_bench import grader, baseline
 
 FLOW = "/OpenROAD-flow-scripts/flow"
 SIGNOFF = "/ppa-bench/bin/signoff.sh"
@@ -70,40 +70,52 @@ def validate_instance(inst_dir: str, work: str) -> dict:
     impl = os.path.join(inst_dir, "public", "impl.sdc")
 
     # The baseline depends only on (design, seed), so it is shared across the
-    # classes generated from the same golden and only ever run once.
-    base_variant = "val_base_{}_{}_s{}".format(platform, design, seed)
+    # classes generated from the same golden and only ever run once. Once
+    # measured it is frozen into private/baseline.json, so grading an agent
+    # later costs one flow run and one sign-off -- never a baseline run.
+    base_variant = baseline.baseline_variant(platform, design, seed)
     broken_variant = "val_{}".format(inst_id)
 
     os.makedirs(work, exist_ok=True)
 
-    base_log_dir = os.path.join(FLOW, "logs", platform, design, base_variant)
-    if not os.path.isdir(base_log_dir):
-        print("  [baseline] running {} ...".format(base_variant), flush=True)
-        run_flow(config, base_variant, golden,
-                 os.path.join(work, base_variant + ".log"))
+    frozen = baseline.load(inst_dir)
+    if frozen is not None:
+        print("  [baseline] frozen ({})".format(base_variant), flush=True)
+        base_qor, base_so = frozen["qor"], frozen["signoff"]
+        base_completed = frozen["completed"]
     else:
-        print("  [baseline] reusing {}".format(base_variant), flush=True)
+        if not os.path.isdir(os.path.join(FLOW, "logs", platform, design, base_variant)):
+            print("  [baseline] running {} ...".format(base_variant), flush=True)
+            run_flow(config, base_variant, golden,
+                     os.path.join(work, base_variant + ".log"))
+        else:
+            print("  [baseline] measuring from existing {}".format(base_variant), flush=True)
+        base_run = parse_run(FLOW, platform, design, base_variant)
+        base_qor, base_completed = base_run.qor, base_run.completed
+        base_so = grader.signoff_view(run_signoff(
+            config, base_variant, golden,
+            os.path.join(work, base_variant + ".signoff.json")))
+        # Raises if sign-off disagrees with the flow -- see baseline.freeze.
+        baseline.freeze(inst_dir, base_qor, base_so, base_variant,
+                        {"clk_period": ans["clk_period"],
+                         "clk_io_pct": ans["clk_io_pct"]}, base_completed)
 
     print("  [broken]   running {} ...".format(broken_variant), flush=True)
     run_flow(config, broken_variant, impl,
              os.path.join(work, broken_variant + ".log"))
 
-    base_run = parse_run(FLOW, platform, design, base_variant)
     broken_run = parse_run(FLOW, platform, design, broken_variant)
-
-    base_so = grader.signoff_view(run_signoff(
-        config, base_variant, golden, os.path.join(work, base_variant + ".signoff.json")))
     broken_so = grader.signoff_view(run_signoff(
         config, broken_variant, golden,
         os.path.join(work, broken_variant + ".signoff.json")))
 
     # BASELINE_PASS: grade the baseline against itself. Every gate must hold.
-    v_base = grader.grade(inst_id + " [baseline]", base_run.qor, base_so,
-                          base_run.qor, base_so, base_run.completed)
+    v_base = grader.grade(inst_id + " [baseline]", base_qor, base_so,
+                          base_qor, base_so, base_completed)
 
     # BROKEN_FAIL: grade the injected run against the baseline. Must NOT pass.
     v_broken = grader.grade(inst_id + " [broken]", broken_run.qor, broken_so,
-                            base_run.qor, base_so, broken_run.completed)
+                            base_qor, base_so, broken_run.completed)
 
     failed = [a.name for a in v_broken.assertions if not a.passed]
     record = {
@@ -119,15 +131,15 @@ def validate_instance(inst_dir: str, work: str) -> dict:
         "evidence": {
             # The pair that shows the inversion for silent classes: the flow's
             # own view versus the held-out sign-off view.
-            "baseline_finish_ws": base_run.qor.get("setup_ws"),
+            "baseline_finish_ws": base_qor.get("setup_ws"),
             "broken_finish_ws": broken_run.qor.get("setup_ws"),
             "baseline_signoff_ws": base_so.get("setup_ws"),
             "broken_signoff_ws": broken_so.get("setup_ws"),
             "baseline_signoff_tns": base_so.get("setup_tns"),
             "broken_signoff_tns": broken_so.get("setup_tns"),
-            "baseline_area": base_run.qor.get("inst_area"),
+            "baseline_area": base_qor.get("inst_area"),
             "broken_area": broken_run.qor.get("inst_area"),
-            "baseline_power": base_run.qor.get("power_total"),
+            "baseline_power": base_qor.get("power_total"),
             "broken_power": broken_run.qor.get("power_total"),
         },
     }
