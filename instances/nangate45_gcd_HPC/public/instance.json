@@ -1,0 +1,80 @@
+{
+  "design": "gcd",
+  "design_config": "./designs/nangate45/gcd/config.mk",
+  "editable_files": [
+    "knobs.json"
+  ],
+  "instance_id": "nangate45_gcd_HPC",
+  "knob_space": {
+    "CELL_PAD_IN_SITES_DETAIL_PLACEMENT": {
+      "minmax": [
+        0,
+        3
+      ],
+      "source": "autotuner.json",
+      "type": "int"
+    },
+    "CELL_PAD_IN_SITES_GLOBAL_PLACEMENT": {
+      "minmax": [
+        0,
+        3
+      ],
+      "source": "autotuner.json",
+      "type": "int"
+    },
+    "CORE_MARGIN": {
+      "minmax": [
+        1,
+        3
+      ],
+      "source": "autotuner.json",
+      "type": "int"
+    },
+    "CORE_UTILIZATION": {
+      "minmax": [
+        30,
+        85
+      ],
+      "source": "curated",
+      "type": "int"
+    },
+    "CTS_CLUSTER_DIAMETER": {
+      "minmax": [
+        20,
+        400
+      ],
+      "source": "autotuner.json",
+      "type": "int"
+    },
+    "CTS_CLUSTER_SIZE": {
+      "minmax": [
+        10,
+        200
+      ],
+      "source": "autotuner.json",
+      "type": "int"
+    },
+    "PLACE_DENSITY": {
+      "minmax": [
+        0.3,
+        0.95
+      ],
+      "source": "curated",
+      "type": "float"
+    },
+    "PLACE_DENSITY_LB_ADDON": {
+      "minmax": [
+        0.0,
+        0.2
+      ],
+      "source": "autotuner.json",
+      "type": "float"
+    }
+  },
+  "min_improvement_pct": 2.0,
+  "orfs_commit": "02ba50d53",
+  "platform": "nangate45",
+  "problem": "HP-C",
+  "run_budget": 12,
+  "task": "minimise die area under correctness gates"
+}

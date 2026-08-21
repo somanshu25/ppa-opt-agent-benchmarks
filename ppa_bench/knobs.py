@@ -42,10 +42,17 @@ DENYLIST = {
 }
 
 # Curated additions beyond autotuner.json: real floorplan/placement knobs that
-# ORFS designs set themselves, with ranges kept wide enough to matter but
-# inside what the flow can actually complete.
+# ORFS designs set themselves.
+#
+# CORE_UTILIZATION's upper bound is deliberately set ABOVE the point where the
+# flow still works. Measured on nangate45/gcd: 77 succeeds (-27.1% die area),
+# 78 dies in global placement with FLW-0024. Capping the range at the optimum
+# would make the task "read the allowlist and pick the maximum" -- a lookup,
+# not a search. Letting it run to 85 puts the optimum in the interior and makes
+# overshooting cost the whole run, which is the actual engineering problem:
+# pack as tight as you dare without falling off the cliff.
 EXTRA_KNOBS = {
-    "CORE_UTILIZATION": {"type": "int", "minmax": [30, 75]},
+    "CORE_UTILIZATION": {"type": "int", "minmax": [30, 85]},
     "PLACE_DENSITY": {"type": "float", "minmax": [0.30, 0.95]},
 }
 
