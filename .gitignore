@@ -1,0 +1,5 @@
+# The golden-SDC sampling secret. Never commit: with it plus the public
+# instance seeds, anyone can recompute every reference constraint.
+.sampling_secret
+__pycache__/
+*.pyc

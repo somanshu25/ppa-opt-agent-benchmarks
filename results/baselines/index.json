@@ -1,0 +1,46 @@
+[
+  {
+    "design": "nangate45_gcd",
+    "die_area": 1278.42,
+    "drc_errors": 0,
+    "inst_area": 683.354,
+    "inst_count": 1068,
+    "note": "primary benchmark design; timing-clean baseline",
+    "power_total": 0.00245292,
+    "setup_tns": 0,
+    "setup_ws": 0.016009
+  },
+  {
+    "design": "nangate45_aes",
+    "die_area": 62612.4,
+    "drc_errors": 0,
+    "inst_area": 19131.8,
+    "inst_count": 32984,
+    "note": "generalisation target; 524 s/run, no SYNTH_REPEATABLE_BUILD",
+    "power_total": 0.441057,
+    "setup_tns": -0.0542506,
+    "setup_ws": -0.010082
+  },
+  {
+    "design": "nangate45_ibex",
+    "die_area": 57254.9,
+    "drc_errors": 0,
+    "inst_area": 29366.7,
+    "inst_count": 32914,
+    "note": "explored, not benchmarked -- runtime not characterised",
+    "power_total": 0.0221371,
+    "setup_tns": -0.0996192,
+    "setup_ws": -0.00422529
+  },
+  {
+    "design": "sky130hd_gcd",
+    "die_area": 6404,
+    "drc_errors": 0,
+    "inst_area": 5281.32,
+    "inst_count": 785,
+    "note": "intentionally over-constrained upstream; excluded from v1 scope (F2)",
+    "power_total": 0.0096735,
+    "setup_tns": -70.9872,
+    "setup_ws": -1.6206
+  }
+]
