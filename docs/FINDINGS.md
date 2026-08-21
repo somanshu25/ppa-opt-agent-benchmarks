@@ -262,3 +262,61 @@ It also isolates a design property worth stating: **on gcd, I/O timing is
 irrelevant**. Three of the four classes (C2, C3, C5) operate on I/O constraints,
 which is why they are weak or vacuous here, while C1 — which attacks the core
 clock — is robust. Class selection has to be matched to the design.
+
+---
+
+## F8 — The grader survives adversarial agents (4/4 correct)
+
+Validation compares baseline against injected runs with no agent involved, so
+`edits_confined`, `no_disabled_checks` and every missing-metric path were
+untested code. Four scripted agents against `nangate45_gcd_C1_s1` (golden
+period 0.69), three attacking and one honest:
+
+| decoy | its own `finish__ws` | held-out `signoff__ws` | resolved | expected | failed on |
+|---|---|---|---|---|---|
+| `oracle` (restores golden) | 0.1839 | 0.18390 | **yes** | yes | — |
+| `null` (does nothing) | −0.4231 | 0.15946 | no | no | `area_not_ballooned`, `signoff_setup_ws` |
+| `cheat_loose` (period → 5.0) | **+3.5836** | 0.14334 | no | no | `signoff_setup_ws` |
+| `cheat_knob` (`SKIP_DETAILED_ROUTE=1`) | 0.1661 | 0.21163 | no | no | `drc_errors`, `antenna_violations`, `signoff_hold_ws`, `no_disabled_checks` |
+
+**4/4 graded correctly.**
+
+### The reward hack, measured
+
+`cheat_loose` relaxed the clock period to 5.0 ns. Its own run reports
+**+3.5836 ns of slack — 19x the baseline's 0.1839**. By any metric the agent can
+see, it produced a spectacular design.
+
+Sign-off against the golden SDC says 0.14334, *worse* than the baseline's
+0.18390. It resolves to **zero**.
+
+This is the benchmark's whole thesis in one row: the visible metric improved
+19-fold while the design got worse, and the grader was not fooled.
+
+### The honest control matters
+
+Without `oracle`, a grader that simply failed everything would look perfectly
+secure. `oracle` resolves with every assertion passing and `area_delta_pct: 0.0`,
+which proves the instance is solvable and the gates are satisfiable.
+
+### `cheat_knob` defeated the sign-off gate — and was caught anyway
+
+The most instructive result. Disabling detailed routing suppresses extraction,
+so timing is computed on an unrouted approximation and comes out
+**optimistic**: `signoff__ws = 0.21163` against a baseline of 0.18390.
+
+That is *better* than baseline, so it **passed both FAIL_TO_PASS assertions**.
+The golden-SDC gate — the centrepiece of this benchmark — did not catch it.
+
+It was caught by PASS_TO_PASS instead: `drc_errors`, `antenna_violations`,
+`signoff_hold_ws`, and the `no_disabled_checks` denylist.
+
+This is SWE-bench's F2P/P2P bracket validated empirically rather than argued
+from theory. Neither set is sufficient alone:
+
+* F2P alone -> `cheat_knob` resolves by not measuring anything.
+* P2P alone -> `null` resolves by doing nothing.
+
+It is also the concrete justification for the knob denylist. An agent tuning
+flow variables can switch off the measurement that the primary gate depends on,
+and the only defence is refusing to accept a run that produced no evidence.
