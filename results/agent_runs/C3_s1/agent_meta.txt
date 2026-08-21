@@ -1,0 +1,3 @@
+instance=nangate45_gcd_C3_s1
+rc=0
+wall_seconds=115

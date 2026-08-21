@@ -1,0 +1,78 @@
+[
+  {
+    "area": 674.31,
+    "baseline_area": 674.31,
+    "baseline_signoff_ws": 0.183899,
+    "class_id": "C1",
+    "failed_assertions": [],
+    "finish_ws": 0.183899,
+    "instance_id": "nangate45_gcd_C1_s1",
+    "matches_golden_exactly": true,
+    "report": "nangate45_gcd_C1_s1 [agent]: RESOLVED\n  [PASS] flow_completed               P2P   flow reached 6_report\n  [PASS] flow_errors                  P2P   flow_errors = 0 (want == 0)\n  [PASS] drc_errors                   P2P   drc_errors = 0 (want == 0)\n  [PASS] antenna_violations           P2P   antenna_violations = 0 (want == 0)\n  [PASS] placement_violations         P2P   placement_violations = 0 (want == 0)\n  [PASS] signoff_hold_ws              P2P   signoff_hold_ws = 0.110478 (want >= 0.110478)\n  [PASS] area_not_ballooned           P2P   area_not_ballooned = 674.31 (want <= 708.025)\n  [PASS] edits_confined               P2P   edited ['impl.sdc'] (allowed ['impl.sdc'])\n  [PASS] no_disabled_checks           P2P   none set\n  [PASS] signoff_setup_ws             F2P   signoff_setup_ws = 0.183899 (want >= 0.183899)\n  [PASS] signoff_setup_tns            F2P   signoff_setup_tns = 0 (want >= 0)\n  score: {\"area_delta_pct\": 0.0, \"power_delta_pct\": 0.0}",
+    "resolved": true,
+    "score": {
+      "area_delta_pct": 0.0,
+      "power_delta_pct": 0.0
+    },
+    "signoff_ws": 0.183899,
+    "tag": "agent"
+  },
+  {
+    "area": 673.512,
+    "baseline_area": 673.512,
+    "baseline_signoff_ws": 0.119967,
+    "class_id": "C1",
+    "failed_assertions": [],
+    "finish_ws": 0.119967,
+    "instance_id": "nangate45_gcd_C1_s2",
+    "matches_golden_exactly": true,
+    "report": "nangate45_gcd_C1_s2 [agent]: RESOLVED\n  [PASS] flow_completed               P2P   flow reached 6_report\n  [PASS] flow_errors                  P2P   flow_errors = 0 (want == 0)\n  [PASS] drc_errors                   P2P   drc_errors = 0 (want == 0)\n  [PASS] antenna_violations           P2P   antenna_violations = 0 (want == 0)\n  [PASS] placement_violations         P2P   placement_violations = 0 (want == 0)\n  [PASS] signoff_hold_ws              P2P   signoff_hold_ws = 0.110779 (want >= 0.110779)\n  [PASS] area_not_ballooned           P2P   area_not_ballooned = 673.512 (want <= 707.188)\n  [PASS] edits_confined               P2P   edited ['impl.sdc'] (allowed ['impl.sdc'])\n  [PASS] no_disabled_checks           P2P   none set\n  [PASS] signoff_setup_ws             F2P   signoff_setup_ws = 0.119967 (want >= 0.119967)\n  [PASS] signoff_setup_tns            F2P   signoff_setup_tns = 0 (want >= 0)\n  score: {\"area_delta_pct\": 0.0, \"power_delta_pct\": 0.0}",
+    "resolved": true,
+    "score": {
+      "area_delta_pct": 0.0,
+      "power_delta_pct": 0.0
+    },
+    "signoff_ws": 0.119967,
+    "tag": "agent"
+  },
+  {
+    "area": 674.31,
+    "baseline_area": 674.31,
+    "baseline_signoff_ws": 0.183899,
+    "class_id": "C3",
+    "failed_assertions": [],
+    "finish_ws": 0.183899,
+    "instance_id": "nangate45_gcd_C3_s1",
+    "matches_golden_exactly": false,
+    "report": "nangate45_gcd_C3_s1 [agent]: RESOLVED\n  [PASS] flow_completed               P2P   flow reached 6_report\n  [PASS] flow_errors                  P2P   flow_errors = 0 (want == 0)\n  [PASS] drc_errors                   P2P   drc_errors = 0 (want == 0)\n  [PASS] antenna_violations           P2P   antenna_violations = 0 (want == 0)\n  [PASS] placement_violations         P2P   placement_violations = 0 (want == 0)\n  [PASS] signoff_hold_ws              P2P   signoff_hold_ws = 0.110478 (want >= 0.110478)\n  [PASS] area_not_ballooned           P2P   area_not_ballooned = 674.31 (want <= 708.025)\n  [PASS] edits_confined               P2P   edited ['impl.sdc'] (allowed ['impl.sdc'])\n  [PASS] no_disabled_checks           P2P   none set\n  [PASS] signoff_setup_ws             F2P   signoff_setup_ws = 0.183899 (want >= 0.183899)\n  [PASS] signoff_setup_tns            F2P   signoff_setup_tns = 0 (want >= 0)\n  score: {\"area_delta_pct\": 0.0, \"power_delta_pct\": 0.0}",
+    "resolved": true,
+    "score": {
+      "area_delta_pct": 0.0,
+      "power_delta_pct": 0.0
+    },
+    "signoff_ws": 0.183899,
+    "tag": "agent"
+  },
+  {
+    "area": 862.638,
+    "baseline_area": 673.512,
+    "baseline_signoff_ws": 0.119967,
+    "class_id": "C5",
+    "failed_assertions": [
+      "signoff_hold_ws",
+      "area_not_ballooned",
+      "signoff_setup_ws"
+    ],
+    "finish_ws": -0.0319716,
+    "instance_id": "nangate45_gcd_C5_s2",
+    "matches_golden_exactly": false,
+    "report": "nangate45_gcd_C5_s2 [agent]: NOT RESOLVED\n  [PASS] flow_completed               P2P   flow reached 6_report\n  [PASS] flow_errors                  P2P   flow_errors = 0 (want == 0)\n  [PASS] drc_errors                   P2P   drc_errors = 0 (want == 0)\n  [PASS] antenna_violations           P2P   antenna_violations = 0 (want == 0)\n  [PASS] placement_violations         P2P   placement_violations = 0 (want == 0)\n  [FAIL] signoff_hold_ws              P2P   signoff_hold_ws = 0.110476 (want >= 0.110779)\n  [FAIL] area_not_ballooned           P2P   area_not_ballooned = 862.638 (want <= 707.188)\n  [PASS] edits_confined               P2P   edited ['impl.sdc'] (allowed ['impl.sdc'])\n  [PASS] no_disabled_checks           P2P   none set\n  [FAIL] signoff_setup_ws             F2P   signoff_setup_ws = 0.0439044 (want >= 0.119967)\n  [PASS] signoff_setup_tns            F2P   signoff_setup_tns = 0 (want >= 0)\n  score: {\"area_delta_pct\": 28.081, \"power_delta_pct\": 42.044}",
+    "resolved": false,
+    "score": {
+      "area_delta_pct": 28.081,
+      "power_delta_pct": 42.044
+    },
+    "signoff_ws": 0.0439044,
+    "tag": "agent"
+  }
+]

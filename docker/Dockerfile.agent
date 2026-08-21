@@ -1,0 +1,32 @@
+# Baseline-agent image: the ORFS flow plus a headless Claude Code.
+#
+# Built on openroad/orfs so the agent has the real toolchain -- it can run
+# `make` and read its own QoR, which is the whole point: the task is not
+# editable-file guesswork, it is iterating against a physical implementation.
+#
+# The agent's isolation does NOT come from this image. It comes from the
+# runner, which builds a sanitised workspace containing only the instance's
+# public/ files and strips the paths that leak the reference constraints
+# (pristine designs/*/constraint.sdc, .git, stale results/*/6_final.sdc,
+# rules-base.json, autotuner.json). See bin/run_agent.sh.
+FROM openroad/orfs:latest
+
+# Node 20 for Claude Code. NodeSource rather than Ubuntu 22.04's node 12.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+       | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" \
+       > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g @anthropic-ai/claude-code \
+    && npm cache clean --force
+
+# Sanity check at build time rather than discovering it mid-eval.
+RUN claude --version
+
+WORKDIR /work

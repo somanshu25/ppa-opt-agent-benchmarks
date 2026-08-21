@@ -320,3 +320,78 @@ from theory. Neither set is sufficient alone:
 It is also the concrete justification for the knob denylist. An agent tuning
 flow variables can switch off the measurement that the primary gate depends on,
 and the only defence is refusing to accept a run that produced no evidence.
+
+---
+
+## F9 — Baseline agent (Claude Code, headless): 3/4 resolved
+
+`claude -p` inside `ppa-bench/orfs-agent` (ORFS + Claude Code), one throwaway
+container per instance, `--max-turns 40`. The agent had the real toolchain and
+could build the design and read its own QoR. Only `public/` was staged; the
+leak audit came back empty on every run.
+
+| instance | resolved | submitted | wall | cost | terminal |
+|---|---|---|---|---|---|
+| C1_s1 | **YES** | period 0.00069 -> **0.69**, byte-identical to golden | 204 s | $0.21 | completed |
+| C1_s2 | **YES** | recovered exactly | 109 s | $0.28 | completed |
+| C3_s1 | **YES** | restored `set_output_delay` | 115 s | $0.17 | completed |
+| C5_s2 | no | **nothing — file unchanged** | 1088 s | $2.39 | **max_turns** |
+
+**Score: 3/4.** Total cost $3.04.
+
+### Randomisation did its job
+
+C1's goldens were 0.69 and 0.58 — neither is upstream's 0.46, the environment
+was sanitised, and the leak audit was clean. The agent could not have copied
+either value. It recovered both exactly, which means it recognised the x1000
+unit slip and inverted it. That is the reasoning the randomisation was designed
+to force, and it would not have been distinguishable from copying had the
+golden been upstream's own value.
+
+### C3 passed with a textually different fix
+
+The submitted SDC differs from golden by a trailing blank line
+(`matches_golden_exactly: false`) and resolves anyway, because grading is
+behavioural — measured QoR — not diff-matching against the reference. An agent
+that writes a different but equally correct constraint must still pass.
+
+### C5 failed on budget, not on reasoning
+
+The agent's *method was right*. It ran a real parameter sweep, building flow
+variants `io020`, `io025`, `io030`, `io035` to measure the I/O budget
+empirically. It then hit the turn limit mid-sweep:
+
+```
+"terminal_reason": "max_turns", "errors": ["Reached maximum number of turns (40)"]
+```
+
+and never wrote its conclusion back to `/work/impl.sdc`. The submitted file is
+byte-identical to the broken input, so it was graded as the null agent — which
+is correct behaviour by the grader, and a misleading headline about the agent.
+
+Three fixes, in the order they matter:
+
+1. **Task**: require writing best-so-far to the deliverable after *each* trial.
+   Then a truncated run degrades gracefully instead of submitting nothing. This
+   is a task-design defect, not an agent defect.
+2. **Harness**: report `terminal_reason` in the verdict so budget exhaustion is
+   never conflated with a wrong answer. A 3/4 that hides one truncation is a
+   dishonest number.
+3. **Budget**: search-shaped tasks need far more than 40 turns. C5 cost 10x the
+   repair tasks in both time and money precisely because it was doing the work.
+
+### The cost asymmetry is the HP-C preview
+
+Repair tasks: ~140 s and $0.22 each. The one search task: 1088 s and $2.39, and
+it still did not finish. That ratio is the argument for HP-C being a genuinely
+different problem, and for making run budget an explicit, measured part of it
+rather than an incidental limit.
+
+### C5's deeper problem, unresolved
+
+Because it never submitted, we still do not know whether C5 is *fair*. Its
+golden `clk_io_pct` is 0.15, drawn at random; the agent swept 0.20-0.35 and had
+no way to derive 0.15 from anything observable. Unlike C1, where the unit slip
+makes the answer reconstructible, C5 under a randomised golden may require
+guessing an arbitrary constant. HP-C avoids this by construction: there is no
+hidden reference, only a public baseline to beat.
