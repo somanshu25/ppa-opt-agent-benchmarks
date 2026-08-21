@@ -566,3 +566,56 @@ your task description and your grader disagree. That is a third failure mode
 alongside "agent games the grader" and "agent finds the answer", and it is the
 one most likely to be invisible: every gate passes, the agent behaves sensibly,
 and the benchmark quietly measures compliance with a contradiction.
+
+---
+
+## F13 — Generalising to aes: the benchmark transfers, the objective does not
+
+First move off gcd. Four full aes runs at different clock periods, 8.7 min each.
+
+| period | setup WS | setup TNS | die area | power | clean baseline? |
+|---|---|---|---|---|---|
+| 0.82 (upstream) | -0.01008 | -0.0543 | 62612 | 441.1 mW | no |
+| 0.85 | -0.01218 | -0.0362 | 62612 | 409.7 mW | no |
+| 0.90 | -0.00365 | -0.0037 | 62612 | 375.7 mW | no |
+| **0.95** | **+0.04914** | **0.0000** | 62612 | 350.7 mW | **yes** |
+| **1.00** | **+0.08122** | **0.0000** | 62612 | 329.2 mW | **yes** |
+
+### The guessed range was wrong, again
+
+`randomize.py` carried `("nangate45", "aes"): (0.85, 1.10)` -- a guess, never
+measured. aes does not close until **0.95**, so most seeds drawn from that range
+would have produced violating baselines: precisely the sky130hd/gcd failure mode
+(F2) that the whole measured-range discipline exists to avoid.
+
+Corrected to `(0.95, 1.00)`, both endpoints verified clean. This is the second
+time a guessed range would have been wrong and a sweep caught it. Ranges are
+measurements, not estimates.
+
+Note also that aes **does not close at its own upstream period** of 0.82. As with
+sky130hd/gcd, that is upstream's intent rather than a broken environment -- but
+it means the shipped configuration is not a usable benchmark baseline.
+
+### die_area is constant at 62612 across every period
+
+Not a coincidence. `designs/nangate45/aes/config.mk` line 8:
+
+```make
+export FLOORPLAN_DEF = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/aes_ng45_fp.def
+```
+
+aes uses a **fixed floorplan DEF**, so the die is nailed down by a file rather
+than derived from `CORE_UTILIZATION`. The dominant HP-B knob has nothing to act
+on.
+
+**Consequence: HP-B's objective does not transfer to aes.** The benchmark
+machinery does -- allowlist, gates, budget accounting, sign-off -- but "minimise
+die area" is meaningless on a design whose die is fixed by a DEF. Power remains
+highly tunable (441 -> 329 mW, a 25% range across the periods above), so power
+is the natural objective there instead.
+
+This is the same lesson C2 taught on the repair side, in a different register:
+**the mechanism generalises, the objective must be matched to the design.** On
+gcd, I/O timing is irrelevant so I/O-delay defects are inert; on aes, die area is
+fixed so area optimisation is inert. A benchmark suite that assumes one objective
+fits every design will silently ship vacuous instances.

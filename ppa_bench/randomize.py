@@ -55,7 +55,13 @@ class GoldenParams:
 # defect to actually bite (too much slack makes instances vacuous).
 PERIOD_RANGE = {
     ("nangate45", "gcd"): (0.50, 0.70),
-    ("nangate45", "aes"): (0.85, 1.10),
+    # aes does not close at its own upstream period. Measured: 0.82 (upstream)
+    # gives WS -0.010, 0.85 gives -0.012, 0.90 gives -0.004; the first clean
+    # baseline is 0.95 (+0.049, TNS 0) and 1.00 is cleaner still (+0.081).
+    # An earlier guess of (0.85, 1.10) would have generated violating baselines
+    # for most seeds -- the sky130hd/gcd failure mode (F2) all over again.
+    # Both endpoints below are verified-clean measurements, not estimates.
+    ("nangate45", "aes"): (0.95, 1.00),
 }
 
 # I/O budget as a fraction of the period. Upstream uses 0.2 everywhere.
