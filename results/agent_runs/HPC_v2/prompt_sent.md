@@ -69,3 +69,14 @@ whenever you stop -- including if you run out of turns.
 
 Write your best-so-far knobs to it **after every trial**, not at the end. Never
 leave the file holding a configuration you have already shown to be worse.
+
+## Running the flow
+
+    cd /OpenROAD-flow-scripts/flow
+    make DESIGN_CONFIG=./designs/nangate45/gcd/config.mk FLOW_VARIANT=try1 \
+         CORE_UTILIZATION=60 PLACE_DENSITY_LB_ADDON=0.1
+
+Pass knobs as make variables, one fresh FLOW_VARIANT per trial. Metrics land in
+logs/nangate45/gcd/<variant>/6_report.json; the objective is
+`finish__design__die__area`. Baseline (default config) is a run with no knob
+overrides -- measure it first if you want a reference.

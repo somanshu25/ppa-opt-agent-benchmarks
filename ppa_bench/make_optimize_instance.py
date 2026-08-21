@@ -59,10 +59,17 @@ Runs are counted from your container, so plan your search.
 
 **Gates** (all must hold, or the run scores zero):
 - the flow completes, with zero DRC, antenna and placement violations
-- sign-off timing is no worse than the baseline, re-timed against the design's
-  own constraints -- which you cannot change
+- **sign-off timing still closes**: setup worst-slack, setup TNS and hold
+  worst-slack must all be `>= 0` when the design is re-timed against its own
+  constraints, which you cannot change
 - every knob you set is inside the permitted space
 - you stayed within the run budget
+
+Note carefully what the timing gate does **not** say. It does not require slack
+to be as good as the baseline. You are explicitly permitted to **spend** slack
+to buy area: a configuration with worst-slack `+0.002` scores exactly as well
+on timing as one with `+0.020`, so long as both are non-negative. Holding back
+to preserve baseline slack will cost you area for no benefit.
 
 **Score** (only if the gates hold): die area reduction, with power reported
 alongside.

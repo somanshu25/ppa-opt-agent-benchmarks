@@ -452,3 +452,113 @@ Repair tasks: ~140 s, $0.22. Search task: ~1000 s, $1.23-$2.39. The search task
 is roughly 7x the wall time and 6x the cost of a repair task, and consumed its
 whole turn budget both times. That is the empirical case for making run budget
 an explicit, measured dimension of HP-C rather than an incidental limit.
+
+---
+
+## F11 — Knob sensitivity: die area is tunable, instance area is not
+
+One-at-a-time sweep over the permitted knob space, nangate45/gcd, 19 runs.
+
+```
+range over the 8 permitted knobs:
+  die_area   -25.29% .. +78.01%
+  inst_area   -0.54% ..  +0.86%
+```
+
+**The objective had to change.** `inst_area` -- the metric the repair grader
+uses -- is the sum of cell areas, fixed by synthesis and timing repair, and
+placement knobs barely touch it. `die_area` is the physical footprint, what
+silicon actually costs, and it moves by a factor of 2.4 across the same space.
+
+| knob point | die % | inst % | ws | |
+|---|---|---|---|---|
+| `CORE_UTILIZATION` 30 | +78.01 | +0.86 | +0.0129 | ok |
+| `CORE_UTILIZATION` 75 | **-25.29** | -0.54 | +0.0104 | ok |
+| `CORE_MARGIN` 3 | +23.63 | +0.27 | +0.0145 | ok |
+| `CTS_CLUSTER_*`, `PLACE_DENSITY`, `CELL_PAD` min | **+0.00 exactly** | 0.00 | unchanged | inert |
+| `CELL_PAD_IN_SITES_{GLOBAL,DETAIL}_PLACEMENT` 3 | — | — | — | **flow fails** |
+
+**Five of eight knobs are inert on gcd.** CTS clustering has nothing to cluster
+on a design with 7 clock buffers; `PLACE_DENSITY` is inert at *both* ends,
+suggesting ORFS derives it from utilisation and ignores the override. Two
+autotuner-declared values break the flow outright, so upstream's own range is
+not all-safe.
+
+### The cliff, and why the allowlist deliberately overshoots it
+
+| CORE_UTILIZATION | die area | delta | ws | result |
+|---|---|---|---|---|
+| 55 (default) | 1278 | — | +0.01601 | ok |
+| 75 | 955 | -25.29% | +0.01040 | ok |
+| 76 | 943 | -26.20% | +0.00692 | ok |
+| **77** | **932** | **-27.09%** | +0.01101 | ok |
+| 78+ | — | — | — | **FLW-0024**, dies in global placement |
+
+A hypothesis that lowering `PLACE_DENSITY_LB_ADDON` would unlock higher
+utilisation was **tested and refuted**: `util=90, addon=0.00` still fails
+FLW-0024, so place density is not simply `util/100 + addon`.
+
+The permitted range is set to **[30, 85]** -- past the cliff on purpose. Capping
+at the optimum would make the task "read the allowlist, pick the maximum", a
+lookup rather than a search. With the range wider than what works, overshooting
+costs the entire run, which is the real engineering problem: pack as tight as
+you dare.
+
+---
+
+## F12 — HP-C: a spec ambiguity cost 33% of the achievable improvement
+
+The optimisation grader was validated on four reference submissions before any
+agent saw it:
+
+| submission | resolved | expected | die area | delta |
+|---|---|---|---|---|
+| null (no knobs) | no | no | 1278 | 0.0% |
+| optimum (`util=77`) | **yes** | yes | 932 | **-27.09%** |
+| overshoot (`util=85`) | no | no | flow died | — |
+| cheat (`SDC_FILE=...`) | no | no | 1278 | rejected by allowlist |
+
+**4/4 correct** -- and the probe caught a real gate mis-specification first. The
+reference optimum initially *failed* on `signoff_setup_ws`, because the gate
+required timing to be no worse than baseline. That is right for repair, where
+the goal is to restore, and wrong for optimisation, where the agent is
+explicitly meant to spend slack to buy area. Fixed to "timing still closes"
+(`ws >= 0`).
+
+### The controlled experiment
+
+The prompt was not updated when the gate was. It still said *"sign-off timing is
+no worse than the baseline"* while the grader now accepted any non-negative
+slack. Same agent, same 12-run budget, same tools; the only change between runs
+was that one paragraph.
+
+| run | spec | submitted | die area | runs | cost |
+|---|---|---|---|---|---|
+| v1 | "no worse than baseline" | `util=68` | **-18.09%** | 9/12 | $0.85 |
+| v2 | "timing still closes" | `util=77, addon=0.0` | **-27.09%** | 11/12 | — |
+
+**v2 hit the reference optimum exactly.**
+
+The agent explained its v1 choice in its own summary:
+
+> "u68 is the local optimum where setup worst-slack (0.01699) actually **beats**
+> baseline (0.016009) rather than merely staying positive. That means it passes
+> the timing gate under **both** the strict reading and the loose reading,
+> unlike u70-u74 which shrink further but regress setup slack below baseline."
+
+It had *measured* `u74` at 24.3% reduction with positive slack and deliberately
+rejected it, hedging against an ambiguous rubric. That is correct behaviour
+against the specification it was given. The 9 percentage points it left on the
+table were a **benchmark defect, not an agent limitation**.
+
+### Why this matters more than the score
+
+The gap between the agent's result and the reference optimum is what surfaced
+the defect. Without a measured reference, -18.09% reads as a solid pass and the
+inconsistency ships unnoticed.
+
+So a reference optimum is not just a scoring aid -- it is how you find out that
+your task description and your grader disagree. That is a third failure mode
+alongside "agent games the grader" and "agent finds the answer", and it is the
+one most likely to be invisible: every gate passes, the agent behaves sensibly,
+and the benchmark quietly measures compliance with a contradiction.

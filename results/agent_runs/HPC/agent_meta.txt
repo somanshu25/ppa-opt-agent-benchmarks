@@ -1,0 +1,4 @@
+instance=nangate45_gcd_HPC
+rc=0
+wall_seconds=570
+flow_runs=9
