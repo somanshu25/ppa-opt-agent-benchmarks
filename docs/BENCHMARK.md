@@ -1,7 +1,7 @@
 # Benchmark Specifications
 
 Two benchmarks: `sdc-repair-v1` (HP-A, constraint repair) and `knob-opt-v1`
-(HP-C, budgeted die-area minimisation). Both use the SWE-bench / Terminal-Bench
+(HP-B, budgeted die-area minimisation). Both use the SWE-bench / Terminal-Bench
 shape: environment, task, grader.
 
 ---
@@ -266,7 +266,7 @@ gate anything.
 
 # Benchmark 2 — `knob-opt-v1`
 
-Budgeted die-area minimisation via flow knobs. HP-C.
+Budgeted die-area minimisation via flow knobs. HP-B.
 
 Same three-part shape (environment, task, grader), but a **different problem
 class**, and the differences are the interesting part: nothing is broken, so

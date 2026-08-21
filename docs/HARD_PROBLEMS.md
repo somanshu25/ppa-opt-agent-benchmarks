@@ -71,11 +71,11 @@ verification.
 | | problem | benchmark built | flow runs to date |
 |---|---|---|---|
 | **HP-A** | Constraint integrity / SDC repair | ✅ built + validated (F7–F9) | 10 validation (baseline shared per seed) + 10 sign-off re-times; 4 decoy; 4 agent |
-| **HP-B** | QoR regression root-cause | ❌ none | 0 |
-| **HP-C** | Budgeted die-area minimisation | ✅ built + validated (F11–F12) | 19 knob sweep + 7 cliff + 8 grader probe; 2 agent |
+| **HP-B** | Budgeted die-area minimisation | ✅ built + validated (F11–F12) | 19 knob sweep + 7 cliff + 8 grader probe; 2 agent |
+| **HP-C** | QoR regression root-cause | ❌ none | 0 |
 | **HP-D** | Top-level → block budgeting | ❌ none | 0 (hierarchical flow never run here) |
 
-**HP-A and HP-C are built.** HP-B and HP-D are *defined* problems with argued
+**HP-A and HP-B are built.** HP-C and HP-D are *defined* problems with argued
 designs. That scoping is deliberate and stated in full at the end.
 
 ---
@@ -194,76 +194,7 @@ the same gate for knob tuning and RTL restructuring, because it judges the
 
 ---
 
-# HP-B — QoR regression root-cause
-
-*"Area went up 8% after this commit. Why?"*
-**Status: defined. Zero instances built.**
-
-### 1. Why it is hard
-
-A regression surfaces far from its cause. A placement-density change presents as
-a *routing* congestion symptom three stages later. The chain of ~16 stage metric
-sets contains both the causal delta and dozens of downstream consequences of it,
-and they look alike. Attribution is the whole job, and it is a different skill
-from repair.
-
-### 2. Why coding agents fail
-
-**R3.** The cause-effect chain is physical, not textual, so `git log` frequently
-does not help — the cause is often a knob or a constraint, not code. An agent
-must know which stage deltas are causal versus consequent, which is domain
-knowledge with no textual signature (**R5**). And with **R1**'s expensive oracle,
-brute-force bisection over full flow runs is unaffordable at real design sizes.
-
-### 3. Inputs / outputs / evidence
-
-| | |
-|---|---|
-| **Input** | two runs — a good one and a regressed one — plus their configs and constraints |
-| **Output** | a structured attribution: *which stage* the regression first appears at, and *what cause* produced it |
-| **Evidence** | all 16 stage metric JSONs for both runs, stage logs, both SDCs, both configs |
-
-### 4. How it is correctly measured
-
-**Genuinely checkable, because we inject the regression** — the true stage and
-true cause are known by construction. Grade on stage-attribution accuracy plus
-cause identification. No multi-objective ambiguity, no Pareto judgment call:
-this is the cleanest oracle of the four.
-
-F1's bit-exact determinism is what makes it rigorous — with zero run-to-run
-noise, **any** metric delta between the two runs is attributable, so there is
-nothing to argue about.
-
-**Cost, corrected.** It was previously claimed this is "nearly free — zero new
-flow runs" by reusing the validation artifacts already on disk. **That is not
-true of this repository as it stands.** `results/` retains only summary verdicts
-and ~10 evidence scalars per instance (`validation.json`); the per-stage JSONs
-from those runs lived in the throwaway container and were not preserved. The
-only stage-level artifacts on disk are the F1 determinism runs
-(`noise/ng45_gcd/logs_noise_ng45_c*`), which are clean-baseline gcd only.
-
-That is a **consequence of a deliberate choice, not an oversight**: one throwaway
-container per instance is the same design that kept the leak audit clean on every
-agent run (F9). Retaining stage metrics is a one-line change to what the runner
-copies out — and HP-B is the reason to make it.
-
-Standing HP-B up therefore costs a re-run: 2 seeds × (1 shared baseline + 4
-classes) = **10 gcd runs ≈ 7 minutes**. Cheap, but not free. The injectors
-themselves already exist, which is the expensive part.
-
-It also *rehabilitates the rejected instances*: C2, C3_s2 and C5_s1 failed as
-repair tasks, but a defect that is inert for repair can still be correctly
-**described**. Four discarded instances become four usable diagnosis tasks.
-
-### 5. Product
-
-**QoR bisect** — automatic regression attribution across runs, the EDA analogue
-of `git bisect`. Engineers do this by hand, constantly, and it is the single most
-requested piece of tooling in a physical design team's workflow.
-
----
-
-# HP-C — Budgeted die-area minimisation
+# HP-B — Budgeted die-area minimisation
 
 *The actual "PPA optimisation agent" — improving a design nobody broke.*
 **Status: built, validated, and baselined. Two agent runs.**
@@ -305,7 +236,7 @@ rather than an incidental limit.
 | **Evidence** | full stage metrics per trial, the search trace, and the count of flow runs consumed |
 
 Note what is *absent*: **no hidden reference**. Nothing must be guessed, only
-beaten. This is why HP-C sidesteps the fairness question that hung over C5.
+beaten. This is why HP-B sidesteps the fairness question that hung over C5.
 
 ### 4. How it is correctly measured
 
@@ -413,7 +344,7 @@ breadth. aes is where more knobs would bite, at 8.7 min/run.
 published, non-LLM optimiser over the same `autotuner.json` space. Running it at
 equal budget would upgrade the claim from "the agent hit the reference optimum"
 to "the agent beat / matched / lost to AutoTuner at 12 runs". That is the single
-highest-value addition remaining for HP-C, and it reuses this grader unchanged.
+highest-value addition remaining for HP-B, and it reuses this grader unchanged.
 
 ### 5. Product
 
@@ -421,6 +352,75 @@ highest-value addition remaining for HP-C, and it reuses this grader unchanged.
 human approves. This is the flagship. HP-A is the safety rail that makes it
 trustworthy: without a cheat-proof grader underneath, a closure copilot is an
 automated way to ship a design that reports good numbers and is not.
+
+---
+
+# HP-C — QoR regression root-cause
+
+*"Area went up 8% after this commit. Why?"*
+**Status: defined. Zero instances built.**
+
+### 1. Why it is hard
+
+A regression surfaces far from its cause. A placement-density change presents as
+a *routing* congestion symptom three stages later. The chain of ~16 stage metric
+sets contains both the causal delta and dozens of downstream consequences of it,
+and they look alike. Attribution is the whole job, and it is a different skill
+from repair.
+
+### 2. Why coding agents fail
+
+**R3.** The cause-effect chain is physical, not textual, so `git log` frequently
+does not help — the cause is often a knob or a constraint, not code. An agent
+must know which stage deltas are causal versus consequent, which is domain
+knowledge with no textual signature (**R5**). And with **R1**'s expensive oracle,
+brute-force bisection over full flow runs is unaffordable at real design sizes.
+
+### 3. Inputs / outputs / evidence
+
+| | |
+|---|---|
+| **Input** | two runs — a good one and a regressed one — plus their configs and constraints |
+| **Output** | a structured attribution: *which stage* the regression first appears at, and *what cause* produced it |
+| **Evidence** | all 16 stage metric JSONs for both runs, stage logs, both SDCs, both configs |
+
+### 4. How it is correctly measured
+
+**Genuinely checkable, because we inject the regression** — the true stage and
+true cause are known by construction. Grade on stage-attribution accuracy plus
+cause identification. No multi-objective ambiguity, no Pareto judgment call:
+this is the cleanest oracle of the four.
+
+F1's bit-exact determinism is what makes it rigorous — with zero run-to-run
+noise, **any** metric delta between the two runs is attributable, so there is
+nothing to argue about.
+
+**Cost, corrected.** It was previously claimed this is "nearly free — zero new
+flow runs" by reusing the validation artifacts already on disk. **That is not
+true of this repository as it stands.** `results/` retains only summary verdicts
+and ~10 evidence scalars per instance (`validation.json`); the per-stage JSONs
+from those runs lived in the throwaway container and were not preserved. The
+only stage-level artifacts on disk are the F1 determinism runs
+(`noise/ng45_gcd/logs_noise_ng45_c*`), which are clean-baseline gcd only.
+
+That is a **consequence of a deliberate choice, not an oversight**: one throwaway
+container per instance is the same design that kept the leak audit clean on every
+agent run (F9). Retaining stage metrics is a one-line change to what the runner
+copies out — and HP-C is the reason to make it.
+
+Standing HP-C up therefore costs a re-run: 2 seeds × (1 shared baseline + 4
+classes) = **10 gcd runs ≈ 7 minutes**. Cheap, but not free. The injectors
+themselves already exist, which is the expensive part.
+
+It also *rehabilitates the rejected instances*: C2, C3_s2 and C5_s1 failed as
+repair tasks, but a defect that is inert for repair can still be correctly
+**described**. Four discarded instances become four usable diagnosis tasks.
+
+### 5. Product
+
+**QoR bisect** — automatic regression attribution across runs, the EDA analogue
+of `git bisect`. Engineers do this by hand, constantly, and it is the single most
+requested piece of tooling in a physical design team's workflow.
 
 ---
 
@@ -458,7 +458,7 @@ over-budgeting.**
 
 ### 2. Why coding agents fail
 
-This one categorically breaks the SWE-bench shape. HP-A, HP-B and HP-C are all
+This one categorically breaks the SWE-bench shape. HP-A, HP-C and HP-B are all
 "one artifact, find the defect." **Here no file contains the bug.** That alone
 makes it the strongest "why coding agents are not enough" argument in the set.
 
@@ -561,9 +561,9 @@ the decision a lead engineer wants to approve rather than delegate.
 ## Scoping, and one reversal worth recording
 
 **HP-A leads.** It has a validated grader, eight measured instances, a 4/4 decoy
-result and a 4/4 agent baseline. **HP-C is built too** — its own grader,
+result and a 4/4 agent baseline. **HP-B is built too** — its own grader,
 validated 4/4 on reference submissions, with a measured reference optimum and
-two agent runs. HP-B and HP-D remain well-argued defined problems with zero
+two agent runs. HP-C and HP-D remain well-argued defined problems with zero
 instances between them.
 
 **This ordering is a reversal.** An earlier version of this analysis recommended
@@ -581,7 +581,7 @@ grader and measured baselines is worth more than four shallow unvalidated ones.
 
 - **Two levers of three.** The three levers available to a PPA agent are flow
   knobs, SDC, and RTL/netlist. **SDC** has 4 agent runs (HP-A) and **flow knobs**
-  have 2 (HP-C). **RTL/netlist: 0** — and it is the lever where cheating is
+  have 2 (HP-B). **RTL/netlist: 0** — and it is the lever where cheating is
   easiest and most catastrophic, since it needs a logical-equivalence gate that
   does not exist here yet.
 - **One design, one platform.** Everything validated is nangate45/gcd (~1100
@@ -601,18 +601,18 @@ grader and measured baselines is worth more than four shallow unvalidated ones.
   but "is the design you produced as good", which is what makes randomised
   goldens fair for value-recovery tasks generally.
 - **`area_not_ballooned` is class-scoped.** Correct for repair; it would wrongly
-  block an optimisation agent that legitimately trades area for timing. HP-C
+  block an optimisation agent that legitimately trades area for timing. HP-B
   therefore drops it, and swaps `inst_area` for `die_area` — measured, the
   former moves ±0.9% across the whole knob space while the latter moves −25% to
   +78% (F11).
 - **A third failure mode exists, and we hit it.** Beyond "agent games the
   grader" and "agent finds the answer" there is **"the task description and the
-  grader disagree"**. HP-C's prompt said timing must be no worse than baseline
+  grader disagree"**. HP-B's prompt said timing must be no worse than baseline
   while its grader accepted any non-negative slack; the agent hedged and lost
   **33% of the achievable improvement** (F12). It is the most invisible of the
   three — every gate passes and the agent looks sensible — and it is only
   detectable by comparing against a *measured reference optimum*.
-- **HP-C is a single-knob task.** Five of its eight permitted knobs are inert on
+- **HP-B is a single-knob task.** Five of its eight permitted knobs are inert on
   gcd. It demonstrates budgeted search against a hard cliff, not multi-objective
   search breadth.
 - **The AutoTuner comparison has not been run.** ORFS ships a real non-LLM

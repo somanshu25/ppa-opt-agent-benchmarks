@@ -77,7 +77,7 @@ line.
 | | problem | task | objective | status |
 |---|---|---|---|---|
 | **`sdc-repair-v1`** | HP-A | diagnose and repair a defective SDC | restore baseline QoR | 4 validated instances, agent **4/4** |
-| **`knob-opt-v1`** | HP-C | shrink the die by tuning flow knobs | `die_area` under correctness gates | grader **4/4** on probes, agent hit the reference optimum |
+| **`knob-opt-v1`** | HP-B | shrink the die by tuning flow knobs | `die_area` under correctness gates | grader **4/4** on probes, agent hit the reference optimum |
 
 They differ in a way that changes the grading shape. In repair something *is*
 broken, so assertions flip fail-to-pass. In optimisation **nothing is broken** —
@@ -106,7 +106,7 @@ ppa_bench/
   knobs.py                   knob allowlist, ranges, submission validation
   knob_sweep.py              measure what the knobs actually move
   optimize.py                optimisation assertions (gates + improvement)
-  make_optimize_instance.py  build the HP-C instance
+  make_optimize_instance.py  build the HP-B instance
   grade_hpc.py               grade a submitted knobs.json
 tcl/signoff_sta.tcl          re-time a finished layout against a golden SDC
 bin/signoff.sh               sign-off driver
@@ -115,6 +115,7 @@ bin/run_agent_hpc.sh         headless agent + budget counting (optimisation)
 docker/Dockerfile.agent      ORFS + Claude Code
 docs/HARD_PROBLEMS.md        Task 1: HP-A..HP-D
 docs/BENCHMARK.md            Task 2: both benchmark specifications
+docs/PRODUCT.md              Task 4: product vision, mock UI, evidence pack
 docs/FINDINGS.md             measured results, including the negatives
 docs/PLAN.md                 build plan and scope decisions
 ```

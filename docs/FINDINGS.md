@@ -384,10 +384,10 @@ Three fixes, in the order they matter:
 3. **Budget**: search-shaped tasks need far more than 40 turns. C5 cost 10x the
    repair tasks in both time and money precisely because it was doing the work.
 
-### The cost asymmetry is the HP-C preview
+### The cost asymmetry is the HP-B preview
 
 Repair tasks: ~140 s and $0.22 each. The one search task: 1088 s and $2.39, and
-it still did not finish. That ratio is the argument for HP-C being a genuinely
+it still did not finish. That ratio is the argument for HP-B being a genuinely
 different problem, and for making run budget an explicit, measured part of it
 rather than an incidental limit.
 
@@ -397,7 +397,7 @@ Because it never submitted, we still do not know whether C5 is *fair*. Its
 golden `clk_io_pct` is 0.15, drawn at random; the agent swept 0.20-0.35 and had
 no way to derive 0.15 from anything observable. Unlike C1, where the unit slip
 makes the answer reconstructible, C5 under a randomised golden may require
-guessing an arbitrary constant. HP-C avoids this by construction: there is no
+guessing an arbitrary constant. HP-B avoids this by construction: there is no
 hidden reference, only a public baseline to beat.
 
 ---
@@ -455,7 +455,7 @@ randomised goldens fair for value-recovery tasks generally.
 Repair tasks: ~140 s, $0.22. Search task: ~1000 s, $1.23-$2.39. The search task
 is roughly 7x the wall time and 6x the cost of a repair task, and consumed its
 whole turn budget both times. That is the empirical case for making run budget
-an explicit, measured dimension of HP-C rather than an incidental limit.
+an explicit, measured dimension of HP-B rather than an incidental limit.
 
 ---
 
@@ -510,7 +510,7 @@ you dare.
 
 ---
 
-## F12 — HP-C: a spec ambiguity cost 33% of the achievable improvement
+## F12 — HP-B: a spec ambiguity cost 33% of the achievable improvement
 
 The optimisation grader was validated on four reference submissions before any
 agent saw it:
