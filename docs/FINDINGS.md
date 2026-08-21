@@ -172,3 +172,93 @@ their signal from placement, CTS, and routing — not from synthesis.
 Validation costs 3 runs per instance (baseline / broken / reference-fix). gcd:
 4 classes ≈ 9 min. aes: 4 classes ≈ 105 min. Both affordable; ibex remains
 untimed and out of scope.
+
+---
+
+## F7 — Validation results: 4 of 8 gcd instances are real tasks
+
+First full validation run. nangate45/gcd, 4 classes x 2 randomised seeds,
+10 flow runs (baseline shared per seed) plus 10 sign-off re-times.
+
+Baseline for both seeds passed every gate. Results for the injected runs:
+
+| instance | golden period | `finish__ws` | `signoff__ws` | baseline `signoff__ws` | area | validated |
+|---|---|---|---|---|---|---|
+| C1_s1 | 0.69 | **-0.42310** | 0.15946 | 0.18390 | **959.5** (+42%) | **yes** |
+| C1_s2 | 0.58 | **-0.44799** | 0.09470 | 0.11997 | **1035.5** (+54%) | **yes** |
+| C2_s1 | 0.69 | 0.18390 | 0.18390 | 0.18390 | 674.3 (+0.0%) | no |
+| C2_s2 | 0.58 | 0.11997 | 0.11997 | 0.11997 | 673.5 (+0.0%) | no |
+| C3_s1 | 0.69 | **0.24142** | **0.17635** | 0.18390 | 673.8 | **yes** |
+| C3_s2 | 0.58 | 0.13196 | 0.12210 | 0.11997 | 674.8 | no |
+| C5_s1 | 0.69 | 0.01837 | 0.18397 | 0.18390 | 674.3 | no |
+| C5_s2 | 0.58 | **-0.03197** | **0.04390** | 0.11997 | **862.6** (+28%) | **yes** |
+
+### C1 is the robust instance
+
+Validated on both seeds with a large, unambiguous effect. Note *where* the
+damage lands: sign-off timing degrades only slightly (0.184 -> 0.159), because
+the golden period is loose enough that even a thrashed layout still meets it.
+The real damage is **area, +42% and +54%** — the tool burned half the design
+again trying to hit an impossible 0.00069 ns target.
+
+This vindicates carrying an area cap as a PASS_TO_PASS assertion rather than
+grading on timing alone. An over-constraint defect can pass every timing gate
+and still be a disaster.
+
+### C3 shows the predicted inversion — but only on one seed
+
+C3_s1 is the effect the whole benchmark was designed around:
+
+```
+              flow's own view      held-out sign-off
+baseline          0.18390               0.18390
+C3 broken         0.24142  (better)     0.17635  (worse)
+```
+
+**The implementation run reports 31% more slack while the design is genuinely
+worse.** An agent optimising the visible metric would call this an improvement.
+Only sign-off against the golden SDC contradicts it.
+
+But the degradation is 7.5 ps, and on seed 2 sign-off came out *better* than
+baseline, so the instance did not validate. C3 is real but marginal and
+seed-dependent on this design.
+
+### C2 is vacuous on gcd — NEGATIVE RESULT
+
+Deleting `set_input_delay` changed **nothing**: `finish`, `signoff` and area are
+bit-identical to baseline on both seeds.
+
+The injection is not at fault. The broken run genuinely elaborated **0 input
+delay constraints versus 35 in the baseline**:
+
+```
+$ grep -c set_input_delay results/.../val_nangate45_gcd_C2_s1/6_final.sdc   ->  0
+$ grep -c set_input_delay results/.../val_base_nangate45_gcd_s1/6_final.sdc -> 35
+```
+
+Removing all 35 constraints produced an identical design. gcd's input paths are
+so far from critical that constraining them is a no-op — the worst path is
+register-to-register and always was.
+
+**Consequence:** C2 cannot be validated on gcd and is not shipped for it. The
+class is only meaningful on a design whose I/O paths are near-critical. aes is
+the next candidate. This is the second class killed by measurement, after CX.
+
+### C5 is conditional on the size of the over-constraint
+
+C5_s1 inflated `clk_io_pct` 0.21 -> 0.45 (2.1x) and did nothing. C5_s2 inflated
+0.15 -> 0.45 (3.0x) and cost 28% area plus a hold violation. The injector should
+scale the multiplier relative to the sampled baseline rather than jumping to a
+fixed 0.45.
+
+### What this says about the method
+
+Half the generated instances were rejected, by measurement, before any agent saw
+them. That is the validation loop doing its job — the same loop that killed CX.
+An unvalidated instance is a guess about what a defect does; these numbers are
+what it actually does.
+
+It also isolates a design property worth stating: **on gcd, I/O timing is
+irrelevant**. Three of the four classes (C2, C3, C5) operate on I/O constraints,
+which is why they are weak or vacuous here, while C1 — which attacks the core
+clock — is robust. Class selection has to be matched to the design.

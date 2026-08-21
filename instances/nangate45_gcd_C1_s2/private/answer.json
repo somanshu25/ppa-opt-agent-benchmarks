@@ -1,0 +1,16 @@
+{
+  "clk_io_pct": 0.15,
+  "clk_period": 0.58,
+  "expect_degrades": [
+    "setup_ws",
+    "setup_tns",
+    "inst_area",
+    "power_total"
+  ],
+  "ground_truth": "set clk_period 0.58",
+  "instance_id": "nangate45_gcd_C1_s2",
+  "notes": "period 0.58 -> 0.00058 (divided by 1000.0)",
+  "seed": 2,
+  "silent_defect": false,
+  "validated": true
+}

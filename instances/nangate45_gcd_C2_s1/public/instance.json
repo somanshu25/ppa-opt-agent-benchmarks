@@ -1,0 +1,12 @@
+{
+  "class_id": "C2",
+  "class_name": "missing_input_delay",
+  "design": "gcd",
+  "design_config": "./designs/nangate45/gcd/config.mk",
+  "editable_files": [
+    "impl.sdc"
+  ],
+  "instance_id": "nangate45_gcd_C2_s1",
+  "orfs_commit": "02ba50d53",
+  "platform": "nangate45"
+}

@@ -1,0 +1,12 @@
+{
+  "class_id": "C3",
+  "class_name": "missing_output_delay",
+  "design": "gcd",
+  "design_config": "./designs/nangate45/gcd/config.mk",
+  "editable_files": [
+    "impl.sdc"
+  ],
+  "instance_id": "nangate45_gcd_C3_s1",
+  "orfs_commit": "02ba50d53",
+  "platform": "nangate45"
+}

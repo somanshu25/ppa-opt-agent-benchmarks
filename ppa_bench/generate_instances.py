@@ -1,18 +1,30 @@
-"""Materialise benchmark instances on disk, one directory per (design, class).
+"""Materialise benchmark instances with a hard public/private split.
 
-Each instance directory is self-contained and holds the two-SDC pair the whole
-benchmark turns on:
+Layout, one directory per (design, class, seed):
 
-    impl.sdc    the mutated constraints -- this is what the agent sees and edits
-    golden.sdc  the reference constraints -- held out, used only for sign-off
+    <instance_id>/
+        public/          <- the ONLY thing that enters the agent's container
+            impl.sdc         the mutated constraints; the agent edits this
+            prompt.md        the task
+            instance.json    metadata with no answers in it
+        private/         <- never mounted, never copied in during the run
+            golden.sdc       reference constraints, used only for sign-off
+            ground_truth.md  the reference fix
+            answer.json      sampled parameters + expected degradations
 
-plus the task prompt, the ground-truth fix, and a machine-readable manifest.
+Two independent safeguards, defending against two different threats:
 
-Generating an instance is cheap and says nothing about whether it is a *good*
-task.  That is what validation decides (see docs/PLAN.md, W5): an instance is
-only shippable once the broken version measurably fails and the reference fix
-measurably recovers.  Every manifest therefore starts at
-``"validated": false``.
+1. **Partitioning** stops the agent reading the answer out of the instance.
+   Necessary, but on its own unfalsifiable -- upstream's pristine
+   ``constraint.sdc``, git history and stale ``6_final.sdc`` files all leak the
+   same value, and you can never prove you found every path.
+
+2. **Randomisation** (``randomize.py``) makes the leaked value *wrong*. The
+   golden is drawn at generation time, so no copy of upstream and no memorised
+   training data yields it.
+
+Neither replaces the sign-off gate: that defends against gaming the grader,
+which is a different attack from finding the answer.
 """
 
 from __future__ import annotations
@@ -20,84 +32,73 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 
 from ppa_bench.injector import inject, V1_CLASSES, InjectionError
+from ppa_bench.randomize import sample_params, render_golden
 
-# (platform, design_dir, config.mk path relative to flow/)
-DESIGNS = [
-    ("nangate45", "gcd", "./designs/nangate45/gcd/config.mk"),
-    ("nangate45", "aes", "./designs/nangate45/aes/config.mk"),
-    ("nangate45", "ibex", "./designs/nangate45/ibex/config.mk"),
-    ("sky130hd", "gcd", "./designs/sky130hd/gcd/config.mk"),
-]
-
-# Designs whose baseline is timing-clean enough to support gate-based grading.
-# sky130hd/gcd is excluded on purpose: upstream itself expects WS -1.68 /
-# TNS -71.2 there, so a "no violations" gate would fail the baseline and an
-# injected defect would be swamped by the existing violation floor.
-V1_DESIGNS = {("nangate45", "gcd"), ("nangate45", "aes")}
+DESIGNS = {
+    ("nangate45", "gcd"): "./designs/nangate45/gcd/config.mk",
+    ("nangate45", "aes"): "./designs/nangate45/aes/config.mk",
+}
 
 PROMPT_TEMPLATE = """# Task: {title}
 
 ## Design
 - Platform: `{platform}`
 - Design: `{design}`
-- Flow: OpenROAD-flow-scripts, RTL-to-GDS
+- Flow: OpenROAD-flow-scripts (RTL to GDS)
 
 ## What you are given
 `impl.sdc` -- the timing constraints this design is currently built with.
+You can build the design and inspect its QoR with the OpenROAD flow.
 
 ## What to do
 {description}
 
-You may edit **only** `impl.sdc`. Do not modify the RTL, the netlist, the
-floorplan, or any flow variable.
+You may edit **only** `impl.sdc`.
 
 ## How you will be judged
-Your edited `impl.sdc` is used to re-run the full flow. The resulting layout is
-then re-timed against a **reference SDC that you are not shown**.
+Your edited `impl.sdc` is used to re-run the full flow from clean. The
+resulting layout is then re-timed against a **reference SDC you are not
+shown**.
 
-That means loosening or deleting constraints cannot help you: the constraints
-used to judge the design are not the ones you edited. A run is only scored on
-area and power **after** it passes the correctness gates (flow completes, zero
-DRC, and sign-off timing no worse than the baseline).
+Loosening or deleting constraints therefore cannot help you: the constraints
+used to judge the design are not the ones you edited. Your run is scored on
+area and power only **after** it passes the correctness gates -- the flow
+completes, DRC is clean, and sign-off timing is no worse than the baseline.
+
+Note that the reference constraints for this instance were generated
+specifically for it. They are not the values in any public version of this
+design.
 """
 
 
-def build(class_id: str, platform: str, design: str, config: str,
-          flow_dir: str, out_root: str) -> dict | None:
-    """Generate one instance directory; return its manifest (or None if N/A)."""
-    sdc_path = os.path.join(flow_dir, "designs", platform, design, "constraint.sdc")
-    if not os.path.isfile(sdc_path):
+def build(class_id, platform, design, config, seed, flow_dir, out_root):
+    """Generate one instance directory. Returns its public manifest."""
+    template_path = os.path.join(
+        flow_dir, "designs", platform, design, "constraint.sdc")
+    if not os.path.isfile(template_path):
         print("  SKIP {}/{} {}: no constraint.sdc".format(platform, design, class_id))
         return None
 
-    golden = open(sdc_path).read()
+    # Randomise first: the golden is the *sampled* SDC, not upstream's.
+    params = sample_params(platform, design, seed)
+    golden = render_golden(open(template_path).read(), params)
+
     try:
         inj = inject(class_id, golden)
     except InjectionError as exc:
         print("  SKIP {}/{} {}: {}".format(platform, design, class_id, exc))
         return None
 
-    inst_id = "{}_{}_{}".format(platform, design, class_id)
+    inst_id = "{}_{}_{}_s{}".format(platform, design, class_id, seed)
     inst_dir = os.path.join(out_root, inst_id)
-    os.makedirs(inst_dir, exist_ok=True)
-
-    with open(os.path.join(inst_dir, "impl.sdc"), "w") as fh:
-        fh.write(inj.sdc)
-    with open(os.path.join(inst_dir, "golden.sdc"), "w") as fh:
-        fh.write(inj.golden_sdc)
-    with open(os.path.join(inst_dir, "prompt.md"), "w") as fh:
-        fh.write(PROMPT_TEMPLATE.format(
-            title=inj.name.replace("_", " "),
-            platform=platform,
-            design=design,
-            description=inj.description,
-        ))
-    with open(os.path.join(inst_dir, "ground_truth.md"), "w") as fh:
-        fh.write("# Ground truth: {}\n\n".format(inst_id))
-        fh.write("**Injected defect:** {}\n\n".format(inj.notes))
-        fh.write("**Reference fix restores:**\n\n```\n{}\n```\n".format(inj.ground_truth))
+    pub = os.path.join(inst_dir, "public")
+    priv = os.path.join(inst_dir, "private")
+    shutil.rmtree(inst_dir, ignore_errors=True)
+    os.makedirs(pub)
+    os.makedirs(priv)
 
     manifest = {
         "instance_id": inst_id,
@@ -108,48 +109,77 @@ def build(class_id: str, platform: str, design: str, config: str,
         "design_config": config,
         "orfs_commit": "02ba50d53",
         "editable_files": ["impl.sdc"],
-        "golden_sdc": "golden.sdc",
+        # Deliberately absent from the public manifest: the sampled parameter
+        # values, expect_degrades, silent_defect -- and the seed. The sampler
+        # ships with the benchmark, so seed + public code would recompute the
+        # golden directly were it not for the sampling secret; omitting the
+        # seed as well is defence in depth.
+    }
+
+    answer = {
+        "instance_id": inst_id,
+        "clk_period": params.clk_period,
+        "clk_io_pct": params.clk_io_pct,
+        "seed": seed,
         "silent_defect": inj.silent,
         "expect_degrades": inj.expect_degrades,
+        "ground_truth": inj.ground_truth,
         "notes": inj.notes,
-        "in_v1_scope": (platform, design) in V1_DESIGNS and class_id in V1_CLASSES,
-        # Set by validate.py once BROKEN_FAIL / REFFIX_PASS are demonstrated.
+        # Set by validate.py once BASELINE_PASS and BROKEN_FAIL are shown.
         "validated": False,
     }
-    with open(os.path.join(inst_dir, "instance.json"), "w") as fh:
-        json.dump(manifest, fh, indent=2, sort_keys=True)
 
-    scope = "v1" if manifest["in_v1_scope"] else "--"
-    print("  {:34} {:3} silent={:5} [{}]".format(
-        inst_id, inj.class_id, str(inj.silent), scope))
+    _write(os.path.join(pub, "impl.sdc"), inj.sdc)
+    _write(os.path.join(pub, "prompt.md"), PROMPT_TEMPLATE.format(
+        title=inj.name.replace("_", " "),
+        platform=platform, design=design, description=inj.description))
+    _write(os.path.join(pub, "instance.json"), json.dumps(manifest, indent=2, sort_keys=True))
+
+    _write(os.path.join(priv, "golden.sdc"), inj.golden_sdc)
+    _write(os.path.join(priv, "answer.json"), json.dumps(answer, indent=2, sort_keys=True))
+    _write(os.path.join(priv, "ground_truth.md"),
+           "# Ground truth: {}\n\n"
+           "**Sampled golden:** {}\n\n"
+           "**Injected defect:** {}\n\n"
+           "**Reference fix restores:**\n\n```\n{}\n```\n".format(
+               inst_id, params.describe(), inj.notes, inj.ground_truth))
+
+    print("  {:32} {:3} {:22} silent={:5} {}".format(
+        inst_id, inj.class_id, inj.name, str(inj.silent), params.describe()))
     return manifest
 
 
+def _write(path: str, text: str) -> None:
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
+    ap = argparse.ArgumentParser(description="Generate benchmark instances")
     ap.add_argument("--flow-dir", default="/OpenROAD-flow-scripts/flow")
     ap.add_argument("--out", default="/ppa-bench/instances")
-    ap.add_argument("--classes", nargs="*", default=V1_CLASSES + ["CX"])
+    ap.add_argument("--classes", nargs="*", default=V1_CLASSES)
+    ap.add_argument("--seeds", nargs="*", type=int, default=[1])
+    ap.add_argument("--designs", nargs="*", default=["nangate45/gcd"])
     args = ap.parse_args()
 
-    print("Generating instances into {}\n".format(args.out))
+    print("Generating into {}\n".format(args.out))
     manifests = []
-    for platform, design, config in DESIGNS:
+    for spec in args.designs:
+        platform, design = spec.split("/")
+        config = DESIGNS[(platform, design)]
         print("{}/{}:".format(platform, design))
-        for class_id in args.classes:
-            m = build(class_id, platform, design, config, args.flow_dir, args.out)
-            if m:
-                manifests.append(m)
+        for seed in args.seeds:
+            for class_id in args.classes:
+                m = build(class_id, platform, design, config, seed,
+                          args.flow_dir, args.out)
+                if m:
+                    manifests.append(m)
         print()
 
-    index_path = os.path.join(args.out, "index.json")
-    with open(index_path, "w") as fh:
-        json.dump(manifests, fh, indent=2, sort_keys=True)
-
-    v1 = sum(1 for m in manifests if m["in_v1_scope"])
-    print("{} instances generated ({} in v1 scope, all validated=false)".format(
-        len(manifests), v1))
-    print("index -> {}".format(index_path))
+    _write(os.path.join(args.out, "index.json"),
+           json.dumps(manifests, indent=2, sort_keys=True))
+    print("{} instances generated (all validated=false)".format(len(manifests)))
 
 
 if __name__ == "__main__":

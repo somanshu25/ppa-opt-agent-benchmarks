@@ -1,0 +1,230 @@
+[
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": true,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [
+      "area_not_ballooned",
+      "signoff_setup_ws"
+    ],
+    "class_id": "C1",
+    "evidence": {
+      "baseline_area": 674.31,
+      "baseline_finish_ws": 0.183899,
+      "baseline_power": 0.00162135,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.183899,
+      "broken_area": 959.462,
+      "broken_finish_ws": -0.423096,
+      "broken_power": 0.662275,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.159457
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 0.69
+    },
+    "instance_id": "nangate45_gcd_C1_s1",
+    "seed": 1,
+    "silent_defect": false,
+    "validated": true
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": false,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [],
+    "class_id": "C2",
+    "evidence": {
+      "baseline_area": 674.31,
+      "baseline_finish_ws": 0.183899,
+      "baseline_power": 0.00162135,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.183899,
+      "broken_area": 674.31,
+      "broken_finish_ws": 0.183899,
+      "broken_power": 0.00162135,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.183899
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 0.69
+    },
+    "instance_id": "nangate45_gcd_C2_s1",
+    "seed": 1,
+    "silent_defect": true,
+    "validated": false
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": true,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [
+      "signoff_setup_ws"
+    ],
+    "class_id": "C3",
+    "evidence": {
+      "baseline_area": 674.31,
+      "baseline_finish_ws": 0.183899,
+      "baseline_power": 0.00162135,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.183899,
+      "broken_area": 673.778,
+      "broken_finish_ws": 0.241418,
+      "broken_power": 0.00163035,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.176345
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 0.69
+    },
+    "instance_id": "nangate45_gcd_C3_s1",
+    "seed": 1,
+    "silent_defect": true,
+    "validated": true
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": false,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [],
+    "class_id": "C5",
+    "evidence": {
+      "baseline_area": 674.31,
+      "baseline_finish_ws": 0.183899,
+      "baseline_power": 0.00162135,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.183899,
+      "broken_area": 674.31,
+      "broken_finish_ws": 0.0183676,
+      "broken_power": 0.00162026,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.183968
+    },
+    "golden": {
+      "clk_io_pct": 0.21,
+      "clk_period": 0.69
+    },
+    "instance_id": "nangate45_gcd_C5_s1",
+    "seed": 1,
+    "silent_defect": false,
+    "validated": false
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": true,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [
+      "area_not_ballooned",
+      "signoff_setup_ws"
+    ],
+    "class_id": "C1",
+    "evidence": {
+      "baseline_area": 673.512,
+      "baseline_finish_ws": 0.119967,
+      "baseline_power": 0.00192727,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.119967,
+      "broken_area": 1035.54,
+      "broken_finish_ws": -0.447991,
+      "broken_power": 0.753196,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.0947014
+    },
+    "golden": {
+      "clk_io_pct": 0.15,
+      "clk_period": 0.58
+    },
+    "instance_id": "nangate45_gcd_C1_s2",
+    "seed": 2,
+    "silent_defect": false,
+    "validated": true
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": false,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [],
+    "class_id": "C2",
+    "evidence": {
+      "baseline_area": 673.512,
+      "baseline_finish_ws": 0.119967,
+      "baseline_power": 0.00192727,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.119967,
+      "broken_area": 673.512,
+      "broken_finish_ws": 0.119967,
+      "broken_power": 0.00192727,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.119967
+    },
+    "golden": {
+      "clk_io_pct": 0.15,
+      "clk_period": 0.58
+    },
+    "instance_id": "nangate45_gcd_C2_s2",
+    "seed": 2,
+    "silent_defect": true,
+    "validated": false
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": false,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [],
+    "class_id": "C3",
+    "evidence": {
+      "baseline_area": 673.512,
+      "baseline_finish_ws": 0.119967,
+      "baseline_power": 0.00192727,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.119967,
+      "broken_area": 674.842,
+      "broken_finish_ws": 0.131961,
+      "broken_power": 0.00194104,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.122104
+    },
+    "golden": {
+      "clk_io_pct": 0.15,
+      "clk_period": 0.58
+    },
+    "instance_id": "nangate45_gcd_C3_s2",
+    "seed": 2,
+    "silent_defect": true,
+    "validated": false
+  },
+  {
+    "BASELINE_PASS": true,
+    "BROKEN_FAIL": true,
+    "REFFIX_PASS": true,
+    "broken_failed_assertions": [
+      "signoff_hold_ws",
+      "area_not_ballooned",
+      "signoff_setup_ws"
+    ],
+    "class_id": "C5",
+    "evidence": {
+      "baseline_area": 673.512,
+      "baseline_finish_ws": 0.119967,
+      "baseline_power": 0.00192727,
+      "baseline_signoff_tns": 0,
+      "baseline_signoff_ws": 0.119967,
+      "broken_area": 862.638,
+      "broken_finish_ws": -0.0319716,
+      "broken_power": 0.00273758,
+      "broken_signoff_tns": 0,
+      "broken_signoff_ws": 0.0439044
+    },
+    "golden": {
+      "clk_io_pct": 0.15,
+      "clk_period": 0.58
+    },
+    "instance_id": "nangate45_gcd_C5_s2",
+    "seed": 2,
+    "silent_defect": false,
+    "validated": true
+  }
+]
